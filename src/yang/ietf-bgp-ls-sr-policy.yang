@@ -39,8 +39,10 @@ module ietf-bgp-ls-sr-policy {
     "WG Web:   <https://datatracker.ietf.org/wg/lsvr>
      WG List:  <mailto:lsvr@ietf.org>
 
-     Author:   Aravind Babu MahendraBabu
-               <mailto:aramahen@cisco.com>";
+     Authors:  Aravind Babu MahendraBabu
+               <mailto:aramahen@cisco.com>
+               Thanigaivel Manoharan
+               <mailto:thanmano@cisco.com>";
   description
     "This module augments the operational Link-State Database in the
      BGP-LS YANG data model with a representation of the Segment

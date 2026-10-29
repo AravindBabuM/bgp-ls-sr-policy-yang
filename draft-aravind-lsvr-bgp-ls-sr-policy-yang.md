@@ -30,6 +30,10 @@ author:
     organization: "Cisco Systems, Inc."
     country: "India"
     email: "aramahen@cisco.com"
+  -
+    fullname: "Thanigaivel Manoharan"
+    organization: "Cisco Systems, Inc."
+    email: "thanmano@cisco.com"
 
 normative:
   RFC7950:
@@ -255,8 +259,10 @@ module ietf-bgp-ls-sr-policy {
     "WG Web:   <https://datatracker.ietf.org/wg/lsvr>
      WG List:  <mailto:lsvr@ietf.org>
 
-     Author:   Aravind Babu MahendraBabu
-               <mailto:aramahen@cisco.com>";
+     Authors:  Aravind Babu MahendraBabu
+               <mailto:aramahen@cisco.com>
+               Thanigaivel Manoharan
+               <mailto:thanmano@cisco.com>";
   description
     "This module augments the operational Link-State Database in the
      BGP-LS YANG data model with a representation of the Segment
@@ -1591,6 +1597,6 @@ reference: RFC XXXX
 # Acknowledgments
 {:numbered="false"}
 
-The author thanks the authors and contributors of {{RFC9857}}, the authors of
+The authors thank the authors and contributors of {{RFC9857}}, the authors of
 {{I-D.ietf-lsvr-bgp-ls-yang}}, and the contributors to the Cisco Service Layer
 BGP-LS topology object model.
