@@ -151,8 +151,8 @@ The separate `attributes` container corresponds to
 * Candidate-path state, names, constraints, and optimization metrics are
   represented as typed leaves and containers.
 * Segment lists and their segments are `ordered-by user`, because their wire
-  order is significant.  An implementation-assigned index supplies a stable
-  YANG list key when an optional Segment List Identifier is absent.
+  order is significant.  A zero-based positional index supplies the YANG list
+  key, including when the optional Segment List Identifier is absent.
 * Segment descriptor types A through K are represented as separate cases.
   SRv6 Endpoint Behavior and SID Structure information from {{RFC9514}}
   reuse the `bgp-ls-topo-srv6-sid-attr` grouping from the base Link-State
@@ -1226,16 +1226,17 @@ module ietf-bgp-ls-sr-policy {
       key "index";
       ordered-by user;
       description
-        "A SID list in the order received.  The index provides a
-         stable key even when the optional protocol identifier is
-         absent or duplicated by a malformed advertisement.";
+        "A SID list in the order received.  The index is the
+         zero-based position of the SID list within the candidate
+         path.";
       reference
         "RFC 9857, Section 5.7.";
 
       leaf index {
         type uint32;
         description
-          "Implementation-assigned ordinal for this SID list.";
+          "Zero-based position of the SID list in the order
+           received.";
       }
       leaf flags {
         type segment-list-flags;
