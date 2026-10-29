@@ -50,127 +50,95 @@ informative:
   RFC8040:
   RFC8340:
   RFC8341:
-  RFC8446:
+  RFC9846:
   RFC9256:
   RFC9514:
   RFC9552:
-  SERVICE-LAYER:
-    title: "Cisco Service Layer Object Model: BGP-LS Topology"
-    target: "https://github.com/Cisco-Service-Layer/service-layer-objmodel/blob/master/grpc/protos/sl_bgpls_topology.proto"
-    date: "2026"
-    author:
-      -
-        org: "Cisco Systems, Inc."
 
 ...
 
 --- abstract
 
-This document defines a YANG 1.1 data model for the operational state of
-Segment Routing (SR) Policy candidate paths advertised using BGP Link-State
-(BGP-LS).  The model augments the BGP-LS Link-State Database defined by
-{{I-D.ietf-lsvr-bgp-ls-yang}} and represents the SR Policy Candidate Path
-NLRI and the associated state TLVs specified by {{RFC9857}}.  Both SR-MPLS
-and SRv6 candidate paths, Binding SIDs, constraints, segment lists, segment
-descriptors, metrics, and unknown TLVs are covered.
+This document defines a YANG 1.1 data model for the Segment Routing (SR)
+Policy Candidate Path Network Layer Reachability Information (NLRI) and its
+associated BGP Link-State (BGP-LS) attributes.  The model augments the
+operational BGP-LS Link-State Database defined by the BGP-LS YANG model with
+the protocol elements specified in RFC 9857.
 
 
 --- middle
 
 # Introduction
 
-{{RFC9857}} defines the BGP-LS SR Policy Candidate Path NLRI and a set of
-BGP-LS Attribute TLVs that report the operational state of an SR Policy at
-candidate-path granularity.  This state includes the Binding SID, candidate
-path status and names, path constraints, and one or more ordered segment
-lists.  The information is useful to controllers and other consumers for
-network visualization, path computation, reoptimization, and service
-placement.
+{{RFC9552}} describes a mechanism by which Link-State (LS) and Traffic
+Engineering (TE) information can be collected and distributed using the
+Border Gateway Protocol (BGP).  {{RFC9857}} extends that mechanism with the
+SR Policy Candidate Path NLRI and BGP-LS Attribute Type-Length-Values (TLVs)
+that advertise the operational state of an SR Policy at candidate-path
+granularity.  The advertised information includes the Binding Segment
+Identifier (SID), candidate-path state and names, constraints, and the
+segment lists associated with the candidate path.
 
-{{I-D.ietf-lsvr-bgp-ls-yang}} defines YANG 1.1 {{RFC7950}} configuration and
-operational models for BGP-LS, BGP-LS-VPN, and BGP-LS-SPF under the routing
-model of {{RFC8349}}.  Its operational Link-State Database models node, link,
-prefix, and SRv6 SID NLRIs, and its common types already identify the SR Policy
-Candidate Path NLRI and the Segment Routing Protocol-ID.  This document
-augments that database with a typed operational representation of the SR
-Policy NLRI and its attributes.
+{{I-D.ietf-lsvr-bgp-ls-yang}} defines a {{RFC7950}} YANG 1.1 data model for
+BGP-LS, BGP-LS-VPN, and BGP-LS-SPF under the routing management model defined
+in {{RFC8349}}.  It includes a read-only Link-State Database (LSDB) for the
+Node, Link, Prefix, and SRv6 SID NLRIs received using BGP-LS.  This document
+defines the `ietf-bgp-ls-sr-policy` module, which augments that LSDB with a
+read-only representation of the SR Policy Candidate Path NLRI and its
+associated attributes defined in {{RFC9857}}.
 
-The model was informed by the `SLBgplsTopoSrPolicyData` and
-`SLBgplsTopoSrPolicyAttr` messages in {{SERVICE-LAYER}}.  The protocol model
-in {{RFC9857}} remains authoritative where the protobuf object model and the
-published RFC differ.
-
-# Conventions and Definitions
+## Requirements Language
 
 {::boilerplate bcp14-tagged}
 
-The terminology and abbreviations from {{RFC9256}}, {{RFC9552}}, and
-{{RFC9857}} are used in this document.  In particular:
+# Terminology
+
+This document uses the terminology defined in {{RFC9256}}, {{RFC9552}}, and
+{{RFC9857}}.  The following terms are used throughout this document:
 
 Candidate path (CP):
 : A path that is associated with an SR Policy.  An SR Policy can have more
-  than one candidate path, but only one is active at a time.
+  than one candidate path, but only one candidate path is active at a time,
+  as described in {{RFC9256}}.
 
 Headend:
 : The node at which an SR Policy is instantiated and where traffic is
-  steered onto the policy.
+  steered onto the policy, as described in {{RFC9256}}.
 
-SID list:
-: An ordered list of segments that describes a path through the SR domain.
+Segment list:
+: An ordered list of segments that describes a path through the SR domain,
+  as described in {{RFC9256}}.
 
-# Model Scope and Design
+## Acronyms
 
-The `ietf-bgp-ls-sr-policy` module is an operational-state augmentation.  It
-does not configure SR Policies or change BGP-LS protocol behavior.  It adds
-the `sr-pol-cp` container to the BGP-LS Link-State Database `instance`, as a
-sibling of `nodes`, `links`, `prefixes`, `srv6-sids`, and `unknowns`.  The
-container is present for an instance whose Protocol-ID is Segment Routing
-(9).
+This document uses the following acronyms:
 
-This module augments only the BGP-LS `link-state` database.  It does not
-augment the separate `link-state-spf` database because {{RFC9857}} does not
-define the SR Policy Candidate Path NLRI for BGP-LS-SPF.
+| Acronym | Definition |
+|---------|------------|
+| BGP | Border Gateway Protocol |
+| BGP-LS | BGP Link-State |
+| CP | Candidate Path |
+| LS | Link-State |
+| LSDB | Link-State Database |
+| NLRI | Network Layer Reachability Information |
+| SID | Segment Identifier |
+| SR | Segment Routing |
+| SR-MPLS | Segment Routing over MPLS |
+| SRv6 | Segment Routing over IPv6 |
+| TE | Traffic Engineering |
+| TLV | Type-Length-Value |
+{: title="Acronyms"}
 
-Each `candidate-path` entry is keyed by the decoded NLRI fields supplied by
-two groupings:
+# Tree Diagram
 
-* `sr-policy-node-descriptors` represents the Local Node Descriptors TLV.
-  It contains the ASN, BGP Router-ID, Member-AS, and the IPv4 and IPv6
-  Router-IDs used to identify the SR Policy headend.  Unspecified values are
-  used for optional descriptors so that the operational list has a fixed
-  YANG key; at least one headend IPv4 or IPv6 Router-ID is required.
-* `sr-policy-candidate-path-descriptor` represents the mandatory SR Policy
-  Candidate Path Descriptor TLV.  It contains Protocol-Origin, flags,
-  endpoint, color, originator ASN, originator address, and discriminator.
-
-The separate `attributes` container corresponds to
-`SLBgplsTopoSrPolicyAttr` and models the BGP-LS Attribute:
-
-* The SR-MPLS and SRv6 Binding SID containers preserve the allocation and
-  fallback state defined by {{RFC9857}}.
-* Candidate-path state, names, constraints, and optimization metrics are
-  represented as typed leaves and containers.
-* Segment lists and their segments are `ordered-by user`, because their wire
-  order is significant.  A zero-based positional index supplies the YANG list
-  key, including when the optional Segment List Identifier is absent.
-* Segment descriptor types A through K are represented as separate cases.
-  SRv6 Endpoint Behavior and SID Structure information from {{RFC9514}}
-  reuse the `bgp-ls-topo-srv6-sid-attr` grouping from the base Link-State
-  Database model.
-* Unknown attributes reuse the base model's
-  `bgp-ls-topo-unknown-attr` grouping and are retained as type and
-  uninterpreted value.
-
-The flags that select IPv4 or IPv6 wire encodings are retained for diagnostic
-fidelity even though the corresponding YANG leaves use `inet:ip-address`.
-Bandwidth values are exposed as `decimal64` in bytes per second; the BGP-LS
-wire format uses an IEEE 754 single-precision value.
-
-# YANG Tree Diagram
-
-This tree uses the notation from {{RFC8340}}.  The complete tree is generated
-from the module during validation; the following diagram is abridged after
-the segment descriptor choice.
+The tree diagram below shows an abridged view of the
+`ietf-bgp-ls-sr-policy` module.  The `sr-pol-cp` container is augmented into
+each BGP-LS LSDB instance that uses the Segment Routing Protocol-ID.  Each
+candidate path is identified by the Local Node Descriptors and the SR Policy
+Candidate Path Descriptor carried in the NLRI.  The `attributes` container
+holds the state TLVs associated with that NLRI.  A complete tree diagram is
+provided in {{appendix-tree}}.  The notation used in the diagrams is defined
+in {{RFC8340}}.
 
 ~~~
 module: ietf-bgp-ls-sr-policy
@@ -210,11 +178,47 @@ module: ietf-bgp-ls-sr-policy
              +--ro unknown* [type]
 ~~~
 
-# YANG Module
+# YANG Model
 
-The module imports the BGP module defined by {{I-D.ietf-idr-bgp-model}}
-and the BGP-LS integration and Link-State Database modules defined by
-{{I-D.ietf-lsvr-bgp-ls-yang}}.
+## BGP-LS SR Policy YANG Model
+
+The `ietf-bgp-ls-sr-policy` module augments the operational BGP-LS LSDB
+defined by {{I-D.ietf-lsvr-bgp-ls-yang}}.  It does not configure SR Policies
+and does not change BGP-LS protocol behavior.  The module augments the
+`link-state` database and does not augment the separate `link-state-spf`
+database because {{RFC9857}} defines the SR Policy Candidate Path NLRI for
+BGP-LS.
+
+The `sr-pol-cp` container is a sibling of the `nodes`, `links`, `prefixes`,
+`srv6-sids`, and `unknowns` containers in an LSDB instance.  The container is
+present when the Protocol-ID is Segment Routing (9), as assigned by
+{{RFC9857}}.
+
+Each `candidate-path` entry represents one SR Policy Candidate Path NLRI.
+The key contains the fields from the Local Node Descriptors TLV and the
+mandatory SR Policy Candidate Path Descriptor TLV.  At least one IPv4 or IPv6
+Router-ID is required to identify the SR Policy headend.  Optional node
+descriptors use their unspecified values when they are not present so that
+the list has a fixed YANG key.
+
+The `attributes` container represents the BGP-LS Attribute associated with
+the NLRI.  It includes the SR and SRv6 Binding SID TLVs, candidate-path state
+and names, constraints, segment lists, metrics, and attributes that are not
+recognized by the implementation.  Segment lists and segments are
+`ordered-by user` to preserve their received order.  Their `index` leaves are
+zero-based positional keys.  The optional Segment List Identifier defined in
+Section 5.7.4 of {{RFC9857}} is represented separately and is not used as the
+list key.
+
+Segment descriptor Types A through K from Section 5.7.1.1 of {{RFC9857}} are
+represented by separate cases.  The module reuses the SRv6 SID attribute and
+unknown attribute groupings from the BGP-LS LSDB model.  These groupings
+include the SRv6 Endpoint Behavior and SID Structure attributes defined in
+{{RFC9514}}.  Bandwidth is represented in bytes per second, consistent with
+the encoding specified by {{RFC9857}}.
+
+The module imports the BGP model defined by {{I-D.ietf-idr-bgp-model}} and the
+BGP-LS and LSDB modules defined by {{I-D.ietf-lsvr-bgp-ls-yang}}.
 
 <!-- YANG-MODEL:BEGIN -->
 ~~~ yang
@@ -1535,46 +1539,10 @@ module ietf-bgp-ls-sr-policy {
 ~~~
 <!-- YANG-MODEL:END -->
 
-# Manageability Considerations
-
-The augmentation is read-only and therefore introduces no new configuration,
-RPC, action, or notification.  Existing BGP and BGP-LS operational procedures
-continue to apply.  An implementation SHOULD retain unknown TLVs to preserve
-visibility when producers and consumers support different extension sets.
-
-The number of candidate paths, SID lists, segments, metrics, and unknown TLVs
-is controlled by received BGP-LS information.  Implementations SHOULD apply
-the same resource limits and malformed-TLV handling used for the underlying
-BGP-LS database.
-
-# Security Considerations
-
-The YANG module specified in this document defines schema for data that is
-accessed through network management protocols such as NETCONF {{RFC6241}} or
-RESTCONF {{RFC8040}}.  The lowest NETCONF layer is the secure transport layer,
-and the mandatory-to-implement secure transport is Secure Shell (SSH)
-{{RFC6242}}.  The lowest RESTCONF layer is HTTPS, and TLS {{RFC8446}} is
-mandatory to implement.
-
-The Network Configuration Access Control Model (NACM) {{RFC8341}} provides the
-means to restrict access for particular users to a preconfigured subset of
-all available protocol operations and content.
-
-All nodes introduced by this module are read-only.  They can nevertheless
-expose commercially or operationally sensitive information, including
-headend and endpoint addresses, Binding SIDs, complete SID lists, path
-constraints, bandwidth, and disjointness relationships.  Unauthorized read
-access could reveal network topology, traffic-engineering intent, and
-protection strategy.  Implementations MUST apply appropriate access control
-to the `sr-pol-cp` subtree and SHOULD expose it only to trusted principals.
-
-The security considerations of {{RFC9256}}, {{RFC9552}}, {{RFC9857}},
-{{I-D.ietf-idr-bgp-model}}, and {{I-D.ietf-lsvr-bgp-ls-yang}} also apply.
-
 # IANA Considerations
 
-This document requests IANA to register the following URI in the "IETF XML
-Registry" {{RFC3688}}:
+This document registers the following URI in the "IETF XML Registry"
+{{RFC3688}}:
 
 ~~~
 URI: urn:ietf:params:xml:ns:yang:ietf-bgp-ls-sr-policy
@@ -1582,8 +1550,8 @@ Registrant Contact: The IESG.
 XML: N/A; the requested URI is an XML namespace.
 ~~~
 
-This document also requests IANA to register the following YANG module in the
-"YANG Module Names" registry {{RFC6020}}:
+This document registers the following YANG module in the "YANG Module Names"
+registry {{RFC6020}}:
 
 ~~~
 name: ietf-bgp-ls-sr-policy
@@ -1592,12 +1560,411 @@ prefix: bgp-ls-sr-policy
 reference: RFC XXXX
 ~~~
 
+# Security Considerations
+
+The YANG module specified in this document defines a schema for data that is
+designed to be accessed through network management protocols such as NETCONF
+{{RFC6241}} or RESTCONF {{RFC8040}}.  The lowest NETCONF layer is the secure
+transport layer, and the mandatory-to-implement secure transport is Secure
+Shell (SSH) {{RFC6242}}.  The lowest RESTCONF layer is HTTPS, and TLS
+{{RFC9846}} is mandatory to implement.
+
+The Network Configuration Access Control Model (NACM) {{RFC8341}} provides
+the means to restrict access for particular users to a preconfigured subset
+of all available protocol operations and content.
+
+All data nodes introduced by the `ietf-bgp-ls-sr-policy` module are read-only.
+The `sr-pol-cp` subtree contains headend and endpoint addresses, Binding SIDs,
+complete segment lists, path constraints, bandwidth, and disjointness
+relationships.  Unauthorized read access to this information may disclose
+network topology, traffic-engineering intent, and protection strategy.
+Implementations MUST apply appropriate access controls to this subtree and
+SHOULD expose it only to trusted principals.
+
+The number of candidate paths, segment lists, segments, metrics, and unknown
+TLVs is controlled by received BGP-LS information.  Implementations SHOULD
+apply the resource limits and malformed-TLV handling used for the underlying
+BGP-LS LSDB.  No RPC or action operations are defined by this document.
+
+The security considerations of {{RFC9256}}, {{RFC9552}}, {{RFC9857}},
+{{I-D.ietf-idr-bgp-model}}, and {{I-D.ietf-lsvr-bgp-ls-yang}} also apply.
+
 
 --- back
+
+# Complete Tree Diagram {#appendix-tree}
+
+This appendix provides the complete tree diagram for the operational data
+defined by the `ietf-bgp-ls-sr-policy` module.
+
+<!-- COMPLETE-TREE:BEGIN -->
+~~~
+module: ietf-bgp-ls-sr-policy
+
+  augment /rt:routing/rt:control-plane-protocols
+            /rt:control-plane-protocol/bgp:bgp/bgp:global
+            /bgp:afi-safis/bgp:afi-safi/bgp-ls:link-state
+            /bgp-ls:bgp-ls-topology/bgp-ls:instances/bgp-ls:instance:
+    +--ro sr-pol-cp
+       +--ro candidate-path*
+               [as bgp-router-id member-as ipv4-router-id
+                ipv6-router-id protocol-origin descriptor-flags
+                endpoint color originator-as originator-address
+                discriminator]
+          +--ro as                    inet:as-number
+          +--ro bgp-router-id         inet:ipv4-address
+          +--ro member-as             inet:as-number
+          +--ro ipv4-router-id        inet:ipv4-address
+          +--ro ipv6-router-id        inet:ipv6-address
+          +--ro protocol-origin       protocol-origin
+          +--ro descriptor-flags      descriptor-flags
+          +--ro endpoint              inet:ip-address
+          +--ro color                 uint32
+          +--ro originator-as         inet:as-number
+          +--ro originator-address    inet:ip-address
+          +--ro discriminator         uint32
+          +--ro attributes
+             +--ro policy-name?           string
+             +--ro candidate-path-name?   string
+             +--ro mpls-binding-sid!
+             |  +--ro flags?                   binding-sid-flags
+             |  +--ro binding-sid?             mpls-label
+             |  +--ro specified-binding-sid?   mpls-label
+             +--ro srv6-binding-sid* [binding-sid]
+             |  +--ro binding-sid              inet:ipv6-address
+             |  +--ro flags?                   srv6-binding-sid-flags
+             |  +--ro specified-binding-sid?   inet:ipv6-address
+             |  +--ro srv6-sid-attributes
+             |  |  +--ro srv6-sid-attribute* [type]
+             |  |     +--ro type                      identityref
+             |  |     +--ro srv6-endpoint-behavior
+             |  |     |  +--ro endpoint-behavior?   uint8
+             |  |     |  +--ro flags?               binary
+             |  |     |  +--ro algorithm?           uint8
+             |  |     +--ro srv6-sid-structure
+             |  |     |  +--ro locator-block-len?   uint8
+             |  |     |  +--ro locator-node-len?    uint8
+             |  |     |  +--ro function-len?        uint8
+             |  |     |  +--ro arg-len?             uint8
+             |  |     +--ro unknowns
+             |  |        +--ro unknown* [type]
+             |  |           +--ro type     uint16
+             |  |           +--ro value?   yang:hex-string
+             |  +--ro unknown* [type]
+             |     +--ro type     uint16
+             |     +--ro value?   yang:hex-string
+             +--ro state!
+             |  +--ro priority      uint8
+             |  +--ro flags?        candidate-path-state-flags
+             |  +--ro preference    uint32
+             +--ro constraints!
+             |  +--ro flags?
+             |  |       candidate-path-constraint-flags
+             |  +--ro multi-topology-id?     uint16
+             |  +--ro algorithm?             uint8
+             |  +--ro affinity!
+             |  |  +--ro exclude-any*   uint32
+             |  |  +--ro include-any*   uint32
+             |  |  +--ro include-all*   uint32
+             |  +--ro excluded-srlg*         uint32
+             |  +--ro bandwidth?             decimal64
+             |  +--ro disjoint-group!
+             |  |  +--ro request-flags?   disjoint-request-flags
+             |  |  +--ro status-flags?    disjoint-status-flags
+             |  |  +--ro group-id         uint32
+             |  +--ro bidirectional-group!
+             |  |  +--ro flags?      bidirectional-flags
+             |  |  +--ro group-id    uint32
+             |  +--ro metric* [type]
+             |     +--ro type      metric-type
+             |     +--ro flags?    metric-constraint-flags
+             |     +--ro margin?   uint32
+             |     +--ro bound?    uint32
+             +--ro segment-list* [index]
+             |  +--ro index                uint32
+             |  +--ro flags?               segment-list-flags
+             |  +--ro multi-topology-id?   uint16
+             |  +--ro algorithm?           uint8
+             |  +--ro weight?              uint32
+             |  +--ro identifier?          uint32
+             |  +--ro segment* [index]
+             |  |  +--ro index                  uint32
+             |  |  +--ro type                   uint8
+             |  |  +--ro flags?                 segment-flags
+             |  |  +--ro (sid)?
+             |  |  |  +--:(mpls)
+             |  |  |  |  +--ro mpls-label?      mpls-label
+             |  |  |  +--:(srv6)
+             |  |  |     +--ro srv6-sid?        inet:ipv6-address
+             |  |  +--ro (descriptor)?
+             |  |  |  +--:(type-a)
+             |  |  |  |  +--ro type-a
+             |  |  |  |     +--ro algorithm    uint8
+             |  |  |  +--:(type-b)
+             |  |  |  |  +--ro type-b
+             |  |  |  |     +--ro algorithm    uint8
+             |  |  |  +--:(type-c)
+             |  |  |  |  +--ro type-c
+             |  |  |  |     +--ro algorithm       uint8
+             |  |  |  |     +--ro node-address    inet:ipv4-address
+             |  |  |  +--:(type-d)
+             |  |  |  |  +--ro type-d
+             |  |  |  |     +--ro algorithm       uint8
+             |  |  |  |     +--ro node-address    inet:ipv6-address
+             |  |  |  +--:(type-e)
+             |  |  |  |  +--ro type-e
+             |  |  |  |     +--ro node-address
+             |  |  |  |     |       inet:ipv4-address
+             |  |  |  |     +--ro local-interface-id    uint32
+             |  |  |  +--:(type-f)
+             |  |  |  |  +--ro type-f
+             |  |  |  |     +--ro local-interface-address
+             |  |  |  |     |       inet:ipv4-address
+             |  |  |  |     +--ro remote-interface-address
+             |  |  |  |             inet:ipv4-address
+             |  |  |  +--:(type-g)
+             |  |  |  |  +--ro type-g
+             |  |  |  |     +--ro local-node-address
+             |  |  |  |     |       inet:ipv6-address
+             |  |  |  |     +--ro local-interface-id     uint32
+             |  |  |  |     +--ro remote-node-address
+             |  |  |  |     |       inet:ipv6-address
+             |  |  |  |     +--ro remote-interface-id    uint32
+             |  |  |  +--:(type-h)
+             |  |  |  |  +--ro type-h
+             |  |  |  |     +--ro local-interface-address
+             |  |  |  |     |       inet:ipv6-address
+             |  |  |  |     +--ro remote-interface-address
+             |  |  |  |             inet:ipv6-address
+             |  |  |  +--:(type-i)
+             |  |  |  |  +--ro type-i
+             |  |  |  |     +--ro algorithm       uint8
+             |  |  |  |     +--ro node-address    inet:ipv6-address
+             |  |  |  +--:(type-j)
+             |  |  |  |  +--ro type-j
+             |  |  |  |     +--ro local-node-address
+             |  |  |  |     |       inet:ipv6-address
+             |  |  |  |     +--ro local-interface-id     uint32
+             |  |  |  |     +--ro remote-node-address
+             |  |  |  |     |       inet:ipv6-address
+             |  |  |  |     +--ro remote-interface-id    uint32
+             |  |  |  +--:(type-k)
+             |  |  |     +--ro type-k
+             |  |  |        +--ro local-interface-address
+             |  |  |        |       inet:ipv6-address
+             |  |  |        +--ro remote-interface-address
+             |  |  |                inet:ipv6-address
+             |  |  +--ro srv6-sid-attributes
+             |  |  |  +--ro srv6-sid-attribute* [type]
+             |  |  |     +--ro type                      identityref
+             |  |  |     +--ro srv6-endpoint-behavior
+             |  |  |     |  +--ro endpoint-behavior?   uint8
+             |  |  |     |  +--ro flags?               binary
+             |  |  |     |  +--ro algorithm?           uint8
+             |  |  |     +--ro srv6-sid-structure
+             |  |  |     |  +--ro locator-block-len?   uint8
+             |  |  |     |  +--ro locator-node-len?    uint8
+             |  |  |     |  +--ro function-len?        uint8
+             |  |  |     |  +--ro arg-len?             uint8
+             |  |  |     +--ro unknowns
+             |  |  |        +--ro unknown* [type]
+             |  |  |           +--ro type     uint16
+             |  |  |           +--ro value?   yang:hex-string
+             |  |  +--ro unknown* [type]
+             |  |     +--ro type     uint16
+             |  |     +--ro value?   yang:hex-string
+             |  +--ro metric* [type]
+             |  |  +--ro type      metric-type
+             |  |  +--ro flags?    segment-list-metric-flags
+             |  |  +--ro margin?   uint32
+             |  |  +--ro bound?    uint32
+             |  |  +--ro value?    uint32
+             |  +--ro bandwidth?           decimal64
+             |  +--ro unknown* [type]
+             |     +--ro type     uint16
+             |     +--ro value?   yang:hex-string
+             +--ro unknown* [type]
+                +--ro type     uint16
+                +--ro value?   yang:hex-string
+~~~
+<!-- COMPLETE-TREE:END -->
+
+# Examples
+
+The following examples illustrate the BGP-LS LSDB populated with an SR-MPLS
+candidate path and an SRv6 candidate path.  The data is shown under the
+`bgp-ls-topology` container augmented into the `link-state` container at
+`/rt:routing/rt:control-plane-protocols/rt:control-plane-protocol/
+bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp-ls:link-state`.
+XML encoding follows {{RFC7950}}.
+
+## SR-MPLS Candidate Path
+
+The following example contains one SR-MPLS candidate path originated by
+local configuration.  The candidate path has an allocated Binding SID and
+one segment list containing an IPv4 Prefix SID.
+
+~~~ xml
+<routing xmlns="urn:ietf:params:xml:ns:yang:ietf-routing"
+ xmlns:bgp="urn:ietf:params:xml:ns:yang:ietf-bgp"
+ xmlns:bgp-ls="urn:ietf:params:xml:ns:yang:ietf-bgp-ls"
+ xmlns:s="urn:ietf:params:xml:ns:yang:ietf-bgp-ls-sr-policy">
+ <control-plane-protocols>
+  <control-plane-protocol>
+   <type>bgp:bgp</type>
+   <name>example</name>
+   <bgp:bgp>
+    <bgp:global>
+     <bgp:afi-safis>
+      <bgp:afi-safi>
+       <bgp:name>bgp-ls:bgp-ls</bgp:name>
+       <bgp-ls:link-state>
+        <bgp-ls:bgp-ls-topology>
+         <bgp-ls:instances>
+          <bgp-ls:instance>
+           <bgp-ls:vrf-name>default</bgp-ls:vrf-name>
+           <bgp-ls:protocol>sr</bgp-ls:protocol>
+           <bgp-ls:identifier>0</bgp-ls:identifier>
+           <s:sr-pol-cp>
+            <s:candidate-path>
+             <s:as>65000</s:as>
+             <s:bgp-router-id>192.0.2.1</s:bgp-router-id>
+             <s:member-as>0</s:member-as>
+             <s:ipv4-router-id>192.0.2.1</s:ipv4-router-id>
+             <s:ipv6-router-id>::</s:ipv6-router-id>
+             <s:protocol-origin>3</s:protocol-origin>
+             <s:descriptor-flags/>
+             <s:endpoint>192.0.2.200</s:endpoint>
+             <s:color>100</s:color>
+             <s:originator-as>65000</s:originator-as>
+             <s:originator-address>192.0.2.1</s:originator-address>
+             <s:discriminator>1</s:discriminator>
+             <s:attributes>
+              <s:policy-name>blue-policy</s:policy-name>
+              <s:candidate-path-name>primary</s:candidate-path-name>
+              <s:mpls-binding-sid>
+               <s:flags>allocated</s:flags>
+               <s:binding-sid>16000</s:binding-sid>
+              </s:mpls-binding-sid>
+              <s:state>
+               <s:priority>100</s:priority>
+               <s:flags>active evaluated valid</s:flags>
+               <s:preference>200</s:preference>
+              </s:state>
+              <s:segment-list>
+               <s:index>0</s:index>
+               <s:weight>1</s:weight>
+               <s:identifier>10</s:identifier>
+               <s:segment>
+                <s:index>0</s:index>
+                <s:type>3</s:type>
+                <s:mpls-label>16001</s:mpls-label>
+                <s:type-c>
+                 <s:algorithm>0</s:algorithm>
+                 <s:node-address>192.0.2.2</s:node-address>
+                </s:type-c>
+               </s:segment>
+              </s:segment-list>
+             </s:attributes>
+            </s:candidate-path>
+           </s:sr-pol-cp>
+          </bgp-ls:instance>
+         </bgp-ls:instances>
+        </bgp-ls:bgp-ls-topology>
+       </bgp-ls:link-state>
+      </bgp:afi-safi>
+     </bgp:afi-safis>
+    </bgp:global>
+   </bgp:bgp>
+  </control-plane-protocol>
+ </control-plane-protocols>
+</routing>
+~~~
+
+## SRv6 Candidate Path
+
+The following example contains one SRv6 candidate path with an allocated
+SRv6 Binding SID and one segment list containing an SRv6 End SID.
+
+~~~ xml
+<routing xmlns="urn:ietf:params:xml:ns:yang:ietf-routing"
+ xmlns:bgp="urn:ietf:params:xml:ns:yang:ietf-bgp"
+ xmlns:bgp-ls="urn:ietf:params:xml:ns:yang:ietf-bgp-ls"
+ xmlns:s="urn:ietf:params:xml:ns:yang:ietf-bgp-ls-sr-policy">
+ <control-plane-protocols>
+  <control-plane-protocol>
+   <type>bgp:bgp</type>
+   <name>example</name>
+   <bgp:bgp>
+    <bgp:global>
+     <bgp:afi-safis>
+      <bgp:afi-safi>
+       <bgp:name>bgp-ls:bgp-ls</bgp:name>
+       <bgp-ls:link-state>
+        <bgp-ls:bgp-ls-topology>
+         <bgp-ls:instances>
+          <bgp-ls:instance>
+           <bgp-ls:vrf-name>default</bgp-ls:vrf-name>
+           <bgp-ls:protocol>sr</bgp-ls:protocol>
+           <bgp-ls:identifier>0</bgp-ls:identifier>
+           <s:sr-pol-cp>
+            <s:candidate-path>
+             <s:as>65000</s:as>
+             <s:bgp-router-id>192.0.2.1</s:bgp-router-id>
+             <s:member-as>0</s:member-as>
+             <s:ipv4-router-id>0.0.0.0</s:ipv4-router-id>
+             <s:ipv6-router-id>2001:db8::1</s:ipv6-router-id>
+             <s:protocol-origin>3</s:protocol-origin>
+             <s:descriptor-flags>endpoint-ipv6</s:descriptor-flags>
+             <s:endpoint>2001:db8::200</s:endpoint>
+             <s:color>200</s:color>
+             <s:originator-as>65000</s:originator-as>
+             <s:originator-address>192.0.2.1</s:originator-address>
+             <s:discriminator>1</s:discriminator>
+             <s:attributes>
+              <s:policy-name>green-policy</s:policy-name>
+              <s:srv6-binding-sid>
+               <s:binding-sid>2001:db8:100::1</s:binding-sid>
+               <s:flags>allocated</s:flags>
+              </s:srv6-binding-sid>
+              <s:state>
+               <s:priority>100</s:priority>
+               <s:flags>active evaluated valid</s:flags>
+               <s:preference>200</s:preference>
+              </s:state>
+              <s:segment-list>
+               <s:index>0</s:index>
+               <s:flags>srv6-dataplane computed</s:flags>
+               <s:weight>1</s:weight>
+               <s:segment>
+                <s:index>0</s:index>
+                <s:type>9</s:type>
+                <s:srv6-sid>2001:db8:200::1</s:srv6-sid>
+                <s:type-i>
+                 <s:algorithm>0</s:algorithm>
+                 <s:node-address>2001:db8::2</s:node-address>
+                </s:type-i>
+               </s:segment>
+              </s:segment-list>
+             </s:attributes>
+            </s:candidate-path>
+           </s:sr-pol-cp>
+          </bgp-ls:instance>
+         </bgp-ls:instances>
+        </bgp-ls:bgp-ls-topology>
+       </bgp-ls:link-state>
+      </bgp:afi-safi>
+     </bgp:afi-safis>
+    </bgp:global>
+   </bgp:bgp>
+  </control-plane-protocol>
+ </control-plane-protocols>
+</routing>
+~~~
 
 # Acknowledgments
 {:numbered="false"}
 
-The authors thank the authors and contributors of {{RFC9857}}, the authors of
-{{I-D.ietf-lsvr-bgp-ls-yang}}, and the contributors to the Cisco Service Layer
-BGP-LS topology object model.
+The authors would like to thank the authors and contributors of {{RFC9857}}
+and {{I-D.ietf-lsvr-bgp-ls-yang}} for their work on the protocol definitions
+and the base YANG model used by this document.
