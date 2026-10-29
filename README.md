@@ -12,10 +12,6 @@ module and its companion Internet-Draft:
 * [`draft-aravind-lsvr-bgp-ls-sr-policy-yang.md`](draft-aravind-lsvr-bgp-ls-sr-policy-yang.md)
   is the kramdown-rfc source for the Internet-Draft.
 
-The repository follows the source layout and validation approach of
-[`mjethanandani/bgp-ls`](https://github.com/mjethanandani/bgp-ls), while using
-the current `i-d-template` GitHub workflows for draft publication.
-
 ## Repository layout
 
 ~~~
