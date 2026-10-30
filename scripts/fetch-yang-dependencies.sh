@@ -45,5 +45,33 @@ extract_document \
   rfc9129.txt \
   https://www.rfc-editor.org/rfc/rfc9129.txt \
   ietf-ospf@2022-10-19.yang
+extract_document \
+  rfc8294.txt \
+  https://www.rfc-editor.org/rfc/rfc8294.txt \
+  ietf-routing-types@2017-12-04.yang
+extract_document \
+  rfc9911.txt \
+  https://www.rfc-editor.org/rfc/rfc9911.txt \
+  ietf-inet-types@2025-12-22.yang
+extract_document \
+  rfc9067.txt \
+  https://www.rfc-editor.org/rfc/rfc9067.txt \
+  ietf-routing-policy@2021-10-11.yang
+extract_document \
+  draft-ietf-netmod-yang-semver-29.txt \
+  https://www.ietf.org/archive/id/draft-ietf-netmod-yang-semver-29.txt \
+  ietf-yang-semver@2026-03-03.yang
+extract_document \
+  rfc9127.txt \
+  https://www.rfc-editor.org/rfc/rfc9127.txt \
+  ietf-bfd-types@2021-10-21.yang
+extract_document \
+  rfc9643.txt \
+  https://www.rfc-editor.org/rfc/rfc9643.txt \
+  ietf-tcp-common@2024-10-10.yang
+extract_document \
+  rfc9648.txt \
+  https://www.rfc-editor.org/rfc/rfc9648.txt \
+  ietf-tcp@2024-10-10.yang
 
 printf '%s\n' "$base_dir" "$dependency_dir"

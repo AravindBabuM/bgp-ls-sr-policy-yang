@@ -233,6 +233,11 @@ module ietf-bgp-ls-sr-policy {
     reference
       "RFC 9911: Common YANG Data Types.";
   }
+  import ietf-routing-types {
+    prefix ietf-rt-t;
+    reference
+      "RFC 8294: Common YANG Data Types for the Routing Area.";
+  }
   import ietf-routing {
     prefix rt;
     reference
@@ -296,16 +301,10 @@ module ietf-bgp-ls-sr-policy {
        BGP-LS Segment Routing Policy.";
   }
 
-  typedef mpls-label {
-    type uint32 {
-      range "0..1048575";
-    }
-    description
-      "A 20-bit MPLS label value.";
-  }
-
   typedef protocol-origin {
-    type uint8;
+    type uint8 {
+      range "1..255";
+    }
     description
       "The component responsible for instantiating an SR Policy
        candidate path.  Values are maintained in the IANA 'SR Policy
@@ -347,23 +346,29 @@ module ietf-bgp-ls-sr-policy {
 
   typedef binding-sid-flags {
     type bits {
-      bit allocated {
+      bit srv6-dataplane {
         position 0;
+        description
+          "The Binding SID values are SRv6 SIDs instead of SR-MPLS
+           labels.  This encoding is deprecated by RFC 9857.";
+      }
+      bit allocated {
+        position 1;
         description
           "The Binding SID value is allocated.";
       }
       bit specified-unavailable {
-        position 1;
+        position 2;
         description
           "The specified Binding SID is unavailable.";
       }
       bit srlb {
-        position 2;
+        position 3;
         description
           "The Binding SID is from the headend SRLB.";
       }
       bit fallback {
-        position 3;
+        position 4;
         description
           "The value was dynamically allocated due to fallback.";
       }
@@ -912,9 +917,7 @@ module ietf-bgp-ls-sr-policy {
           "RFC 9857, Section 5.6.2.";
       }
       leaf bandwidth {
-        type decimal64 {
-          fraction-digits 2;
-        }
+        type ietf-rt-t:bandwidth-ieee-float32;
         units "bytes per second";
         description
           "Requested bandwidth.  The protocol encodes this value as
@@ -1305,7 +1308,7 @@ module ietf-bgp-ls-sr-policy {
             "Resolved or explicitly provisioned SID value.";
           case mpls {
             leaf mpls-label {
-              type mpls-label;
+              type ietf-rt-t:mpls-label-general-use;
               description
                 "SR-MPLS label.";
             }
@@ -1359,9 +1362,7 @@ module ietf-bgp-ls-sr-policy {
       }
 
       leaf bandwidth {
-        type decimal64 {
-          fraction-digits 2;
-        }
+        type ietf-rt-t:bandwidth-ieee-float32;
         units "bytes per second";
         description
           "Allocated bandwidth.  The protocol encodes this value as
@@ -1447,12 +1448,12 @@ module ietf-bgp-ls-sr-policy {
                 "Binding SID status flags.";
             }
             leaf binding-sid {
-              type mpls-label;
+              type ietf-rt-t:mpls-label-general-use;
               description
                 "Allocated or operational Binding SID.";
             }
             leaf specified-binding-sid {
-              type mpls-label;
+              type ietf-rt-t:mpls-label-general-use;
               description
                 "Explicitly specified Binding SID.";
             }
