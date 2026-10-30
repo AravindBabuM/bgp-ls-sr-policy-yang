@@ -9,6 +9,11 @@ module ietf-bgp-ls-sr-policy {
     reference
       "RFC 9911: Common YANG Data Types.";
   }
+  import ietf-yang-types {
+    prefix yang;
+    reference
+      "RFC 9911: Common YANG Data Types.";
+  }
   import ietf-routing-types {
     prefix ietf-rt-t;
     reference
@@ -37,6 +42,12 @@ module ietf-bgp-ls-sr-policy {
     reference
       "I-D.ietf-lsvr-bgp-ls-yang: A YANG Model for BGP-LS,
        BGP-LS-VPN, and BGP-LS-SPF.";
+  }
+  import iana-bgp-ls-sr-policy-types {
+    prefix iana-bgp-ls-srp-t;
+    reference
+      "RFC XXXX: A YANG Data Model for BGP-LS Segment Routing
+       Policy.";
   }
   organization
     "IETF LSVR Working Group";
@@ -78,27 +89,51 @@ module ietf-bgp-ls-sr-policy {
   }
 
   typedef protocol-origin {
-    type uint8 {
-      range "1..255";
+    type union {
+      type iana-bgp-ls-srp-t:protocol-origin;
+      type uint8 {
+        range "1..255";
+      }
     }
     description
       "The component responsible for instantiating an SR Policy
-       candidate path.  Values are maintained in the IANA 'SR Policy
-       Protocol-Origin' registry.  RFC 9857 initially defines PCEP
-       (1), BGP SR Policy (2), configuration (3), PCEP via a PCE
-       (10), BGP SR Policy via a PCE (20), and configuration via a
-       PCE (30).";
+       candidate path, from the IANA 'SR Policy Protocol-Origin'
+       registry.  A code point that is not defined in the
+       implemented revision of the IANA-maintained module is
+       reported as a numeric value.";
     reference
       "RFC 9857, Sections 4 and 8.4.";
   }
 
   typedef metric-type {
-    type uint8;
+    type union {
+      type iana-bgp-ls-srp-t:metric-type;
+      type uint8;
+    }
     description
       "An SR Policy metric type from the IANA 'BGP-LS SR Policy
-       Metric Types' registry.";
+       Metric Types' registry.  A code point that is not defined
+       in the implemented revision of the IANA-maintained module,
+       including a User Defined code point, is reported as a
+       numeric value.";
     reference
       "RFC 9857, Sections 5.6.6, 5.7.2, and 8.6.";
+  }
+
+  typedef segment-type {
+    type union {
+      type iana-bgp-ls-srp-t:segment-type;
+      type uint8 {
+        range "1..255";
+      }
+    }
+    description
+      "A Segment Type from the IANA 'BGP-LS SR Segment Descriptor
+       Types' registry.  A code point that is not defined in the
+       implemented revision of the IANA-maintained module is
+       reported as a numeric value.";
+    reference
+      "RFC 9857, Sections 5.7.1 and 8.5.";
   }
 
   typedef descriptor-flags {
@@ -547,10 +582,10 @@ module ietf-bgp-ls-sr-policy {
          value of zero indicates that the descriptor was absent.";
     }
     leaf bgp-router-id {
-      type inet:ipv4-address;
+      type yang:dotted-quad;
       description
-        "BGP Router-ID in Node Descriptor TLV 516.  The unspecified
-         address indicates that the descriptor was absent.";
+        "BGP Identifier in Node Descriptor TLV 516.  The value
+         0.0.0.0 indicates that the descriptor was absent.";
     }
     leaf member-as {
       type inet:as-number;
@@ -817,7 +852,7 @@ module ietf-bgp-ls-sr-policy {
 
       case type-a {
         container type-a {
-          when "../type = 1";
+          when "../type = 'type-a'";
           description
             "Type A: SR-MPLS label descriptor.";
           leaf algorithm {
@@ -830,7 +865,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-b {
         container type-b {
-          when "../type = 2";
+          when "../type = 'type-b'";
           description
             "Type B: SRv6 SID descriptor.";
           leaf algorithm {
@@ -843,7 +878,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-c {
         container type-c {
-          when "../type = 3";
+          when "../type = 'type-c'";
           description
             "Type C: IPv4 node address for an SR-MPLS Prefix SID.";
           leaf algorithm {
@@ -862,7 +897,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-d {
         container type-d {
-          when "../type = 4";
+          when "../type = 'type-d'";
           description
             "Type D: IPv6 node address for an SR-MPLS Prefix SID.";
           leaf algorithm {
@@ -881,7 +916,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-e {
         container type-e {
-          when "../type = 5";
+          when "../type = 'type-e'";
           description
             "Type E: IPv4 node and local interface identifier.";
           leaf node-address {
@@ -900,7 +935,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-f {
         container type-f {
-          when "../type = 6";
+          when "../type = 'type-f'";
           description
             "Type F: IPv4 local and remote interface addresses.";
           leaf local-interface-address {
@@ -920,7 +955,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-g {
         container type-g {
-          when "../type = 7";
+          when "../type = 'type-g'";
           description
             "Type G: IPv6 node addresses and interface identifiers
              for an SR-MPLS adjacency.";
@@ -929,7 +964,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-h {
         container type-h {
-          when "../type = 8";
+          when "../type = 'type-h'";
           description
             "Type H: IPv6 local and remote interface addresses for
              an SR-MPLS adjacency.";
@@ -938,7 +973,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-i {
         container type-i {
-          when "../type = 9";
+          when "../type = 'type-i'";
           description
             "Type I: IPv6 node address for an SRv6 End SID.";
           leaf algorithm {
@@ -957,7 +992,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-j {
         container type-j {
-          when "../type = 10";
+          when "../type = 'type-j'";
           description
             "Type J: IPv6 node addresses and interface identifiers
              for an SRv6 End.X SID.";
@@ -966,7 +1001,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-k {
         container type-k {
-          when "../type = 11";
+          when "../type = 'type-k'";
           description
             "Type K: IPv6 local and remote interface addresses for
              an SRv6 End.X SID.";
@@ -1092,13 +1127,10 @@ module ietf-bgp-ls-sr-policy {
             "Zero-based position of the segment in the SID list.";
         }
         leaf type {
-          type uint8 {
-            range "1..255";
-          }
+          type segment-type;
           mandatory true;
           description
-            "Segment Descriptor Type from the IANA 'BGP-LS SR
-             Segment Descriptor Types' registry.";
+            "Segment Type of the segment.";
         }
         leaf flags {
           type segment-flags;
@@ -1182,7 +1214,7 @@ module ietf-bgp-ls-sr-policy {
     description
       "Operational SR Policy candidate paths advertised in BGP-LS.";
 
-    container sr-pol-cp {
+    container sr-policy-candidate-paths {
       description
         "BGP-LS topology entries for SR Policy Candidate Path
          NLRIs.";
@@ -1290,13 +1322,21 @@ module ietf-bgp-ls-sr-policy {
           }
 
           list srv6-binding-sid {
-            key "binding-sid";
+            key "index";
+            ordered-by user;
             description
               "An SRv6 Binding SID associated with the candidate
-               path.";
+               path, in the order in which the SRv6 Binding SID TLVs
+               were received.";
             reference
               "RFC 9857, Section 5.2.";
 
+            leaf index {
+              type uint32;
+              description
+                "Zero-based position of the SRv6 Binding SID TLV in
+                 the order received.";
+            }
             leaf binding-sid {
               type inet:ipv6-address;
               description

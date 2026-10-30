@@ -13,8 +13,9 @@ setup-yang-tools: .yang-venv/.installed
 	.yang-venv/bin/python -m pip install -r requirements.txt
 	touch $@
 
-sync-draft:
-	scripts/sync-draft-yang.py
+sync-draft: setup-yang-tools
+	SYNC_DRAFT=1 PYANG=.yang-venv/bin/pyang XYM=.yang-venv/bin/xym \
+		scripts/validate-yang.sh
 
 validate-yang: setup-yang-tools
 	PYANG=.yang-venv/bin/pyang XYM=.yang-venv/bin/xym \

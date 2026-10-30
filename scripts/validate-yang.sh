@@ -4,6 +4,7 @@ set -eu
 repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 pyang=${PYANG:-pyang}
 model="$repo_root/src/yang/ietf-bgp-ls-sr-policy.yang"
+iana_model="$repo_root/src/yang/iana-bgp-ls-sr-policy-types.yang"
 build_dir="$repo_root/build"
 tree="$build_dir/ietf-bgp-ls-sr-policy-tree.txt"
 normalized_base_dir="$build_dir/dependencies/bgp-ls"
@@ -21,7 +22,7 @@ for module in "$normalized_base_dir"/*.yang; do
   mv "$module.tmp" "$module"
 done
 
-search_path="$normalized_base_dir:$dependency_dir"
+search_path="$repo_root/src/yang:$normalized_base_dir:$dependency_dir"
 pyang_executable=$(command -v "$pyang")
 pyang_prefix=$(CDPATH= cd -- "$(dirname -- "$pyang_executable")/.." && pwd)
 pyang_ietf_dir="$pyang_prefix/share/yang/modules/ietf"
@@ -33,7 +34,7 @@ pyang_iana_dir="$pyang_prefix/share/yang/modules/iana"
   --strict \
   --canonical \
   -p "$search_path" \
-  "$model"
+  "$iana_model" "$model"
 
 "$pyang" \
   -f tree \
@@ -43,6 +44,7 @@ pyang_iana_dir="$pyang_prefix/share/yang/modules/iana"
 
 if command -v yanglint >/dev/null 2>&1; then
   yanglint \
+    -p "$repo_root/src/yang" \
     -p "$normalized_base_dir" \
     -p "$dependency_dir" \
     -p "$pyang_ietf_dir" \
@@ -52,5 +54,9 @@ else
   echo "yanglint not found; pyang validation completed"
 fi
 
-"$repo_root/scripts/sync-draft-yang.py" --check
+if [ "${SYNC_DRAFT:-0}" = 1 ]; then
+  "$repo_root/scripts/sync-draft-yang.py"
+else
+  "$repo_root/scripts/sync-draft-yang.py" --check
+fi
 echo "YANG validation completed; tree written to $tree"

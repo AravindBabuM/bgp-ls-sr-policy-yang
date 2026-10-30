@@ -58,6 +58,11 @@ informative:
   RFC8340:
   RFC8341:
   RFC9846:
+  IANA-YANG-PARAMETERS:
+    title: "YANG Parameters"
+    author:
+      org: IANA
+    target: https://www.iana.org/assignments/yang-parameters
   IEEE754:
     title: "IEEE Standard for Floating-Point Arithmetic"
     author:
@@ -182,17 +187,18 @@ imported modules, as shown in the following table.
 | bgp | ietf-bgp | {{I-D.ietf-idr-bgp-model}} |
 | bgp-ls | ietf-bgp-ls | {{I-D.ietf-lsvr-bgp-ls-yang}} |
 | bgp-lsdb | ietf-bgp-lsdb | {{I-D.ietf-lsvr-bgp-ls-yang}} |
+| iana-bgp-ls-srp-t | iana-bgp-ls-sr-policy-types | RFC XXXX |
 {: title="Prefixes and Corresponding YANG Modules"}
 
 # Overview of the Data Model
 
 The tree diagram below shows an abridged view of the
-`ietf-bgp-ls-sr-policy` module.  The `sr-pol-cp` container is augmented into
-each BGP-LS LSDB instance whose Protocol-ID is Segment Routing.  Each
-candidate path is identified by the Local Node Descriptors and the SR Policy
-Candidate Path Descriptor carried in the NLRI.  The `attributes` container
-holds the state TLVs carried in the associated BGP-LS Attribute.  The
-complete tree diagram is provided in {{appendix-tree}}.
+`ietf-bgp-ls-sr-policy` module.  The `sr-policy-candidate-paths` container is
+augmented into each BGP-LS LSDB instance whose Protocol-ID is Segment
+Routing.  Each candidate path is identified by the Local Node Descriptors
+and the SR Policy Candidate Path Descriptor carried in the NLRI.  The
+`attributes` container holds the state TLVs carried in the associated BGP-LS
+Attribute.  The complete tree diagram is provided in {{appendix-tree}}.
 
 ~~~
 module: ietf-bgp-ls-sr-policy
@@ -201,14 +207,14 @@ module: ietf-bgp-ls-sr-policy
             /rt:control-plane-protocol/bgp:bgp/bgp:global
             /bgp:afi-safis/bgp:afi-safi/bgp-ls:link-state
             /bgp-ls:bgp-ls-topology/bgp-ls:instances/bgp-ls:instance:
-    +--ro sr-pol-cp
+    +--ro sr-policy-candidate-paths
        +--ro candidate-path*
                [as bgp-router-id member-as ipv4-router-id
                 ipv6-router-id protocol-origin descriptor-flags
                 endpoint color originator-as originator-address
                 discriminator]
           +--ro as                           inet:as-number
-          +--ro bgp-router-id                inet:ipv4-address
+          +--ro bgp-router-id                yang:dotted-quad
           +--ro member-as                    inet:as-number
           +--ro ipv4-router-id               inet:ipv4-address
           +--ro ipv6-router-id               inet:ipv6-address
@@ -223,7 +229,7 @@ module: ietf-bgp-ls-sr-policy
              +--ro policy-name?             string
              +--ro candidate-path-name?     string
              +--ro sr-binding-sid!
-             +--ro srv6-binding-sid* [binding-sid]
+             +--ro srv6-binding-sid* [index]
              |  +--ro srv6-sid-attributes
              |  +--ro unknown* [type]
              +--ro state!
@@ -243,12 +249,12 @@ defined by {{I-D.ietf-lsvr-bgp-ls-yang}}.  The module augments only the
 augmented because {{RFC9857}} does not define the SR Policy Candidate Path
 NLRI for BGP-LS-SPF.
 
-The `sr-pol-cp` container is a sibling of the `nodes`, `links`, `prefixes`,
-`srv6-sids`, and `unknowns` containers in an LSDB instance.  A `when`
-statement restricts the container to LSDB instances whose `protocol` leaf is
-`sr`, which corresponds to the Segment Routing Protocol-ID (9) assigned by
-{{RFC9857}}.  The NLRI Identifier field is represented by the `identifier`
-key of the enclosing LSDB instance.
+The `sr-policy-candidate-paths` container is a sibling of the `nodes`,
+`links`, `prefixes`, `srv6-sids`, and `unknowns` containers in an LSDB
+instance.  A `when` statement restricts the container to LSDB instances
+whose `protocol` leaf is `sr`, which corresponds to the Segment Routing
+Protocol-ID (9) assigned by {{RFC9857}}.  The NLRI Identifier field is
+represented by the `identifier` key of the enclosing LSDB instance.
 
 ## Candidate Path Identification
 
@@ -296,7 +302,11 @@ corresponding Node Descriptor TLV is absent from the NLRI:
 
 * `as` and `member-as`: the value 0.
 
-* `bgp-router-id` and `ipv4-router-id`: the IPv4 unspecified address
+* `bgp-router-id`: the value 0.0.0.0.  This leaf uses the `dotted-quad`
+  type because the BGP Identifier is a 4-octet value that is not
+  necessarily an IPv4 address.
+
+* `ipv4-router-id`: the IPv4 unspecified address
   (0.0.0.0).
 
 * `ipv6-router-id`: the IPv6 unspecified address (::).
@@ -366,6 +376,22 @@ The following rules apply to the representation of the BGP-LS Attribute:
   set to 0 (e.g., because no Binding SID has been specified), the server
   MUST NOT report the corresponding leaf.
 
+* Each SRv6 Binding SID TLV (TLV 1212) is represented by one entry of the
+  `srv6-binding-sid` list.  {{RFC9857}} permits multiple instances of this
+  TLV for a candidate path.  The server MUST assign the `index` key
+  according to the order in which the TLVs appear in the BGP-LS Attribute,
+  starting at 0.  When the Binding SID or Specified Binding SID field is
+  set to 0, the server MUST NOT report the corresponding leaf.
+
+* The Protocol-Origin, Metric Type, and Segment Type fields carry code
+  points from IANA registries.  These are represented by union types whose
+  first member is an enumeration defined in the IANA-maintained
+  `iana-bgp-ls-sr-policy-types` module ({{iana-module}}) and whose second
+  member is `uint8`.  When a code point is defined in the revision of the
+  IANA-maintained module implemented by the server, the server MUST report
+  the enumeration name.  Otherwise, including for User Defined metric
+  types, the server MUST report the numeric value.
+
 * When the Disjoint Group Identifier or Bidirectional Group Identifier
   field carries a 4-octet value, the server MUST report it in the
   `group-id` leaf.  When the field carries a PCEP ASSOCIATION Object
@@ -405,16 +431,20 @@ without `segment` entries.
 
 Segment Descriptor Types A through K defined in Section 5.7.1.1 of
 {{RFC9857}} are represented by separate cases of the `descriptor` choice.
-The `type` leaf of a segment contains the Segment Type code point, and each
-case is constrained by a `when` statement to the corresponding code point.
+The `type` leaf of a segment contains the Segment Type, and each case is
+constrained by a `when` statement to the corresponding enumeration name.
 The SID value is present only when the S-flag (`sid-present`) of the
 segment is set.  The Algorithm field of a Type A or Type B descriptor is
 meaningful only when the A-flag (`algorithm-valid`) of the segment is set.
 
-# YANG Module
+# YANG Modules
 
-The `ietf-bgp-ls-sr-policy` module imports typedefs from {{RFC9911}} and
-{{RFC8294}}, the routing management module defined in {{RFC8349}}, the BGP module defined in
+## BGP-LS SR Policy Module
+
+The `ietf-bgp-ls-sr-policy` module imports typedefs from {{RFC9911}},
+{{RFC8294}}, and the `iana-bgp-ls-sr-policy-types` module defined in
+{{iana-module}}, the routing management module defined in {{RFC8349}}, the
+BGP module defined in
 {{I-D.ietf-idr-bgp-model}}, and the BGP-LS and LSDB modules defined in
 {{I-D.ietf-lsvr-bgp-ls-yang}}.  The module also references {{RFC8697}} and
 {{RFC9857}}.
@@ -431,6 +461,11 @@ module ietf-bgp-ls-sr-policy {
 
   import ietf-inet-types {
     prefix inet;
+    reference
+      "RFC 9911: Common YANG Data Types.";
+  }
+  import ietf-yang-types {
+    prefix yang;
     reference
       "RFC 9911: Common YANG Data Types.";
   }
@@ -462,6 +497,12 @@ module ietf-bgp-ls-sr-policy {
     reference
       "I-D.ietf-lsvr-bgp-ls-yang: A YANG Model for BGP-LS,
        BGP-LS-VPN, and BGP-LS-SPF.";
+  }
+  import iana-bgp-ls-sr-policy-types {
+    prefix iana-bgp-ls-srp-t;
+    reference
+      "RFC XXXX: A YANG Data Model for BGP-LS Segment Routing
+       Policy.";
   }
   organization
     "IETF LSVR Working Group";
@@ -503,27 +544,51 @@ module ietf-bgp-ls-sr-policy {
   }
 
   typedef protocol-origin {
-    type uint8 {
-      range "1..255";
+    type union {
+      type iana-bgp-ls-srp-t:protocol-origin;
+      type uint8 {
+        range "1..255";
+      }
     }
     description
       "The component responsible for instantiating an SR Policy
-       candidate path.  Values are maintained in the IANA 'SR Policy
-       Protocol-Origin' registry.  RFC 9857 initially defines PCEP
-       (1), BGP SR Policy (2), configuration (3), PCEP via a PCE
-       (10), BGP SR Policy via a PCE (20), and configuration via a
-       PCE (30).";
+       candidate path, from the IANA 'SR Policy Protocol-Origin'
+       registry.  A code point that is not defined in the
+       implemented revision of the IANA-maintained module is
+       reported as a numeric value.";
     reference
       "RFC 9857, Sections 4 and 8.4.";
   }
 
   typedef metric-type {
-    type uint8;
+    type union {
+      type iana-bgp-ls-srp-t:metric-type;
+      type uint8;
+    }
     description
       "An SR Policy metric type from the IANA 'BGP-LS SR Policy
-       Metric Types' registry.";
+       Metric Types' registry.  A code point that is not defined
+       in the implemented revision of the IANA-maintained module,
+       including a User Defined code point, is reported as a
+       numeric value.";
     reference
       "RFC 9857, Sections 5.6.6, 5.7.2, and 8.6.";
+  }
+
+  typedef segment-type {
+    type union {
+      type iana-bgp-ls-srp-t:segment-type;
+      type uint8 {
+        range "1..255";
+      }
+    }
+    description
+      "A Segment Type from the IANA 'BGP-LS SR Segment Descriptor
+       Types' registry.  A code point that is not defined in the
+       implemented revision of the IANA-maintained module is
+       reported as a numeric value.";
+    reference
+      "RFC 9857, Sections 5.7.1 and 8.5.";
   }
 
   typedef descriptor-flags {
@@ -972,10 +1037,10 @@ module ietf-bgp-ls-sr-policy {
          value of zero indicates that the descriptor was absent.";
     }
     leaf bgp-router-id {
-      type inet:ipv4-address;
+      type yang:dotted-quad;
       description
-        "BGP Router-ID in Node Descriptor TLV 516.  The unspecified
-         address indicates that the descriptor was absent.";
+        "BGP Identifier in Node Descriptor TLV 516.  The value
+         0.0.0.0 indicates that the descriptor was absent.";
     }
     leaf member-as {
       type inet:as-number;
@@ -1242,7 +1307,7 @@ module ietf-bgp-ls-sr-policy {
 
       case type-a {
         container type-a {
-          when "../type = 1";
+          when "../type = 'type-a'";
           description
             "Type A: SR-MPLS label descriptor.";
           leaf algorithm {
@@ -1255,7 +1320,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-b {
         container type-b {
-          when "../type = 2";
+          when "../type = 'type-b'";
           description
             "Type B: SRv6 SID descriptor.";
           leaf algorithm {
@@ -1268,7 +1333,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-c {
         container type-c {
-          when "../type = 3";
+          when "../type = 'type-c'";
           description
             "Type C: IPv4 node address for an SR-MPLS Prefix SID.";
           leaf algorithm {
@@ -1287,7 +1352,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-d {
         container type-d {
-          when "../type = 4";
+          when "../type = 'type-d'";
           description
             "Type D: IPv6 node address for an SR-MPLS Prefix SID.";
           leaf algorithm {
@@ -1306,7 +1371,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-e {
         container type-e {
-          when "../type = 5";
+          when "../type = 'type-e'";
           description
             "Type E: IPv4 node and local interface identifier.";
           leaf node-address {
@@ -1325,7 +1390,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-f {
         container type-f {
-          when "../type = 6";
+          when "../type = 'type-f'";
           description
             "Type F: IPv4 local and remote interface addresses.";
           leaf local-interface-address {
@@ -1345,7 +1410,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-g {
         container type-g {
-          when "../type = 7";
+          when "../type = 'type-g'";
           description
             "Type G: IPv6 node addresses and interface identifiers
              for an SR-MPLS adjacency.";
@@ -1354,7 +1419,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-h {
         container type-h {
-          when "../type = 8";
+          when "../type = 'type-h'";
           description
             "Type H: IPv6 local and remote interface addresses for
              an SR-MPLS adjacency.";
@@ -1363,7 +1428,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-i {
         container type-i {
-          when "../type = 9";
+          when "../type = 'type-i'";
           description
             "Type I: IPv6 node address for an SRv6 End SID.";
           leaf algorithm {
@@ -1382,7 +1447,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-j {
         container type-j {
-          when "../type = 10";
+          when "../type = 'type-j'";
           description
             "Type J: IPv6 node addresses and interface identifiers
              for an SRv6 End.X SID.";
@@ -1391,7 +1456,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-k {
         container type-k {
-          when "../type = 11";
+          when "../type = 'type-k'";
           description
             "Type K: IPv6 local and remote interface addresses for
              an SRv6 End.X SID.";
@@ -1517,13 +1582,10 @@ module ietf-bgp-ls-sr-policy {
             "Zero-based position of the segment in the SID list.";
         }
         leaf type {
-          type uint8 {
-            range "1..255";
-          }
+          type segment-type;
           mandatory true;
           description
-            "Segment Descriptor Type from the IANA 'BGP-LS SR
-             Segment Descriptor Types' registry.";
+            "Segment Type of the segment.";
         }
         leaf flags {
           type segment-flags;
@@ -1607,7 +1669,7 @@ module ietf-bgp-ls-sr-policy {
     description
       "Operational SR Policy candidate paths advertised in BGP-LS.";
 
-    container sr-pol-cp {
+    container sr-policy-candidate-paths {
       description
         "BGP-LS topology entries for SR Policy Candidate Path
          NLRIs.";
@@ -1715,13 +1777,21 @@ module ietf-bgp-ls-sr-policy {
           }
 
           list srv6-binding-sid {
-            key "binding-sid";
+            key "index";
+            ordered-by user;
             description
               "An SRv6 Binding SID associated with the candidate
-               path.";
+               path, in the order in which the SRv6 Binding SID TLVs
+               were received.";
             reference
               "RFC 9857, Section 5.2.";
 
+            leaf index {
+              type uint32;
+              description
+                "Zero-based position of the SRv6 Binding SID TLV in
+                 the order received.";
+            }
             leaf binding-sid {
               type inet:ipv6-address;
               description
@@ -1797,6 +1867,245 @@ module ietf-bgp-ls-sr-policy {
 ~~~
 <!-- YANG-MODEL:END -->
 
+## IANA-Maintained Module {#iana-module}
+
+The `iana-bgp-ls-sr-policy-types` module defines enumerations for the code
+points of the "SR Policy Protocol-Origin", "BGP-LS SR Segment Descriptor
+Types", and "BGP-LS SR Policy Metric Types" registries established by
+{{RFC9857}}.  The version of the module below reflects the registries at
+the time of writing.  The current version is maintained by IANA, as
+described in {{iana-maintained}}.
+
+<!-- IANA-YANG-MODEL:BEGIN -->
+~~~ yang
+<CODE BEGINS> file "iana-bgp-ls-sr-policy-types@2026-10-28.yang"
+
+module iana-bgp-ls-sr-policy-types {
+  yang-version 1.1;
+  namespace
+    "urn:ietf:params:xml:ns:yang:iana-bgp-ls-sr-policy-types";
+  prefix iana-bgp-ls-srp-t;
+
+  organization
+    "Internet Assigned Numbers Authority (IANA)";
+  contact
+    "Internet Assigned Numbers Authority
+
+     ICANN
+     12025 Waterfront Drive, Suite 300
+     Los Angeles, CA 90094-2536
+     United States of America
+
+     Tel:    +1 310 301 5800
+     <mailto:iana@iana.org>";
+  description
+    "This module contains type definitions for the code points of
+     the IANA registries used by SR Policy information distributed
+     in BGP - Link State (BGP-LS).
+
+     Copyright (c) 2026 IETF Trust and the persons identified as
+     authors of the code.  All rights reserved.
+
+     Redistribution and use in source and binary forms, with or
+     without modification, is permitted pursuant to, and subject to
+     the license terms contained in, the Revised BSD License set
+     forth in Section 4.c of the IETF Trust's Legal Provisions
+     Relating to IETF Documents
+     (https://trustee.ietf.org/license-info).
+
+     The initial version of this YANG module is part of RFC XXXX;
+     see the RFC itself for full legal notices.
+
+     All revisions of IANA-maintained modules can be found in the
+     'YANG Parameters' registry group
+     (https://www.iana.org/assignments/yang-parameters).";
+
+  revision 2026-10-28 {
+    description
+      "Initial revision.";
+    reference
+      "RFC XXXX: A YANG Data Model for BGP-LS Segment Routing
+       Policy.";
+  }
+
+  typedef protocol-origin {
+    type enumeration {
+      enum pcep {
+        value 1;
+        description
+          "PCEP.";
+      }
+      enum bgp-sr-policy {
+        value 2;
+        description
+          "BGP SR Policy.";
+      }
+      enum configuration {
+        value 3;
+        description
+          "Configuration (CLI, YANG model via NETCONF, etc.).";
+      }
+      enum pcep-via-pce {
+        value 10;
+        description
+          "PCEP (in PCEP or when BGP-LS Producer is PCE).";
+      }
+      enum bgp-sr-policy-via-pce {
+        value 20;
+        description
+          "BGP SR Policy (in PCEP or when BGP-LS Producer is PCE).";
+      }
+      enum configuration-via-pce {
+        value 30;
+        description
+          "Configuration (CLI, YANG model via NETCONF, etc.  In
+           PCEP or when BGP-LS Producer is PCE).";
+      }
+    }
+    description
+      "Code points of the IANA 'SR Policy Protocol-Origin'
+       registry.";
+    reference
+      "RFC 9857: Advertisement of Segment Routing Policies Using
+       BGP - Link State, Section 8.4.";
+  }
+
+  typedef segment-type {
+    type enumeration {
+      enum type-a {
+        value 1;
+        description
+          "Type A Segment: SR-MPLS Label.";
+      }
+      enum type-b {
+        value 2;
+        description
+          "Type B Segment: SRv6 SID.";
+      }
+      enum type-c {
+        value 3;
+        description
+          "Type C Segment: IPv4 Prefix with optional SR
+           Algorithm.";
+      }
+      enum type-d {
+        value 4;
+        description
+          "Type D Segment: IPv6 Global Prefix with optional SR
+           Algorithm for SR-MPLS.";
+      }
+      enum type-e {
+        value 5;
+        description
+          "Type E Segment: IPv4 Prefix with Local Interface ID.";
+      }
+      enum type-f {
+        value 6;
+        description
+          "Type F Segment: IPv4 Addresses for link endpoints as
+           Local, Remote pair.";
+      }
+      enum type-g {
+        value 7;
+        description
+          "Type G Segment: IPv6 Prefix and Interface ID for link
+           endpoints as Local, Remote pair for SR-MPLS.";
+      }
+      enum type-h {
+        value 8;
+        description
+          "Type H Segment: IPv6 Addresses for link endpoints as
+           Local, Remote pair for SR-MPLS.";
+      }
+      enum type-i {
+        value 9;
+        description
+          "Type I Segment: IPv6 Global Prefix with optional SR
+           Algorithm for SRv6.";
+      }
+      enum type-j {
+        value 10;
+        description
+          "Type J Segment: IPv6 Prefix and Interface ID for link
+           endpoints as Local, Remote pair for SRv6.";
+      }
+      enum type-k {
+        value 11;
+        description
+          "Type K Segment: IPv6 Addresses for link endpoints as
+           Local, Remote pair for SRv6.";
+      }
+    }
+    description
+      "Code points of the IANA 'BGP-LS SR Segment Descriptor
+       Types' registry.";
+    reference
+      "RFC 9857: Advertisement of Segment Routing Policies Using
+       BGP - Link State, Section 8.5.";
+  }
+
+  typedef metric-type {
+    type enumeration {
+      enum igp {
+        value 0;
+        description
+          "IGP metric.";
+      }
+      enum min-unidirectional-delay {
+        value 1;
+        description
+          "Min Unidirectional Delay.";
+      }
+      enum te {
+        value 2;
+        description
+          "TE metric.";
+      }
+      enum hop-count {
+        value 3;
+        description
+          "Hop Count.";
+      }
+      enum sid-list-length {
+        value 4;
+        description
+          "SID List Length.";
+      }
+      enum bandwidth {
+        value 5;
+        description
+          "Bandwidth.";
+      }
+      enum avg-unidirectional-delay {
+        value 6;
+        description
+          "Avg Unidirectional Delay.";
+      }
+      enum unidirectional-delay-variation {
+        value 7;
+        description
+          "Unidirectional Delay Variation.";
+      }
+      enum loss {
+        value 8;
+        description
+          "Loss.";
+      }
+    }
+    description
+      "Code points of the IANA 'BGP-LS SR Policy Metric Types'
+       registry.  The User Defined range (128-255) is not
+       enumerated.";
+    reference
+      "RFC 9857: Advertisement of Segment Routing Policies Using
+       BGP - Link State, Section 8.6.";
+  }
+}
+
+<CODE ENDS>
+~~~
+<!-- IANA-YANG-MODEL:END -->
+
 # Security Considerations
 
 The YANG module specified in this document defines a schema for data that is
@@ -1811,9 +2120,12 @@ the means to restrict access for particular NETCONF or RESTCONF users to a
 preconfigured subset of all available NETCONF or RESTCONF protocol
 operations and content.
 
-There are no data nodes defined in this YANG module that are writable,
-creatable, or deletable (i.e., `config true`, which is the default).  The
-module therefore introduces no write-related vulnerabilities.
+There are no data nodes defined in the `ietf-bgp-ls-sr-policy` module that
+are writable, creatable, or deletable (i.e., `config true`, which is the
+default).  The module therefore introduces no write-related
+vulnerabilities.  The `iana-bgp-ls-sr-policy-types` module defines only
+data types and no data nodes, RPCs, actions, or notifications; it
+introduces no security considerations of its own.
 
 Some of the readable data nodes in this YANG module may be considered
 sensitive or vulnerable in some network environments.  It is thus important
@@ -1822,7 +2134,7 @@ data nodes.  These are the subtrees and data nodes and their
 sensitivity/vulnerability (the augmented path is abbreviated; the full path
 is shown in {{appendix-tree}}):
 
-`.../bgp-ls:instance/bgp-ls-sr-policy:sr-pol-cp`:
+`.../bgp-ls:instance/bgp-ls-sr-policy:sr-policy-candidate-paths`:
 : This subtree contains headend, endpoint, and originator addresses,
   Binding SIDs, complete segment lists, path constraints, requested and
   allocated bandwidth, and disjointness and bidirectional associations.
@@ -1848,19 +2160,24 @@ The security considerations of {{RFC9256}}, {{RFC9552}}, {{RFC9857}},
 
 ## The "IETF XML" Registry
 
-IANA is requested to register the following URI in the "ns" subregistry
+IANA is requested to register the following URIs in the "ns" subregistry
 within the "IETF XML Registry" {{RFC3688}}:
 
 ~~~
 URI: urn:ietf:params:xml:ns:yang:ietf-bgp-ls-sr-policy
 Registrant Contact: The IESG.
 XML: N/A; the requested URI is an XML namespace.
+
+URI: urn:ietf:params:xml:ns:yang:iana-bgp-ls-sr-policy-types
+Registrant Contact: The IESG.
+XML: N/A; the requested URI is an XML namespace.
 ~~~
 
 ## The "YANG Module Names" Registry
 
-IANA is requested to register the following YANG module in the "YANG Module
-Names" registry {{RFC6020}} within the "YANG Parameters" registry group:
+IANA is requested to register the following YANG modules in the "YANG
+Module Names" registry {{RFC6020}} within the "YANG Parameters" registry
+group:
 
 ~~~
 Name: ietf-bgp-ls-sr-policy
@@ -1868,7 +2185,56 @@ Maintained by IANA?  N
 Namespace: urn:ietf:params:xml:ns:yang:ietf-bgp-ls-sr-policy
 Prefix: bgp-ls-sr-policy
 Reference: RFC XXXX
+
+Name: iana-bgp-ls-sr-policy-types
+Maintained by IANA?  Y
+Namespace: urn:ietf:params:xml:ns:yang:iana-bgp-ls-sr-policy-types
+Prefix: iana-bgp-ls-srp-t
+Reference: RFC XXXX
 ~~~
+
+## Maintenance of the IANA-Maintained Module {#iana-maintained}
+
+IANA is requested to post the initial version of the
+`iana-bgp-ls-sr-policy-types` YANG module defined in {{iana-module}} and to
+maintain it as follows.
+
+When a new code point is assigned in the "SR Policy Protocol-Origin",
+"BGP-LS SR Segment Descriptor Types", or "BGP-LS SR Policy Metric Types"
+registry, other than in the Reserved, Private Use, or User Defined ranges,
+a new `enum` statement MUST be added to the corresponding `protocol-origin`,
+`segment-type`, or `metric-type` typedef of the module.  The `enum`
+statement MUST have the following sub-statements:
+
+`value`:
+: The assigned code point.
+
+`description`:
+: The description of the code point in the registry.
+
+`reference`:
+: The reference of the code point in the registry.
+
+The name of the `enum` statement is derived from the registry description
+by converting it to lowercase and replacing spaces and punctuation with
+hyphens.
+
+When the description or reference of a code point is updated in one of
+these registries, the corresponding `enum` statement MUST be updated.  When
+a code point is deprecated or made obsolete, a `status` sub-statement with
+the value `deprecated` or `obsolete`, respectively, MUST be added to the
+corresponding `enum` statement.
+
+Each time the module is updated, a new `revision` statement MUST be added
+before the existing `revision` statements.  The description of the new
+`revision` statement MUST identify the changes made.
+
+IANA is requested to add the following note to each of the three
+registries listed above:
+
+> When this registry is modified, the YANG module
+> "iana-bgp-ls-sr-policy-types" {{IANA-YANG-PARAMETERS}} must be updated as
+> defined in RFC XXXX.
 
 RFC Editor: Please replace XXXX with the RFC number assigned to this
 document and remove this note.
@@ -1889,14 +2255,14 @@ module: ietf-bgp-ls-sr-policy
             /rt:control-plane-protocol/bgp:bgp/bgp:global
             /bgp:afi-safis/bgp:afi-safi/bgp-ls:link-state
             /bgp-ls:bgp-ls-topology/bgp-ls:instances/bgp-ls:instance:
-    +--ro sr-pol-cp
+    +--ro sr-policy-candidate-paths
        +--ro candidate-path*
                [as bgp-router-id member-as ipv4-router-id
                 ipv6-router-id protocol-origin descriptor-flags
                 endpoint color originator-as originator-address
                 discriminator]
           +--ro as                    inet:as-number
-          +--ro bgp-router-id         inet:ipv4-address
+          +--ro bgp-router-id         yang:dotted-quad
           +--ro member-as             inet:as-number
           +--ro ipv4-router-id        inet:ipv4-address
           +--ro ipv6-router-id        inet:ipv6-address
@@ -1924,8 +2290,9 @@ module: ietf-bgp-ls-sr-policy
              |        |       inet:ipv6-address
              |        +--ro srv6-specified-binding-sid?
              |                inet:ipv6-address
-             +--ro srv6-binding-sid* [binding-sid]
-             |  +--ro binding-sid              inet:ipv6-address
+             +--ro srv6-binding-sid* [index]
+             |  +--ro index                    uint32
+             |  +--ro binding-sid?             inet:ipv6-address
              |  +--ro flags?                   srv6-binding-sid-flags
              |  +--ro specified-binding-sid?   inet:ipv6-address
              |  +--ro srv6-sid-attributes
@@ -1995,7 +2362,7 @@ module: ietf-bgp-ls-sr-policy
              |  +--ro identifier?          uint32
              |  +--ro segment* [index]
              |  |  +--ro index                  uint32
-             |  |  +--ro type                   uint8
+             |  |  +--ro type                   segment-type
              |  |  +--ro flags?                 segment-flags
              |  |  +--ro (sid)?
              |  |  |  +--:(mpls)
@@ -2133,14 +2500,14 @@ segment (IPv4 Prefix SID).
            <bgp-ls:vrf-name>default</bgp-ls:vrf-name>
            <bgp-ls:protocol>sr</bgp-ls:protocol>
            <bgp-ls:identifier>0</bgp-ls:identifier>
-           <s:sr-pol-cp>
+           <s:sr-policy-candidate-paths>
             <s:candidate-path>
              <s:as>65000</s:as>
              <s:bgp-router-id>192.0.2.1</s:bgp-router-id>
              <s:member-as>0</s:member-as>
              <s:ipv4-router-id>192.0.2.1</s:ipv4-router-id>
              <s:ipv6-router-id>::</s:ipv6-router-id>
-             <s:protocol-origin>3</s:protocol-origin>
+             <s:protocol-origin>configuration</s:protocol-origin>
              <s:descriptor-flags/>
              <s:endpoint>192.0.2.200</s:endpoint>
              <s:color>100</s:color>
@@ -2166,7 +2533,7 @@ segment (IPv4 Prefix SID).
                <s:identifier>10</s:identifier>
                <s:segment>
                 <s:index>0</s:index>
-                <s:type>3</s:type>
+                <s:type>type-c</s:type>
                 <s:flags>sid-present verified resolved</s:flags>
                 <s:mpls-label>16001</s:mpls-label>
                 <s:type-c>
@@ -2177,7 +2544,7 @@ segment (IPv4 Prefix SID).
               </s:segment-list>
              </s:attributes>
             </s:candidate-path>
-           </s:sr-pol-cp>
+           </s:sr-policy-candidate-paths>
           </bgp-ls:instance>
          </bgp-ls:instances>
         </bgp-ls:bgp-ls-topology>
@@ -2220,14 +2587,14 @@ address.
            <bgp-ls:vrf-name>default</bgp-ls:vrf-name>
            <bgp-ls:protocol>sr</bgp-ls:protocol>
            <bgp-ls:identifier>0</bgp-ls:identifier>
-           <s:sr-pol-cp>
+           <s:sr-policy-candidate-paths>
             <s:candidate-path>
              <s:as>65000</s:as>
              <s:bgp-router-id>192.0.2.1</s:bgp-router-id>
              <s:member-as>0</s:member-as>
              <s:ipv4-router-id>0.0.0.0</s:ipv4-router-id>
              <s:ipv6-router-id>2001:db8::1</s:ipv6-router-id>
-             <s:protocol-origin>3</s:protocol-origin>
+             <s:protocol-origin>configuration</s:protocol-origin>
              <s:descriptor-flags>endpoint-ipv6</s:descriptor-flags>
              <s:endpoint>2001:db8::200</s:endpoint>
              <s:color>200</s:color>
@@ -2237,6 +2604,7 @@ address.
              <s:attributes>
               <s:policy-name>green-policy</s:policy-name>
               <s:srv6-binding-sid>
+               <s:index>0</s:index>
                <s:binding-sid>2001:db8:100::1</s:binding-sid>
                <s:flags>allocated</s:flags>
               </s:srv6-binding-sid>
@@ -2251,7 +2619,7 @@ address.
                <s:weight>1</s:weight>
                <s:segment>
                 <s:index>0</s:index>
-                <s:type>9</s:type>
+                <s:type>type-i</s:type>
                 <s:flags>sid-present verified resolved</s:flags>
                 <s:srv6-sid>2001:db8:200::1</s:srv6-sid>
                 <s:type-i>
@@ -2262,7 +2630,7 @@ address.
               </s:segment-list>
              </s:attributes>
             </s:candidate-path>
-           </s:sr-pol-cp>
+           </s:sr-policy-candidate-paths>
           </bgp-ls:instance>
          </bgp-ls:instances>
         </bgp-ls:bgp-ls-topology>
