@@ -37,6 +37,7 @@ author:
 
 normative:
   RFC7950:
+  RFC8294:
   RFC8342:
   RFC8349:
   RFC8697:
@@ -177,6 +178,7 @@ imported modules, as shown in the following table.
 | inet | ietf-inet-types | {{RFC9911}} |
 | yang | ietf-yang-types | {{RFC9911}} |
 | rt | ietf-routing | {{RFC8349}} |
+| ietf-rt-t | ietf-routing-types | {{RFC8294}} |
 | bgp | ietf-bgp | {{I-D.ietf-idr-bgp-model}} |
 | bgp-ls | ietf-bgp-ls | {{I-D.ietf-lsvr-bgp-ls-yang}} |
 | bgp-lsdb | ietf-bgp-lsdb | {{I-D.ietf-lsvr-bgp-ls-yang}} |
@@ -220,7 +222,7 @@ module: ietf-bgp-ls-sr-policy
           +--ro attributes
              +--ro policy-name?             string
              +--ro candidate-path-name?     string
-             +--ro mpls-binding-sid!
+             +--ro sr-binding-sid!
              +--ro srv6-binding-sid* [binding-sid]
              |  +--ro srv6-sid-attributes
              |  +--ro unknown* [type]
@@ -318,7 +320,7 @@ the TLV code point indicates a sub-TLV of the preceding TLV.
 ~~~
 TLV   RFC 9857 element                Data node under attributes
 ----  ------------------------------  -------------------------------
-1201  SR Binding SID (D-flag clear)   mpls-binding-sid
+1201  SR Binding SID                  sr-binding-sid
 1212  SRv6 Binding SID                srv6-binding-sid
 1202  SR Candidate Path State         state
 1213  SR Policy Name                  policy-name
@@ -353,10 +355,16 @@ The following rules apply to the representation of the BGP-LS Attribute:
   TLVs and sub-TLVs, the server MUST represent only the instance that is
   used according to {{RFC9857}}.
 
-* An SR Binding SID TLV (TLV 1201) with the D-flag set uses the deprecated
-  SRv6 encoding described in Section 5.1 of {{RFC9857}}.  The server MUST
-  NOT represent such a TLV in the `mpls-binding-sid` container and MAY
-  report it in the `unknown` list of the `attributes` container.
+* The SR Binding SID TLV (TLV 1201) is represented by the `sr-binding-sid`
+  container.  The D-flag is represented by the `srv6-dataplane` bit of the
+  `flags` leaf.  When the D-flag is clear, the server MUST report the
+  Binding SID and Specified Binding SID fields in the `binding-sid` and
+  `specified-binding-sid` leaves.  When the D-flag is set, the TLV uses the
+  SRv6 encoding that is deprecated by Section 5.1 of {{RFC9857}}, and the
+  server MUST report these fields in the `srv6-binding-sid` and
+  `srv6-specified-binding-sid` leaves.  In both cases, when either field is
+  set to 0 (e.g., because no Binding SID has been specified), the server
+  MUST NOT report the corresponding leaf.
 
 * When the Disjoint Group Identifier or Bidirectional Group Identifier
   field carries a 4-octet value, the server MUST report it in the
@@ -366,9 +374,9 @@ The following rules apply to the representation of the BGP-LS Attribute:
 
 * Bandwidth values are encoded by {{RFC9857}} in bytes per second as IEEE
   754 single-precision floating-point numbers {{IEEE754}}.  The module
-  represents bandwidth as a `decimal64` value with two fractional digits in
-  bytes per second.  The server SHOULD round the received value to the
-  nearest representable `decimal64` value.
+  represents bandwidth using the `bandwidth-ieee-float32` type defined in
+  {{RFC8294}}, in bytes per second.  The server MUST report the received
+  value without conversion or rounding.
 
 * Each flag defined by {{RFC9857}} is represented by a bit of the same
   name in a YANG `bits` type.  The YANG bit positions match the bit
@@ -405,8 +413,8 @@ meaningful only when the A-flag (`algorithm-valid`) of the segment is set.
 
 # YANG Module
 
-The `ietf-bgp-ls-sr-policy` module imports typedefs from {{RFC9911}}, the
-routing management module defined in {{RFC8349}}, the BGP module defined in
+The `ietf-bgp-ls-sr-policy` module imports typedefs from {{RFC9911}} and
+{{RFC8294}}, the routing management module defined in {{RFC8349}}, the BGP module defined in
 {{I-D.ietf-idr-bgp-model}}, and the BGP-LS and LSDB modules defined in
 {{I-D.ietf-lsvr-bgp-ls-yang}}.  The module also references {{RFC8697}} and
 {{RFC9857}}.
@@ -1653,14 +1661,16 @@ module ietf-bgp-ls-sr-policy {
               "RFC 9857, Section 5.5.";
           }
 
-          container mpls-binding-sid {
+          container sr-binding-sid {
             presence "An SR Binding SID TLV was received.";
             description
-              "SR-MPLS Binding SID state.  An SR Binding SID TLV
-               with the D-flag set uses the deprecated SRv6 encoding
-               and is not represented in this container; SRv6
-               Binding SIDs are represented by the srv6-binding-sid
-               list (TLV 1212).";
+              "Binding SID state reported in the SR Binding SID TLV
+               (TLV 1201).  The 'srv6-dataplane' flag (D-flag)
+               selects between the SR-MPLS and SRv6 encodings.  The
+               SRv6 encoding of this TLV is deprecated by RFC 9857
+               and is represented only for backward compatibility;
+               SRv6 Binding SIDs are otherwise represented by the
+               srv6-binding-sid list (TLV 1212).";
             reference
               "RFC 9857, Section 5.1.";
 
@@ -1669,15 +1679,38 @@ module ietf-bgp-ls-sr-policy {
               description
                 "Binding SID status flags.";
             }
-            leaf binding-sid {
-              type ietf-rt-t:mpls-label-general-use;
+            choice dataplane {
               description
-                "Allocated or operational Binding SID.";
-            }
-            leaf specified-binding-sid {
-              type ietf-rt-t:mpls-label-general-use;
-              description
-                "Explicitly specified Binding SID.";
+                "Binding SID values according to the dataplane
+                 indicated by the 'srv6-dataplane' flag.";
+              case mpls {
+                leaf binding-sid {
+                  when "not(bit-is-set(../flags, 'srv6-dataplane'))";
+                  type ietf-rt-t:mpls-label-general-use;
+                  description
+                    "Allocated or operational SR-MPLS Binding SID.";
+                }
+                leaf specified-binding-sid {
+                  when "not(bit-is-set(../flags, 'srv6-dataplane'))";
+                  type ietf-rt-t:mpls-label-general-use;
+                  description
+                    "Explicitly specified SR-MPLS Binding SID.";
+                }
+              }
+              case srv6 {
+                leaf srv6-binding-sid {
+                  when "bit-is-set(../flags, 'srv6-dataplane')";
+                  type inet:ipv6-address;
+                  description
+                    "Allocated or operational SRv6 Binding SID.";
+                }
+                leaf srv6-specified-binding-sid {
+                  when "bit-is-set(../flags, 'srv6-dataplane')";
+                  type inet:ipv6-address;
+                  description
+                    "Explicitly specified SRv6 Binding SID.";
+                }
+              }
             }
           }
 
@@ -1877,10 +1910,20 @@ module: ietf-bgp-ls-sr-policy
           +--ro attributes
              +--ro policy-name?           string
              +--ro candidate-path-name?   string
-             +--ro mpls-binding-sid!
-             |  +--ro flags?                   binding-sid-flags
-             |  +--ro binding-sid?             mpls-label
-             |  +--ro specified-binding-sid?   mpls-label
+             +--ro sr-binding-sid!
+             |  +--ro flags?
+             |  |       binding-sid-flags
+             |  +--ro (dataplane)?
+             |     +--:(mpls)
+             |     |  +--ro binding-sid?
+             |     |  |       ietf-rt-t:mpls-label-general-use
+             |     |  +--ro specified-binding-sid?
+             |     |          ietf-rt-t:mpls-label-general-use
+             |     +--:(srv6)
+             |        +--ro srv6-binding-sid?
+             |        |       inet:ipv6-address
+             |        +--ro srv6-specified-binding-sid?
+             |                inet:ipv6-address
              +--ro srv6-binding-sid* [binding-sid]
              |  +--ro binding-sid              inet:ipv6-address
              |  +--ro flags?                   srv6-binding-sid-flags
@@ -1918,7 +1961,8 @@ module: ietf-bgp-ls-sr-policy
              |  |  +--ro include-any*   uint32
              |  |  +--ro include-all*   uint32
              |  +--ro excluded-srlg*         uint32
-             |  +--ro bandwidth?             decimal64
+             |  +--ro bandwidth?
+             |  |       ietf-rt-t:bandwidth-ieee-float32
              |  +--ro disjoint-group!
              |  |  +--ro request-flags?
              |  |  |       disjoint-request-flags
@@ -1955,7 +1999,8 @@ module: ietf-bgp-ls-sr-policy
              |  |  +--ro flags?                 segment-flags
              |  |  +--ro (sid)?
              |  |  |  +--:(mpls)
-             |  |  |  |  +--ro mpls-label?      mpls-label
+             |  |  |  |  +--ro mpls-label?
+             |  |  |  |          ietf-rt-t:mpls-label-general-use
              |  |  |  +--:(srv6)
              |  |  |     +--ro srv6-sid?        inet:ipv6-address
              |  |  +--ro (descriptor)?
@@ -2041,7 +2086,8 @@ module: ietf-bgp-ls-sr-policy
              |  |  +--ro margin?   uint32
              |  |  +--ro bound?    uint32
              |  |  +--ro value?    uint32
-             |  +--ro bandwidth?           decimal64
+             |  +--ro bandwidth?
+             |  |       ietf-rt-t:bandwidth-ieee-float32
              |  +--ro unknown* [type]
              |     +--ro type     uint16
              |     +--ro value?   yang:hex-string
@@ -2104,10 +2150,10 @@ segment (IPv4 Prefix SID).
              <s:attributes>
               <s:policy-name>blue-policy</s:policy-name>
               <s:candidate-path-name>primary</s:candidate-path-name>
-              <s:mpls-binding-sid>
+              <s:sr-binding-sid>
                <s:flags>allocated</s:flags>
                <s:binding-sid>16000</s:binding-sid>
-              </s:mpls-binding-sid>
+              </s:sr-binding-sid>
               <s:state>
                <s:priority>100</s:priority>
                <s:flags>active evaluated valid</s:flags>

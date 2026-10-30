@@ -1236,14 +1236,16 @@ module ietf-bgp-ls-sr-policy {
               "RFC 9857, Section 5.5.";
           }
 
-          container mpls-binding-sid {
+          container sr-binding-sid {
             presence "An SR Binding SID TLV was received.";
             description
-              "SR-MPLS Binding SID state.  An SR Binding SID TLV
-               with the D-flag set uses the deprecated SRv6 encoding
-               and is not represented in this container; SRv6
-               Binding SIDs are represented by the srv6-binding-sid
-               list (TLV 1212).";
+              "Binding SID state reported in the SR Binding SID TLV
+               (TLV 1201).  The 'srv6-dataplane' flag (D-flag)
+               selects between the SR-MPLS and SRv6 encodings.  The
+               SRv6 encoding of this TLV is deprecated by RFC 9857
+               and is represented only for backward compatibility;
+               SRv6 Binding SIDs are otherwise represented by the
+               srv6-binding-sid list (TLV 1212).";
             reference
               "RFC 9857, Section 5.1.";
 
@@ -1252,15 +1254,38 @@ module ietf-bgp-ls-sr-policy {
               description
                 "Binding SID status flags.";
             }
-            leaf binding-sid {
-              type ietf-rt-t:mpls-label-general-use;
+            choice dataplane {
               description
-                "Allocated or operational Binding SID.";
-            }
-            leaf specified-binding-sid {
-              type ietf-rt-t:mpls-label-general-use;
-              description
-                "Explicitly specified Binding SID.";
+                "Binding SID values according to the dataplane
+                 indicated by the 'srv6-dataplane' flag.";
+              case mpls {
+                leaf binding-sid {
+                  when "not(bit-is-set(../flags, 'srv6-dataplane'))";
+                  type ietf-rt-t:mpls-label-general-use;
+                  description
+                    "Allocated or operational SR-MPLS Binding SID.";
+                }
+                leaf specified-binding-sid {
+                  when "not(bit-is-set(../flags, 'srv6-dataplane'))";
+                  type ietf-rt-t:mpls-label-general-use;
+                  description
+                    "Explicitly specified SR-MPLS Binding SID.";
+                }
+              }
+              case srv6 {
+                leaf srv6-binding-sid {
+                  when "bit-is-set(../flags, 'srv6-dataplane')";
+                  type inet:ipv6-address;
+                  description
+                    "Allocated or operational SRv6 Binding SID.";
+                }
+                leaf srv6-specified-binding-sid {
+                  when "bit-is-set(../flags, 'srv6-dataplane')";
+                  type inet:ipv6-address;
+                  description
+                    "Explicitly specified SRv6 Binding SID.";
+                }
+              }
             }
           }
 

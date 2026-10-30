@@ -16,7 +16,9 @@ mkdir -p "$build_dir" "$normalized_base_dir"
 cp "$base_dir"/src/yang/*.yang "$normalized_base_dir"/
 base_revision=$(git -C "$base_dir" show -s --format=%cs HEAD)
 for module in "$normalized_base_dir"/*.yang; do
-  sed -i "s/revision YYYY-MM-DD/revision $base_revision/" "$module"
+  sed "s/revision YYYY-MM-DD/revision $base_revision/" "$module" \
+    >"$module.tmp"
+  mv "$module.tmp" "$module"
 done
 
 search_path="$normalized_base_dir:$dependency_dir"
