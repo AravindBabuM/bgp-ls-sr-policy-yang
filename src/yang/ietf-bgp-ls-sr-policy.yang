@@ -626,6 +626,42 @@ module ietf-bgp-ls-sr-policy {
     }
   }
 
+  grouping group-identifier {
+    description
+      "Group identifier carried in the SR Disjoint Group and SR
+       Bidirectional Group Constraint sub-TLVs.";
+    reference
+      "RFC 9857, Sections 5.6.4 and 5.6.5.";
+
+    choice group-identifier {
+      mandatory true;
+      description
+        "The identifier is encoded either as a 4-octet value or as
+         an entire PCEP ASSOCIATION Object.";
+      case group-id {
+        leaf group-id {
+          type uint32;
+          description
+            "4-octet group identifier.";
+        }
+      }
+      case pcep-association-object {
+        leaf pcep-association-object {
+          type binary;
+          description
+            "Entire PCEP ASSOCIATION Object, including its optional
+             TLVs, as received.  The object is not parsed by BGP
+             speakers.";
+          reference
+            "RFC 8697: Path Computation Element Communication
+             Protocol (PCEP) Extensions for Establishing
+             Relationships between Sets of Label Switched Paths
+             (LSPs), Section 6.1.";
+        }
+      }
+    }
+  }
+
   grouping candidate-path-constraints {
     description
       "Constraints associated with an SR Policy candidate path.";
@@ -720,12 +756,7 @@ module ietf-bgp-ls-sr-policy {
           description
             "Achieved disjointness properties.";
         }
-        leaf group-id {
-          type uint32;
-          mandatory true;
-          description
-            "Disjoint group identifier.";
-        }
+        uses group-identifier;
       }
 
       container bidirectional-group {
@@ -742,12 +773,7 @@ module ietf-bgp-ls-sr-policy {
           description
             "Bidirectional group flags.";
         }
-        leaf group-id {
-          type uint32;
-          mandatory true;
-          description
-            "Bidirectional group identifier.";
-        }
+        uses group-identifier;
       }
 
       list metric {
@@ -1081,7 +1107,9 @@ module ietf-bgp-ls-sr-policy {
         }
         choice sid {
           description
-            "Resolved or explicitly provisioned SID value.";
+            "Resolved or explicitly provisioned SID value.  A SID
+             value is present only when the 'sid-present' flag is
+             set.";
           case mpls {
             leaf mpls-label {
               type ietf-rt-t:mpls-label-general-use;
@@ -1190,20 +1218,20 @@ module ietf-bgp-ls-sr-policy {
              Policy Candidate Path NLRI.";
 
           leaf policy-name {
-            type string {
-              length "0..255";
-            }
+            type string;
             description
-              "Symbolic SR Policy name from TLV 1213.";
+              "Symbolic SR Policy name from TLV 1213.  RFC 9857
+               recommends, but does not require, that the name be
+               limited to 255 octets.";
             reference
               "RFC 9857, Section 5.4.";
           }
           leaf candidate-path-name {
-            type string {
-              length "0..255";
-            }
+            type string;
             description
-              "Symbolic candidate-path name from TLV 1203.";
+              "Symbolic candidate-path name from TLV 1203.  RFC 9857
+               recommends, but does not require, that the name be
+               limited to 255 octets.";
             reference
               "RFC 9857, Section 5.5.";
           }
@@ -1211,10 +1239,11 @@ module ietf-bgp-ls-sr-policy {
           container mpls-binding-sid {
             presence "An SR Binding SID TLV was received.";
             description
-              "SR-MPLS Binding SID state.  The deprecated SRv6
-               encoding of TLV 1201 is intentionally not represented
-               here; SRv6 Binding SIDs are represented by TLV 1212
-               below.";
+              "SR-MPLS Binding SID state.  An SR Binding SID TLV
+               with the D-flag set uses the deprecated SRv6 encoding
+               and is not represented in this container; SRv6
+               Binding SIDs are represented by the srv6-binding-sid
+               list (TLV 1212).";
             reference
               "RFC 9857, Section 5.1.";
 

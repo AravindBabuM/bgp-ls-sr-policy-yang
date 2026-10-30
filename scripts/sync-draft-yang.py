@@ -15,6 +15,14 @@ BEGIN = "<!-- YANG-MODEL:BEGIN -->"
 END = "<!-- YANG-MODEL:END -->"
 
 
+def module_file_name(model: str) -> str:
+    for line in model.splitlines():
+        words = line.split()
+        if len(words) >= 2 and words[0] == "revision":
+            return f"{MODEL.stem}@{words[1]}.yang"
+    raise RuntimeError(f"no revision statement in {MODEL}")
+
+
 def rendered_draft() -> str:
     draft = DRAFT.read_text(encoding="utf-8")
     model = MODEL.read_text(encoding="utf-8").rstrip()
@@ -24,7 +32,11 @@ def rendered_draft() -> str:
     _, separator, after = remainder.partition(END)
     if not separator:
         raise RuntimeError(f"missing marker {END!r} in {DRAFT}")
-    block = f"{BEGIN}\n~~~ yang\n{model}\n~~~\n{END}"
+    block = (
+        f"{BEGIN}\n~~~ yang\n"
+        f'<CODE BEGINS> file "{module_file_name(model)}"\n\n'
+        f"{model}\n\n<CODE ENDS>\n~~~\n{END}"
+    )
     return before + block + after
 
 
