@@ -3266,13 +3266,22 @@ module ietf-bgp-ls-sr-policy {
         <h3 id="name-iana-maintained-module">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-iana-maintained-module" class="section-name selfRef">IANA-Maintained Module</a>
         </h3>
-<p id="section-5.2-1">The <code>iana-bgp-ls-sr-policy-types</code> module defines enumerations for the code
-points of the "SR Policy Protocol-Origin", "BGP-LS SR Segment Descriptor
-Types", and "BGP-LS SR Policy Metric Types" registries established by
-<span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.  The version of the module below reflects the registries at
-the time of writing.  The current version is maintained by IANA, as
-described in <a href="#iana-maintained" class="auto internal xref">Section 7.3</a>.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<div class="breakable lang-yang sourcecode" id="section-5.2-2">
+<p id="section-5.2-1">This document defines the initial version of the
+<code>iana-bgp-ls-sr-policy-types</code> YANG module.  The module defines enumerations
+for code points in the "SR Policy Protocol-Origin", "BGP-LS SR Segment
+Descriptor Types", and "BGP-LS SR Policy Metric Types" registries
+established by <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.  The version below reflects those registries at
+the time of writing.  This document requests IANA to publish and maintain
+the module as described in <a href="#iana-maintained" class="auto internal xref">Section 7.3</a>.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">A single module covers these three registries because they contain closely
+related, one-octet code points used by the same BGP-LS SR Policy data model
+and are expected to remain small.  Enumerations are used instead of
+identities because the numeric value of each enumeration corresponds
+directly to the code point carried in the protocol encoding.  The typedefs
+used by the BGP-LS SR Policy module combine each enumeration with <code>uint8</code>,
+allowing a server to report a code point that is not defined by the revision
+of the IANA-maintained module that it implements.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<div class="breakable lang-yang sourcecode" id="section-5.2-3">
 <pre>
 &lt;CODE BEGINS&gt; file "iana-bgp-ls-sr-policy-types@2026-10-28.yang"
 
@@ -3330,32 +3339,50 @@ module iana-bgp-ls-sr-policy-types {
         value 1;
         description
           "PCEP.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum bgp-sr-policy {
         value 2;
         description
           "BGP SR Policy.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum configuration {
         value 3;
         description
           "Configuration (CLI, YANG model via NETCONF, etc.).";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum pcep-via-pce {
         value 10;
         description
           "PCEP (in PCEP or when BGP-LS Producer is PCE).";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum bgp-sr-policy-via-pce {
         value 20;
         description
           "BGP SR Policy (in PCEP or when BGP-LS Producer is PCE).";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum configuration-via-pce {
         value 30;
         description
           "Configuration (CLI, YANG model via NETCONF, etc.  In
            PCEP or when BGP-LS Producer is PCE).";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
     }
     description
@@ -3371,65 +3398,90 @@ module iana-bgp-ls-sr-policy-types {
       enum type-a {
         value 1;
         description
-          "Type A Segment: SR-MPLS Label.";
+          "Type A Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-b {
         value 2;
         description
-          "Type B Segment: SRv6 SID.";
+          "Type B Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-c {
         value 3;
         description
-          "Type C Segment: IPv4 Prefix with optional SR
-           Algorithm.";
+          "Type C Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-d {
         value 4;
         description
-          "Type D Segment: IPv6 Global Prefix with optional SR
-           Algorithm for SR-MPLS.";
+          "Type D Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-e {
         value 5;
         description
-          "Type E Segment: IPv4 Prefix with Local Interface ID.";
+          "Type E Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-f {
         value 6;
         description
-          "Type F Segment: IPv4 Addresses for link endpoints as
-           Local, Remote pair.";
+          "Type F Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-g {
         value 7;
         description
-          "Type G Segment: IPv6 Prefix and Interface ID for link
-           endpoints as Local, Remote pair for SR-MPLS.";
+          "Type G Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-h {
         value 8;
         description
-          "Type H Segment: IPv6 Addresses for link endpoints as
-           Local, Remote pair for SR-MPLS.";
+          "Type H Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-i {
         value 9;
         description
-          "Type I Segment: IPv6 Global Prefix with optional SR
-           Algorithm for SRv6.";
+          "Type I Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-j {
         value 10;
         description
-          "Type J Segment: IPv6 Prefix and Interface ID for link
-           endpoints as Local, Remote pair for SRv6.";
+          "Type J Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-k {
         value 11;
         description
-          "Type K Segment: IPv6 Addresses for link endpoints as
-           Local, Remote pair for SRv6.";
+          "Type K Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
     }
     description
@@ -3445,47 +3497,74 @@ module iana-bgp-ls-sr-policy-types {
       enum igp {
         value 0;
         description
-          "IGP metric.";
+          "IGP.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum min-unidirectional-delay {
         value 1;
         description
           "Min Unidirectional Delay.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum te {
         value 2;
         description
-          "TE metric.";
+          "TE.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum hop-count {
         value 3;
         description
           "Hop Count.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum sid-list-length {
         value 4;
         description
           "SID List Length.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum bandwidth {
         value 5;
         description
           "Bandwidth.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum avg-unidirectional-delay {
         value 6;
         description
           "Avg Unidirectional Delay.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum unidirectional-delay-variation {
         value 7;
         description
           "Unidirectional Delay Variation.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum loss {
         value 8;
         description
           "Loss.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
     }
     description
@@ -3499,7 +3578,7 @@ module iana-bgp-ls-sr-policy-types {
 }
 
 &lt;CODE ENDS&gt;
-</pre><a href="#section-5.2-2" class="pilcrow">¶</a>
+</pre><a href="#section-5.2-3" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -3616,54 +3695,76 @@ Reference: RFC XXXX
 <p id="section-7.3-1">IANA is requested to post the initial version of the
 <code>iana-bgp-ls-sr-policy-types</code> YANG module defined in <a href="#iana-module" class="auto internal xref">Section 5.2</a> and to
 maintain it as follows.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
-<p id="section-7.3-2">When a new code point is assigned in the "SR Policy Protocol-Origin",
+<p id="section-7.3-2">IANA is requested to add a "YANG Enum Name" column to each of the "SR
+Policy Protocol-Origin", "BGP-LS SR Segment Descriptor Types", and "BGP-LS
+SR Policy Metric Types" registries.  For every assigned code point that is
+represented in the initial module, IANA is requested to populate that
+column with the name of the <code>enum</code> statement having the same numeric value
+in the corresponding typedef.  The column is left empty for Reserved,
+Unassigned, Private Use, and User Defined entries.  A future assignment
+that is to be represented in the module <span class="bcp14">MUST</span> include a unique YANG enum
+name that conforms to the identifier syntax in <span>[<a href="#RFC7950" class="cite xref">RFC7950</a>]</span>.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3-3">IANA is requested to add the following note to the page that displays the
+<code>iana-bgp-ls-sr-policy-types</code> module:<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-7.3-4.1">
+            <p id="section-7.3-4.1.1">New values must not be added directly to the
+"iana-bgp-ls-sr-policy-types" YANG module.  They must instead be added to
+the corresponding authoritative IANA registry.<a href="#section-7.3-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-7.3-5">When a new code point is assigned in the "SR Policy Protocol-Origin",
 "BGP-LS SR Segment Descriptor Types", or "BGP-LS SR Policy Metric Types"
 registry, other than in the Reserved, Private Use, or User Defined ranges,
 a new <code>enum</code> statement <span class="bcp14">MUST</span> be added to the corresponding <code>protocol-origin</code>,
 <code>segment-type</code>, or <code>metric-type</code> typedef of the module.  The <code>enum</code>
-statement <span class="bcp14">MUST</span> have the following sub-statements:<a href="#section-7.3-2" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-7.3-3">
-          <dt id="section-7.3-3.1">
+statement <span class="bcp14">MUST</span> have the following sub-statements:<a href="#section-7.3-5" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-7.3-6">
+          <dt id="section-7.3-6.1">
+<code>enum</code>:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.3-6.2">
+            <p id="section-7.3-6.2.1">The YANG enum name recorded in the registry.<a href="#section-7.3-6.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.3-6.3">
 <code>value</code>:</dt>
-          <dd style="margin-left: 1.5em" id="section-7.3-3.2">
-            <p id="section-7.3-3.2.1">The assigned code point.<a href="#section-7.3-3.2.1" class="pilcrow">¶</a></p>
+          <dd style="margin-left: 1.5em" id="section-7.3-6.4">
+            <p id="section-7.3-6.4.1">The assigned code point.<a href="#section-7.3-6.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-7.3-3.3">
+<dt id="section-7.3-6.5">
 <code>description</code>:</dt>
-          <dd style="margin-left: 1.5em" id="section-7.3-3.4">
-            <p id="section-7.3-3.4.1">The description of the code point in the registry.<a href="#section-7.3-3.4.1" class="pilcrow">¶</a></p>
+          <dd style="margin-left: 1.5em" id="section-7.3-6.6">
+            <p id="section-7.3-6.6.1">The description of the code point in the registry.<a href="#section-7.3-6.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-7.3-3.5">
+<dt id="section-7.3-6.7">
 <code>reference</code>:</dt>
-          <dd style="margin-left: 1.5em" id="section-7.3-3.6">
-            <p id="section-7.3-3.6.1">The reference of the code point in the registry.<a href="#section-7.3-3.6.1" class="pilcrow">¶</a></p>
+          <dd style="margin-left: 1.5em" id="section-7.3-6.8">
+            <p id="section-7.3-6.8.1">The reference of the code point in the registry, including the title of
+the referenced document.<a href="#section-7.3-6.8.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-7.3-4">The name of the <code>enum</code> statement is derived from the registry description
-by converting it to lowercase and replacing spaces and punctuation with
-hyphens.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
-<p id="section-7.3-5">When the description or reference of a code point is updated in one of
+<p id="section-7.3-7">When the description or reference of a code point is updated in one of
 these registries, the corresponding <code>enum</code> statement <span class="bcp14">MUST</span> be updated.  When
 a code point is deprecated or made obsolete, a <code>status</code> sub-statement with
 the value <code>deprecated</code> or <code>obsolete</code>, respectively, <span class="bcp14">MUST</span> be added to the
-corresponding <code>enum</code> statement.<a href="#section-7.3-5" class="pilcrow">¶</a></p>
-<p id="section-7.3-6">Each time the module is updated, a new <code>revision</code> statement <span class="bcp14">MUST</span> be added
+corresponding <code>enum</code> statement.<a href="#section-7.3-7" class="pilcrow">¶</a></p>
+<p id="section-7.3-8">Each time the module is updated, a new <code>revision</code> statement <span class="bcp14">MUST</span> be added
 before the existing <code>revision</code> statements.  The description of the new
-<code>revision</code> statement <span class="bcp14">MUST</span> identify the changes made.<a href="#section-7.3-6" class="pilcrow">¶</a></p>
-<p id="section-7.3-7">IANA is requested to add the following note to each of the three
-registries listed above:<a href="#section-7.3-7" class="pilcrow">¶</a></p>
+<code>revision</code> statement <span class="bcp14">MUST</span> identify the changes made.<a href="#section-7.3-8" class="pilcrow">¶</a></p>
+<p id="section-7.3-9">IANA is requested to add the following note to each of the three
+registries listed above:<a href="#section-7.3-9" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-7.3-8.1">
-            <p id="section-7.3-8.1.1">When this registry is modified, the YANG module
+<li class="normal ulEmpty" id="section-7.3-10.1">
+            <p id="section-7.3-10.1.1">When this registry is modified, the YANG module
 "iana-bgp-ls-sr-policy-types" <span>[<a href="#IANA-YANG-PARAMETERS" class="cite xref">IANA-YANG-PARAMETERS</a>]</span> must be updated as
-defined in RFC XXXX.<a href="#section-7.3-8.1.1" class="pilcrow">¶</a></p>
+defined in RFC XXXX.<a href="#section-7.3-10.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.3-9">RFC Editor: Please replace XXXX with the RFC number assigned to this
-document and remove this note.<a href="#section-7.3-9" class="pilcrow">¶</a></p>
+<p id="section-7.3-11">RFC Editor: Please replace XXXX with the RFC number assigned to this
+document and remove this note.<a href="#section-7.3-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3686,6 +3787,10 @@ document and remove this note.<a href="#section-7.3-9" class="pilcrow">¶</a></p
 <dt id="I-D.ietf-lsvr-bgp-ls-yang">[I-D.ietf-lsvr-bgp-ls-yang]</dt>
         <dd>
 <span class="refAuthor">Jethanandani, M.</span>, <span class="refAuthor">Patel, K.</span>, and <span class="refAuthor">A. B. MahendraBabu</span>, <span class="refTitle">"A YANG Model for BGP-LS, BGP-LS-VPN, and BGP-LS-SPF"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lsvr-bgp-ls-yang-05</span>, <time datetime="2026-11-01" class="refDate">1 November 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lsvr-bgp-ls-yang-05">https://datatracker.ietf.org/doc/html/draft-ietf-lsvr-bgp-ls-yang-05</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA-YANG-PARAMETERS">[IANA-YANG-PARAMETERS]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"YANG Parameters"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.iana.org/assignments/yang-parameters">https://www.iana.org/assignments/yang-parameters</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -3744,10 +3849,6 @@ document and remove this note.<a href="#section-7.3-9" class="pilcrow">¶</a></p
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
-<dt id="IANA-YANG-PARAMETERS">[IANA-YANG-PARAMETERS]</dt>
-        <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"YANG Parameters"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.iana.org/assignments/yang-parameters">https://www.iana.org/assignments/yang-parameters</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="IEEE754">[IEEE754]</dt>
         <dd>
 <span class="refAuthor">IEEE</span>, <span class="refTitle">"IEEE Standard for Floating-Point Arithmetic"</span>, <span class="seriesInfo">IEEE Std 754-2019</span>, <span class="seriesInfo">DOI 10.1109/IEEESTD.2019.8766229</span>, <time datetime="2019" class="refDate">2019</time>, <span>&lt;<a href="https://doi.org/10.1109/IEEESTD.2019.8766229">https://doi.org/10.1109/IEEESTD.2019.8766229</a>&gt;</span>. </dd>
