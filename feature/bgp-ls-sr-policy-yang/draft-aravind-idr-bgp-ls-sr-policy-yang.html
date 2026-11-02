@@ -8,18 +8,19 @@
 <meta content="Aravind Babu MahendraBabu" name="author">
 <meta content="Thanigaivel Manoharan" name="author">
 <meta content="
-       This document defines a YANG 1.1 data model for the Segment Routing (SR)
-Policy Candidate Path Network Layer Reachability Information (NLRI) and its
-associated BGP Link-State (BGP-LS) attributes.  The model augments the
-operational BGP-LS Link-State Database defined by the BGP-LS YANG model with
-the protocol elements specified in RFC 9857. 
+       This document defines a YANG data model for the operational state of
+Segment Routing (SR) Policy candidate paths that are advertised using BGP -
+Link State (BGP-LS).  The model augments the read-only BGP-LS Link-State
+Database with the SR Policy Candidate Path Network Layer Reachability
+Information (NLRI) and the associated BGP-LS Attribute TLVs specified in
+RFC 9857. 
     " name="description">
 <meta content="xml2rfc 3.34.1" name="generator">
 <meta content="BGP-LS" name="keyword">
 <meta content="Segment Routing" name="keyword">
 <meta content="SR Policy" name="keyword">
 <meta content="YANG" name="keyword">
-<meta content="draft-aravind-lsvr-bgp-ls-sr-policy-yang-latest" name="ietf.draft">
+<meta content="draft-aravind-idr-bgp-ls-sr-policy-yang-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.34.1
     Python 3.14.8
@@ -35,7 +36,7 @@ the protocol elements specified in RFC 9857.
     requests 2.33.1
     wcwidth 0.9.2
 -->
-<link href="draft-aravind-lsvr-bgp-ls-sr-policy-yang.xml" rel="alternate" type="application/rfc+xml">
+<link href="draft-aravind-idr-bgp-ls-sr-policy-yang.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">@font-face {
   font-family: 'Lora';
@@ -1061,9 +1062,9 @@ svg {
 <div id="internal-metadata" class="document-information">
 <dl id="identifiers">
 <dt class="label-workgroup">Workgroup:</dt>
-<dd class="workgroup">Link State Vector Routing</dd>
+<dd class="workgroup">Inter-Domain Routing</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-aravind-lsvr-bgp-ls-sr-policy-yang-latest</dd>
+<dd class="internet-draft">draft-aravind-idr-bgp-ls-sr-policy-yang-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
 <time datetime="2026-11-02" class="published">2 November 2026</time>
@@ -1088,11 +1089,12 @@ svg {
 <h1 id="title">A YANG Data Model for BGP-LS Segment Routing Policy</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document defines a YANG 1.1 data model for the Segment Routing (SR)
-Policy Candidate Path Network Layer Reachability Information (NLRI) and its
-associated BGP Link-State (BGP-LS) attributes.  The model augments the
-operational BGP-LS Link-State Database defined by the BGP-LS YANG model with
-the protocol elements specified in RFC 9857.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document defines a YANG data model for the operational state of
+Segment Routing (SR) Policy candidate paths that are advertised using BGP -
+Link State (BGP-LS).  The model augments the read-only BGP-LS Link-State
+Database with the SR Policy Candidate Path Network Layer Reachability
+Information (NLRI) and the associated BGP-LS Attribute TLVs specified in
+RFC 9857.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1100,13 +1102,13 @@ the protocol elements specified in RFC 9857.<a href="#section-abstract-1" class=
       </h2>
 <p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
 <p id="section-note.1-2">
-        The latest revision of this draft can be found at <span><a href="https://AravindBabuM.github.io/bgp-ls-sr-policy-yang/draft-aravind-lsvr-bgp-ls-sr-policy-yang.html">https://AravindBabuM.github.io/bgp-ls-sr-policy-yang/draft-aravind-lsvr-bgp-ls-sr-policy-yang.html</a></span>.
-        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-aravind-lsvr-bgp-ls-sr-policy-yang/">https://datatracker.ietf.org/doc/draft-aravind-lsvr-bgp-ls-sr-policy-yang/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+        The latest revision of this draft can be found at <span><a href="https://AravindBabuM.github.io/bgp-ls-sr-policy-yang/draft-aravind-idr-bgp-ls-sr-policy-yang.html">https://AravindBabuM.github.io/bgp-ls-sr-policy-yang/draft-aravind-idr-bgp-ls-sr-policy-yang.html</a></span>.
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-aravind-idr-bgp-ls-sr-policy-yang/">https://datatracker.ietf.org/doc/draft-aravind-idr-bgp-ls-sr-policy-yang/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
 <p id="section-note.1-3">
         Discussion of this document takes place on the
-        Link State Vector Routing Working Group mailing list (<span><a href="mailto:lsvr@ietf.org">mailto:lsvr@ietf.org</a></span>),
-        which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/lsvr/">https://mailarchive.ietf.org/arch/browse/lsvr/</a></span>.
-        Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/lsvr/">https://www.ietf.org/mailman/listinfo/lsvr/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+        Inter-Domain Routing Working Group mailing list (<span><a href="mailto:idr@ietf.org">mailto:idr@ietf.org</a></span>),
+        which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/idr/">https://mailarchive.ietf.org/arch/browse/idr/</a></span>.
+        Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/idr/">https://www.ietf.org/mailman/listinfo/idr/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 <p id="section-note.1-4">Source for this draft and an issue tracker can be found at
         <span><a href="https://github.com/AravindBabuM/bgp-ls-sr-policy-yang">https://github.com/AravindBabuM/bgp-ls-sr-policy-yang</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
 </section>
@@ -1160,67 +1162,105 @@ the protocol elements specified in RFC 9857.<a href="#section-abstract-1" class=
 <nav class="toc"><ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
-                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-requirements-language" class="internal xref">Requirements Language</a></p>
-</li>
-            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
-                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-acronyms" class="internal xref">Acronyms</a></p>
+                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-requirements-language" class="internal xref">Requirements Language</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
+                <p id="section-toc.1-1.2.2.2.1" class="keepWithNext"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
+                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-acronyms" class="internal xref">Acronyms</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4">
+                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="auto internal xref">2.4</a>.  <a href="#name-tree-diagrams" class="internal xref">Tree Diagrams</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5">
+                <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="auto internal xref">2.5</a>.  <a href="#name-prefixes-in-data-node-names" class="internal xref">Prefixes in Data Node Names</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-tree-diagram" class="internal xref">Tree Diagram</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-overview-of-the-data-model" class="internal xref">Overview of the Data Model</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-yang-model" class="internal xref">YANG Model</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-design-of-the-data-model" class="internal xref">Design of the Data Model</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-bgp-ls-sr-policy-yang-model" class="internal xref">BGP-LS SR Policy YANG Model</a></p>
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-scope-and-augmentation" class="internal xref">Scope and Augmentation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-candidate-path-identificati" class="internal xref">Candidate Path Identification</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-candidate-path-attributes" class="internal xref">Candidate Path Attributes</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-segment-lists-and-segments" class="internal xref">Segment Lists and Segments</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-yang-modules" class="internal xref">YANG Modules</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-bgp-ls-sr-policy-module" class="internal xref">BGP-LS SR Policy Module</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-iana-maintained-module" class="internal xref">IANA-Maintained Module</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-the-ietf-xml-registry" class="internal xref">The "IETF XML" Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-the-yang-module-names-regis" class="internal xref">The "YANG Module Names" Registry</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-maintenance-of-the-iana-mai" class="internal xref">Maintenance of the IANA-Maintained Module</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-complete-tree-diagram" class="internal xref">Complete Tree Diagram</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#appendix-B.1" class="auto internal xref">B.1</a>.  <a href="#name-sr-mpls-candidate-path" class="internal xref">SR-MPLS Candidate Path</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#appendix-B.2" class="auto internal xref">B.2</a>.  <a href="#name-srv6-candidate-path" class="internal xref">SRv6 Candidate Path</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-complete-tree-diagram" class="internal xref">Complete Tree Diagram</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#appendix-B.1" class="auto internal xref">B.1</a>.  <a href="#name-sr-mpls-candidate-path" class="internal xref">SR-MPLS Candidate Path</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#appendix-B.2" class="auto internal xref">B.2</a>.  <a href="#name-srv6-candidate-path" class="internal xref">SRv6 Candidate Path</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1231,68 +1271,89 @@ the protocol elements specified in RFC 9857.<a href="#section-abstract-1" class=
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1"><span>[<a href="#RFC9552" class="cite xref">RFC9552</a>]</span> describes a mechanism by which Link-State (LS) and Traffic
-Engineering (TE) information can be collected and distributed using the
-Border Gateway Protocol (BGP).  <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> extends that mechanism with the
-SR Policy Candidate Path NLRI and BGP-LS Attribute Type-Length-Values (TLVs)
-that advertise the operational state of an SR Policy at candidate-path
-granularity.  The advertised information includes the Binding Segment
-Identifier (SID), candidate-path state and names, constraints, and the
-segment lists associated with the candidate path.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2"><span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span> defines a <span>[<a href="#RFC7950" class="cite xref">RFC7950</a>]</span> YANG 1.1 data model for
-BGP-LS, BGP-LS-VPN, and BGP-LS-SPF under the routing management model defined
-in <span>[<a href="#RFC8349" class="cite xref">RFC8349</a>]</span>.  It includes a read-only Link-State Database (LSDB) for the
-Node, Link, Prefix, and SRv6 SID NLRIs received using BGP-LS.  This document
-defines the <code>ietf-bgp-ls-sr-policy</code> module, which augments that LSDB with a
-read-only representation of the SR Policy Candidate Path NLRI and its
-associated attributes defined in <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<div id="requirements-language">
-<section id="section-1.1">
-        <h3 id="name-requirements-language">
-<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-requirements-language" class="section-name selfRef">Requirements Language</a>
-        </h3>
-<p id="section-1.1-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
-"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
-described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
-appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1"><span>[<a href="#RFC9552" class="cite xref">RFC9552</a>]</span> specifies a mechanism by which Link-State (LS) and Traffic
+Engineering (TE) information is collected and distributed using the Border
+Gateway Protocol (BGP).  <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> extends that mechanism with the SR
+Policy Candidate Path NLRI (NLRI Type 5), the Segment Routing Protocol-ID
+(9), and a set of BGP-LS Attribute TLVs that report the operational state
+of an SR Policy <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span> at candidate-path granularity.  The reported
+information includes the Binding Segment Identifier (BSID), the
+candidate-path state and names, path constraints, and the segment lists
+associated with the candidate path.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2"><span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span> defines a YANG 1.1 <span>[<a href="#RFC7950" class="cite xref">RFC7950</a>]</span> data model for
+BGP-LS, BGP-LS-VPN, and BGP-LS-SPF as an extension of the BGP YANG data
+model <span>[<a href="#I-D.ietf-idr-bgp-model" class="cite xref">I-D.ietf-idr-bgp-model</a>]</span>, which is itself instantiated under the
+routing management model <span>[<a href="#RFC8349" class="cite xref">RFC8349</a>]</span>.  That model includes a read-only
+Link-State Database (LSDB) for the Node, Link, Prefix, and SRv6 SID NLRIs
+received using BGP-LS, but it does not represent the SR Policy Candidate
+Path NLRI.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This document defines the <code>ietf-bgp-ls-sr-policy</code> YANG module, which
+augments that LSDB with a read-only representation of the SR Policy
+Candidate Path NLRI and its associated BGP-LS Attribute TLVs.  The module
+does not configure SR Policies and does not alter BGP-LS protocol
+procedures.  The module conforms to the Network Management Datastore
+Architecture (NMDA) <span>[<a href="#RFC8342" class="cite xref">RFC8342</a>]</span>; all data nodes defined by this document
+are reported in the operational state datastore.<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="conventions-and-definitions">
+<section id="section-2">
+      <h2 id="name-conventions-and-definitions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+      </h2>
+<div id="requirements-language">
+<section id="section-2.1">
+        <h3 id="name-requirements-language">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-requirements-language" class="section-name selfRef">Requirements Language</a>
+        </h3>
+<p id="section-2.1-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="terminology">
-<section id="section-2">
-      <h2 id="name-terminology">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
-      </h2>
-<p id="section-2-1">This document uses the terminology defined in <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>, <span>[<a href="#RFC9552" class="cite xref">RFC9552</a>]</span>, and
-<span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.  The following terms are used throughout this document:<a href="#section-2-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-2-2">
-        <dt id="section-2-2.1">Candidate path (CP):</dt>
-        <dd style="margin-left: 1.5em" id="section-2-2.2">
-          <p id="section-2-2.2.1">A path that is associated with an SR Policy.  An SR Policy can have more
-than one candidate path, but only one candidate path is active at a time,
-as described in <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>.<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-2-2.3">Headend:</dt>
-        <dd style="margin-left: 1.5em" id="section-2-2.4">
-          <p id="section-2-2.4.1">The node at which an SR Policy is instantiated and where traffic is
-steered onto the policy, as described in <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>.<a href="#section-2-2.4.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-2-2.5">Segment list:</dt>
-        <dd style="margin-left: 1.5em" id="section-2-2.6">
-          <p id="section-2-2.6.1">An ordered list of segments that describes a path through the SR domain,
-as described in <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>.<a href="#section-2-2.6.1" class="pilcrow">¶</a></p>
-</dd>
-      <dd class="break"></dd>
-</dl>
-<div id="acronyms">
-<section id="section-2.1">
-        <h3 id="name-acronyms">
-<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-acronyms" class="section-name selfRef">Acronyms</a>
+<section id="section-2.2">
+        <h3 id="name-terminology">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
         </h3>
-<p id="section-2.1-1">This document uses the following acronyms:<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-1">This document uses the terminology defined in <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>, <span>[<a href="#RFC9552" class="cite xref">RFC9552</a>]</span>, and
+<span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.  In addition, the following terms are used:<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-2.2-2">
+          <dt id="section-2.2-2.1">Candidate path:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.2-2.2">
+            <p id="section-2.2-2.2.1">A path associated with an SR Policy, as defined in Section 2.2 of
+<span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>.  An SR Policy can have multiple candidate paths, of which at
+most one is active at any given time.<a href="#section-2.2-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.2-2.3">Headend:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.2-2.4">
+            <p id="section-2.2-2.4.1">The node at which an SR Policy is instantiated and at which traffic is
+steered onto the SR Policy, as defined in <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>.<a href="#section-2.2-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.2-2.5">Segment list:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.2-2.6">
+            <p id="section-2.2-2.6.1">An ordered list of segments that describes a path through the SR domain,
+as defined in <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>.  The term "SID list" is used interchangeably.<a href="#section-2.2-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.2-2.7">Server:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.2-2.8">
+            <p id="section-2.2-2.8.1">The entity that implements the module defined in this document and
+exposes the BGP-LS LSDB through a network management protocol.<a href="#section-2.2-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="acronyms">
+<section id="section-2.3">
+        <h3 id="name-acronyms">
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-acronyms" class="section-name selfRef">Acronyms</a>
+        </h3>
+<p id="section-2.3-1">This document uses the following acronyms:<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <span id="name-acronyms-2"></span><table class="center" id="table-1">
           <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
@@ -1311,7 +1372,11 @@ as described in <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>.
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">BGP-LS</td>
-              <td class="text-left" rowspan="1" colspan="1">BGP Link-State</td>
+              <td class="text-left" rowspan="1" colspan="1">BGP - Link State</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">BSID</td>
+              <td class="text-left" rowspan="1" colspan="1">Binding Segment Identifier</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">CP</td>
@@ -1330,6 +1395,18 @@ as described in <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>.
               <td class="text-left" rowspan="1" colspan="1">Network Layer Reachability Information</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">NMDA</td>
+              <td class="text-left" rowspan="1" colspan="1">Network Management Datastore Architecture</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">PCE</td>
+              <td class="text-left" rowspan="1" colspan="1">Path Computation Element</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">PCEP</td>
+              <td class="text-left" rowspan="1" colspan="1">Path Computation Element Communication Protocol</td>
+            </tr>
+            <tr>
               <td class="text-left" rowspan="1" colspan="1">SID</td>
               <td class="text-left" rowspan="1" colspan="1">Segment Identifier</td>
             </tr>
@@ -1340,6 +1417,10 @@ as described in <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>.
             <tr>
               <td class="text-left" rowspan="1" colspan="1">SR-MPLS</td>
               <td class="text-left" rowspan="1" colspan="1">Segment Routing over MPLS</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">SRLG</td>
+              <td class="text-left" rowspan="1" colspan="1">Shared Risk Link Group</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">SRv6</td>
@@ -1357,22 +1438,110 @@ as described in <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>.
         </table>
 </section>
 </div>
+<div id="tree-diagrams">
+<section id="section-2.4">
+        <h3 id="name-tree-diagrams">
+<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-tree-diagrams" class="section-name selfRef">Tree Diagrams</a>
+        </h3>
+<p id="section-2.4-1">Tree diagrams used in this document follow the notation defined in
+<span>[<a href="#RFC8340" class="cite xref">RFC8340</a>]</span>.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="tree-diagram">
+<div id="prefixes-in-data-node-names">
+<section id="section-2.5">
+        <h3 id="name-prefixes-in-data-node-names">
+<a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-prefixes-in-data-node-names" class="section-name selfRef">Prefixes in Data Node Names</a>
+        </h3>
+<p id="section-2.5-1">In this document, names of data nodes and other data model objects are
+prefixed using the standard prefix associated with the corresponding YANG
+imported modules, as shown in the following table.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
+<span id="name-prefixes-and-corresponding-"></span><table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-prefixes-and-corresponding-" class="selfRef">Prefixes and Corresponding YANG Modules</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Prefix</th>
+              <th class="text-left" rowspan="1" colspan="1">YANG Module</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">inet</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-inet-types</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC9911" class="cite xref">RFC9911</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">yang</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-yang-types</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC9911" class="cite xref">RFC9911</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">rt</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-routing</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC8349" class="cite xref">RFC8349</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ietf-rt-t</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-routing-types</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC8294" class="cite xref">RFC8294</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">bgp</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-bgp</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#I-D.ietf-idr-bgp-model" class="cite xref">I-D.ietf-idr-bgp-model</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">bgp-ls</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-bgp-ls</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">bgp-lsdb</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-bgp-lsdb</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">iana-bgp-ls-srp-t</td>
+              <td class="text-left" rowspan="1" colspan="1">iana-bgp-ls-sr-policy-types</td>
+              <td class="text-left" rowspan="1" colspan="1">RFC XXXX</td>
+            </tr>
+          </tbody>
+        </table>
+</section>
+</div>
+</section>
+</div>
+<div id="overview-of-the-data-model">
 <section id="section-3">
-      <h2 id="name-tree-diagram">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-tree-diagram" class="section-name selfRef">Tree Diagram</a>
+      <h2 id="name-overview-of-the-data-model">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-overview-of-the-data-model" class="section-name selfRef">Overview of the Data Model</a>
       </h2>
 <p id="section-3-1">The tree diagram below shows an abridged view of the
-<code>ietf-bgp-ls-sr-policy</code> module.  The <code>sr-pol-cp</code> container is augmented into
-each BGP-LS LSDB instance that uses the Segment Routing Protocol-ID.  Each
-candidate path is identified by the Local Node Descriptors and the SR Policy
-Candidate Path Descriptor carried in the NLRI.  The <code>attributes</code> container
-holds the state TLVs associated with that NLRI.  A complete tree diagram is
-provided in <a href="#appendix-tree" class="auto internal xref">Appendix A</a>.  The notation used in the diagrams is defined
-in <span>[<a href="#RFC8340" class="cite xref">RFC8340</a>]</span>.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3-2">
+<code>ietf-bgp-ls-sr-policy</code> module.  The <code>sr-policy-candidate-paths</code> container is
+augmented into each BGP-LS LSDB instance whose Protocol-ID is Segment
+Routing.  Each candidate path is identified by the Local Node Descriptors
+and the SR Policy Candidate Path Descriptor carried in the NLRI.  The
+<code>attributes</code> container holds the state TLVs carried in the associated BGP-LS
+Attribute.  The complete tree diagram is provided in <a href="#appendix-tree" class="auto internal xref">Appendix A</a>.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<span id="name-abridged-tree-diagram-of-ie"></span><figure id="figure-1">
+        <div class="alignLeft art-text artwork" id="section-3-2.1">
 <pre>
 module: ietf-bgp-ls-sr-policy
 
@@ -1380,14 +1549,14 @@ module: ietf-bgp-ls-sr-policy
             /rt:control-plane-protocol/bgp:bgp/bgp:global
             /bgp:afi-safis/bgp:afi-safi/bgp-ls:link-state
             /bgp-ls:bgp-ls-topology/bgp-ls:instances/bgp-ls:instance:
-    +--ro sr-pol-cp
+    +--ro sr-policy-candidate-paths
        +--ro candidate-path*
                [as bgp-router-id member-as ipv4-router-id
                 ipv6-router-id protocol-origin descriptor-flags
                 endpoint color originator-as originator-address
                 discriminator]
           +--ro as                           inet:as-number
-          +--ro bgp-router-id                inet:ipv4-address
+          +--ro bgp-router-id                yang:dotted-quad
           +--ro member-as                    inet:as-number
           +--ro ipv4-router-id               inet:ipv4-address
           +--ro ipv6-router-id               inet:ipv6-address
@@ -1401,62 +1570,282 @@ module: ietf-bgp-ls-sr-policy
           +--ro attributes
              +--ro policy-name?             string
              +--ro candidate-path-name?     string
-             +--ro mpls-binding-sid!
-             +--ro srv6-binding-sid* [binding-sid]
+             +--ro sr-binding-sid!
+             +--ro srv6-binding-sid* [index]
              |  +--ro srv6-sid-attributes
              |  +--ro unknown* [type]
              +--ro state!
              +--ro constraints!
              +--ro segment-list* [index]
              +--ro unknown* [type]
-</pre><a href="#section-3-2" class="pilcrow">¶</a>
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-abridged-tree-diagram-of-ie" class="selfRef">Abridged Tree Diagram of ietf-bgp-ls-sr-policy</a>
+        </figcaption></figure>
+</section>
+</div>
+<div id="design-of-the-data-model">
+<section id="section-4">
+      <h2 id="name-design-of-the-data-model">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-design-of-the-data-model" class="section-name selfRef">Design of the Data Model</a>
+      </h2>
+<div id="scope-and-augmentation">
+<section id="section-4.1">
+        <h3 id="name-scope-and-augmentation">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-scope-and-augmentation" class="section-name selfRef">Scope and Augmentation</a>
+        </h3>
+<p id="section-4.1-1">The <code>ietf-bgp-ls-sr-policy</code> module augments the operational BGP-LS LSDB
+defined by <span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span>.  The module augments only the
+<code>link-state</code> database.  The separate <code>link-state-spf</code> database is not
+augmented because <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> does not define the SR Policy Candidate Path
+NLRI for BGP-LS-SPF.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">The <code>sr-policy-candidate-paths</code> container is a sibling of the <code>nodes</code>,
+<code>links</code>, <code>prefixes</code>, <code>srv6-sids</code>, and <code>unknowns</code> containers in an LSDB
+instance.  A <code>when</code> statement restricts the container to LSDB instances
+whose <code>protocol</code> leaf is <code>sr</code>, which corresponds to the Segment Routing
+Protocol-ID (9) assigned by <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.  The NLRI Identifier field is
+represented by the <code>identifier</code> key of the enclosing LSDB instance.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="candidate-path-identification">
+<section id="section-4.2">
+        <h3 id="name-candidate-path-identificati">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-candidate-path-identificati" class="section-name selfRef">Candidate Path Identification</a>
+        </h3>
+<p id="section-4.2-1">Each entry in the <code>candidate-path</code> list represents one SR Policy Candidate
+Path NLRI.  The list key consists of the decoded fields of the Local Node
+Descriptors TLV followed by the fields of the mandatory SR Policy Candidate
+Path Descriptor TLV (TLV 554).  <a href="#fig-nlri-key" class="auto internal xref">Figure 2</a> shows the correspondence
+between the NLRI fields and the YANG data nodes.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<span id="name-mapping-of-nlri-fields-to-l"></span><div id="fig-nlri-key">
+<figure id="figure-2">
+          <div class="alignLeft art-text artwork" id="section-4.2-2.1">
+<pre>
+ SR Policy Candidate Path NLRI     YANG data node
+ (RFC 9857, Sections 3 and 4)
++-------------------------------+
+| Protocol-ID (9)               |-&gt; bgp-ls:instance/protocol
++-------------------------------+
+| Identifier (64 bits)          |-&gt; bgp-ls:instance/identifier
++-------------------------------+
+| Local Node Descriptors (256)  |
+|   Autonomous System (512)     |-&gt; candidate-path/as
+|   BGP Router-ID (516)         |-&gt; candidate-path/bgp-router-id
+|   Confed. Member (517)        |-&gt; candidate-path/member-as
+|   IPv4 Router-ID (1028)       |-&gt; candidate-path/ipv4-router-id
+|   IPv6 Router-ID (1029)       |-&gt; candidate-path/ipv6-router-id
++-------------------------------+
+| SR Policy CP Descriptor (554) |
+|   Protocol-Origin             |-&gt; candidate-path/protocol-origin
+|   Flags (E, O)                |-&gt; candidate-path/descriptor-flags
+|   Endpoint                    |-&gt; candidate-path/endpoint
+|   Policy Color                |-&gt; candidate-path/color
+|   Originator ASN              |-&gt; candidate-path/originator-as
+|   Originator Address          |-&gt; candidate-path/originator-address
+|   Discriminator               |-&gt; candidate-path/discriminator
++-------------------------------+
+</pre>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-mapping-of-nlri-fields-to-l" class="selfRef">Mapping of NLRI Fields to List Keys</a>
+          </figcaption></figure>
+</div>
+<p id="section-4.2-3">YANG requires every key leaf to have a value.  <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> requires the
+Autonomous System (TLV 512) and BGP Router-ID (TLV 516) Node Descriptors
+when the headend is the BGP-LS Producer, but makes them optional when a PCE
+is the BGP-LS Producer.  The BGP Confederation Member (TLV 517) Node
+Descriptor is always optional, and at least one of the IPv4 Router-ID
+(TLV 1028) and IPv6 Router-ID (TLV 1029) Node Descriptors is required.  A
+server therefore <span class="bcp14">MUST</span> populate the key leaves as follows when the
+corresponding Node Descriptor TLV is absent from the NLRI:<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.2-4.1">
+            <p id="section-4.2-4.1.1"><code>as</code> and <code>member-as</code>: the value 0.<a href="#section-4.2-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.2-4.2">
+            <p id="section-4.2-4.2.1"><code>bgp-router-id</code>: the value 0.0.0.0.  This leaf uses the <code>dotted-quad</code>
+type because the BGP Identifier is a 4-octet value that is not
+necessarily an IPv4 address.<a href="#section-4.2-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.2-4.3">
+            <p id="section-4.2-4.3.1"><code>ipv4-router-id</code>: the IPv4 unspecified address
+(0.0.0.0).<a href="#section-4.2-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.2-4.4">
+            <p id="section-4.2-4.4.1"><code>ipv6-router-id</code>: the IPv6 unspecified address (::).<a href="#section-4.2-4.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-4.2-5">A <code>must</code> statement enforces that at least one of <code>ipv4-router-id</code> and
+<code>ipv6-router-id</code> contains a specified address.<a href="#section-4.2-5" class="pilcrow">¶</a></p>
+<p id="section-4.2-6"><span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> also permits other Node Descriptor TLVs defined in <span>[<a href="#RFC9552" class="cite xref">RFC9552</a>]</span>,
+such as the IGP Router-ID (TLV 515), to be included in the Local Node
+Descriptors TLV.  Such descriptors are not represented in the list key by
+this version of the module.<a href="#section-4.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="candidate-path-attributes">
+<section id="section-4.3">
+        <h3 id="name-candidate-path-attributes">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-candidate-path-attributes" class="section-name selfRef">Candidate Path Attributes</a>
+        </h3>
+<p id="section-4.3-1">The <code>attributes</code> container represents the BGP-LS Attribute associated with
+the NLRI.  <a href="#fig-attr-map" class="auto internal xref">Figure 3</a> shows the correspondence between the BGP-LS
+Attribute TLVs and sub-TLVs defined in <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> and <span>[<a href="#RFC9514" class="cite xref">RFC9514</a>]</span> and the
+YANG data nodes defined under the <code>attributes</code> container.  Indentation of
+the TLV code point indicates a sub-TLV of the preceding TLV.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<span id="name-mapping-of-bgp-ls-attribute"></span><div id="fig-attr-map">
+<figure id="figure-3">
+          <div class="alignLeft art-text artwork" id="section-4.3-2.1">
+<pre>
+TLV   RFC 9857 element                Data node under attributes
+----  ------------------------------  -------------------------------
+1201  SR Binding SID                  sr-binding-sid
+1212  SRv6 Binding SID                srv6-binding-sid
+1202  SR Candidate Path State         state
+1213  SR Policy Name                  policy-name
+1203  SR Candidate Path Name          candidate-path-name
+1204  SR Candidate Path Constraints   constraints
+1208    SR Affinity                   constraints/affinity
+1209    SR SRLG                       constraints/excluded-srlg
+1210    SR Bandwidth                  constraints/bandwidth
+1211    SR Disjoint Group             constraints/disjoint-group
+1214    SR Bidirectional Group        constraints/bidirectional-group
+1215    SR Metric                     constraints/metric
+1205  SR Segment List                 segment-list
+1206    SR Segment                    segment-list/segment
+1207    SR Segment List Metric        segment-list/metric
+1216    SR Segment List Bandwidth     segment-list/bandwidth
+1217    SR Segment List Identifier    segment-list/identifier
+1250  SRv6 Endpoint Behavior          .../srv6-sid-attributes
+1252  SRv6 SID Structure              .../srv6-sid-attributes
+----  Unrecognized TLV or sub-TLV     unknown (at each level)
+</pre>
+</div>
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<a href="#name-mapping-of-bgp-ls-attribute" class="selfRef">Mapping of BGP-LS Attribute TLVs to Data Nodes</a>
+          </figcaption></figure>
+</div>
+<p id="section-4.3-3">The SRv6 Endpoint Behavior (TLV 1250) and SRv6 SID Structure (TLV 1252)
+sub-TLVs apply to the <code>srv6-binding-sid</code> list entries and to the <code>segment</code>
+list entries.  These are represented by the SRv6 SID attribute grouping
+reused from <span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span>.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-4">The following rules apply to the representation of the BGP-LS Attribute:<a href="#section-4.3-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.3-5.1">
+            <p id="section-4.3-5.1.1"><span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> specifies that only the first valid instance of certain TLVs
+and sub-TLVs is used when multiple instances are received.  For such
+TLVs and sub-TLVs, the server <span class="bcp14">MUST</span> represent only the instance that is
+used according to <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.<a href="#section-4.3-5.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.3-5.2">
+            <p id="section-4.3-5.2.1">The SR Binding SID TLV (TLV 1201) is represented by the <code>sr-binding-sid</code>
+container.  The D-flag is represented by the <code>srv6-dataplane</code> bit of the
+<code>flags</code> leaf.  When the D-flag is clear, the server <span class="bcp14">MUST</span> report the
+Binding SID and Specified Binding SID fields in the <code>binding-sid</code> and
+<code>specified-binding-sid</code> leaves.  When the D-flag is set, the TLV uses the
+SRv6 encoding that is deprecated by Section 5.1 of <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>, and the
+server <span class="bcp14">MUST</span> report these fields in the <code>srv6-binding-sid</code> and
+<code>srv6-specified-binding-sid</code> leaves.  In both cases, when either field is
+set to 0 (e.g., because no Binding SID has been specified), the server
+<span class="bcp14">MUST NOT</span> report the corresponding leaf.<a href="#section-4.3-5.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.3-5.3">
+            <p id="section-4.3-5.3.1">Each SRv6 Binding SID TLV (TLV 1212) is represented by one entry of the
+<code>srv6-binding-sid</code> list.  <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> permits multiple instances of this
+TLV for a candidate path.  The server <span class="bcp14">MUST</span> assign the <code>index</code> key
+according to the order in which the TLVs appear in the BGP-LS Attribute,
+starting at 0.  When the Binding SID or Specified Binding SID field is
+set to 0, the server <span class="bcp14">MUST NOT</span> report the corresponding leaf.<a href="#section-4.3-5.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.3-5.4">
+            <p id="section-4.3-5.4.1">The Protocol-Origin, Metric Type, and Segment Type fields carry code
+points from IANA registries.  These are represented by union types whose
+first member is an enumeration defined in the IANA-maintained
+<code>iana-bgp-ls-sr-policy-types</code> module (<a href="#iana-module" class="auto internal xref">Section 5.2</a>) and whose second
+member is <code>uint8</code>.  When a code point is defined in the revision of the
+IANA-maintained module implemented by the server, the server <span class="bcp14">MUST</span> report
+the enumeration name.  Otherwise, including for User Defined metric
+types, the server <span class="bcp14">MUST</span> report the numeric value.<a href="#section-4.3-5.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.3-5.5">
+            <p id="section-4.3-5.5.1">When the Disjoint Group Identifier or Bidirectional Group Identifier
+field carries a 4-octet value, the server <span class="bcp14">MUST</span> report it in the
+<code>group-id</code> leaf.  When the field carries a PCEP ASSOCIATION Object
+<span>[<a href="#RFC8697" class="cite xref">RFC8697</a>]</span>, the server <span class="bcp14">MUST</span> report the object, as received, in the
+<code>pcep-association-object</code> leaf.<a href="#section-4.3-5.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.3-5.6">
+            <p id="section-4.3-5.6.1">Bandwidth values are encoded by <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> in bytes per second as IEEE
+754 single-precision floating-point numbers <span>[<a href="#IEEE754" class="cite xref">IEEE754</a>]</span>.  The module
+represents bandwidth using the <code>bandwidth-ieee-float32</code> type defined in
+<span>[<a href="#RFC8294" class="cite xref">RFC8294</a>]</span>, in bytes per second.  The server <span class="bcp14">MUST</span> report the received
+value without conversion or rounding.<a href="#section-4.3-5.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.3-5.7">
+            <p id="section-4.3-5.7.1">Each flag defined by <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> is represented by a bit of the same
+name in a YANG <code>bits</code> type.  The YANG bit positions match the bit
+numbering used in <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.  Bits that are undefined in <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>
+are ignored by a receiver and are not represented.<a href="#section-4.3-5.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.3-5.8">
+            <p id="section-4.3-5.8.1">A TLV or sub-TLV that is not recognized by the server <span class="bcp14">SHOULD</span> be reported
+in the <code>unknown</code> list of the enclosing level, using the unknown
+attribute grouping reused from <span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span>.<a href="#section-4.3-5.8.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="segment-lists-and-segments">
+<section id="section-4.4">
+        <h3 id="name-segment-lists-and-segments">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-segment-lists-and-segments" class="section-name selfRef">Segment Lists and Segments</a>
+        </h3>
+<p id="section-4.4-1">Segment lists and segments are represented by lists that are <code>ordered-by
+user</code> so that the received order is preserved.  The server <span class="bcp14">MUST</span> assign the
+<code>index</code> key of a segment list according to the order in which the
+corresponding SR Segment List TLV appears in the BGP-LS Attribute,
+starting at 0.  The server <span class="bcp14">MUST</span> assign the <code>index</code> key of a segment
+according to the order in which the corresponding SR Segment sub-TLV
+appears in the SR Segment List TLV, starting at 0.  The optional Segment
+List Identifier defined in Section 5.7.4 of <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> is represented by
+the <code>identifier</code> leaf and is not used as the list key, because it is
+optional and is not required to be present for every segment list.  A
+segment list without any SR Segment sub-TLVs (e.g., a dynamic path that
+has not yet been computed) is represented by a <code>segment-list</code> entry
+without <code>segment</code> entries.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">Segment Descriptor Types A through K defined in Section 5.7.1.1 of
+<span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> are represented by separate cases of the <code>descriptor</code> choice.
+The <code>type</code> leaf of a segment contains the Segment Type, and each case is
+constrained by a <code>when</code> statement to the corresponding enumeration name.
+The SID value is present only when the S-flag (<code>sid-present</code>) of the
+segment is set.  The Algorithm field of a Type A or Type B descriptor is
+meaningful only when the A-flag (<code>algorithm-valid</code>) of the segment is set.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+</section>
 </div>
 </section>
 </div>
-<div id="yang-model">
-<section id="section-4">
-      <h2 id="name-yang-model">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-yang-model" class="section-name selfRef">YANG Model</a>
+<div id="yang-modules">
+<section id="section-5">
+      <h2 id="name-yang-modules">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-yang-modules" class="section-name selfRef">YANG Modules</a>
       </h2>
-<div id="bgp-ls-sr-policy-yang-model">
-<section id="section-4.1">
-        <h3 id="name-bgp-ls-sr-policy-yang-model">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-bgp-ls-sr-policy-yang-model" class="section-name selfRef">BGP-LS SR Policy YANG Model</a>
+<div id="bgp-ls-sr-policy-module">
+<section id="section-5.1">
+        <h3 id="name-bgp-ls-sr-policy-module">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-bgp-ls-sr-policy-module" class="section-name selfRef">BGP-LS SR Policy Module</a>
         </h3>
-<p id="section-4.1-1">The <code>ietf-bgp-ls-sr-policy</code> module augments the operational BGP-LS LSDB
-defined by <span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span>.  It does not configure SR Policies
-and does not change BGP-LS protocol behavior.  The module augments the
-<code>link-state</code> database and does not augment the separate <code>link-state-spf</code>
-database because <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> defines the SR Policy Candidate Path NLRI for
-BGP-LS.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">The <code>sr-pol-cp</code> container is a sibling of the <code>nodes</code>, <code>links</code>, <code>prefixes</code>,
-<code>srv6-sids</code>, and <code>unknowns</code> containers in an LSDB instance.  The container is
-present when the Protocol-ID is Segment Routing (9), as assigned by
-<span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
-<p id="section-4.1-3">Each <code>candidate-path</code> entry represents one SR Policy Candidate Path NLRI.
-The key contains the fields from the Local Node Descriptors TLV and the
-mandatory SR Policy Candidate Path Descriptor TLV.  At least one IPv4 or IPv6
-Router-ID is required to identify the SR Policy headend.  Optional node
-descriptors use their unspecified values when they are not present so that
-the list has a fixed YANG key.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
-<p id="section-4.1-4">The <code>attributes</code> container represents the BGP-LS Attribute associated with
-the NLRI.  It includes the SR and SRv6 Binding SID TLVs, candidate-path state
-and names, constraints, segment lists, metrics, and attributes that are not
-recognized by the implementation.  Segment lists and segments are
-<code>ordered-by user</code> to preserve their received order.  Their <code>index</code> leaves are
-zero-based positional keys.  The optional Segment List Identifier defined in
-Section 5.7.4 of <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> is represented separately and is not used as the
-list key.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
-<p id="section-4.1-5">Segment descriptor Types A through K from Section 5.7.1.1 of <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> are
-represented by separate cases.  The module reuses the SRv6 SID attribute and
-unknown attribute groupings from the BGP-LS LSDB model.  These groupings
-include the SRv6 Endpoint Behavior and SID Structure attributes defined in
-<span>[<a href="#RFC9514" class="cite xref">RFC9514</a>]</span>.  Bandwidth is represented in bytes per second, consistent with
-the encoding specified by <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
-<p id="section-4.1-6">The module imports the BGP model defined by <span>[<a href="#I-D.ietf-idr-bgp-model" class="cite xref">I-D.ietf-idr-bgp-model</a>]</span> and the
-BGP-LS and LSDB modules defined by <span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span>.<a href="#section-4.1-6" class="pilcrow">¶</a></p>
-<div class="breakable lang-yang sourcecode" id="section-4.1-7">
+<p id="section-5.1-1">The <code>ietf-bgp-ls-sr-policy</code> module imports typedefs from <span>[<a href="#RFC9911" class="cite xref">RFC9911</a>]</span>,
+<span>[<a href="#RFC8294" class="cite xref">RFC8294</a>]</span>, and the <code>iana-bgp-ls-sr-policy-types</code> module defined in
+<a href="#iana-module" class="auto internal xref">Section 5.2</a>, the routing management module defined in <span>[<a href="#RFC8349" class="cite xref">RFC8349</a>]</span>, the
+BGP module defined in
+<span>[<a href="#I-D.ietf-idr-bgp-model" class="cite xref">I-D.ietf-idr-bgp-model</a>]</span>, and the BGP-LS and LSDB modules defined in
+<span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span>.  The module also references <span>[<a href="#RFC8697" class="cite xref">RFC8697</a>]</span> and
+<span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<div class="breakable lang-yang sourcecode" id="section-5.1-2">
 <pre>
+&lt;CODE BEGINS&gt; file "ietf-bgp-ls-sr-policy@2026-10-28.yang"
+
 module ietf-bgp-ls-sr-policy {
   yang-version 1.1;
   namespace
@@ -1465,6 +1854,11 @@ module ietf-bgp-ls-sr-policy {
 
   import ietf-inet-types {
     prefix inet;
+    reference
+      "RFC 9911: Common YANG Data Types.";
+  }
+  import ietf-yang-types {
+    prefix yang;
     reference
       "RFC 9911: Common YANG Data Types.";
   }
@@ -1497,11 +1891,17 @@ module ietf-bgp-ls-sr-policy {
       "I-D.ietf-lsvr-bgp-ls-yang: A YANG Model for BGP-LS,
        BGP-LS-VPN, and BGP-LS-SPF.";
   }
+  import iana-bgp-ls-sr-policy-types {
+    prefix iana-bgp-ls-srp-t;
+    reference
+      "RFC XXXX: A YANG Data Model for BGP-LS Segment Routing
+       Policy.";
+  }
   organization
-    "IETF LSVR Working Group";
+    "IETF IDR Working Group";
   contact
-    "WG Web:   &lt;https://datatracker.ietf.org/wg/lsvr&gt;
-     WG List:  &lt;mailto:lsvr@ietf.org&gt;
+    "WG Web:   &lt;https://datatracker.ietf.org/wg/idr&gt;
+     WG List:  &lt;mailto:idr@ietf.org&gt;
 
      Authors:  Aravind Babu MahendraBabu
                &lt;mailto:aramahen@cisco.com&gt;
@@ -1532,32 +1932,56 @@ module ietf-bgp-ls-sr-policy {
     reference
       "RFC 9857: Advertisement of Segment Routing Policies Using
        BGP - Link State.
-       I-D.aravind-lsvr-bgp-ls-sr-policy-yang: A YANG Data Model for
+       I-D.aravind-idr-bgp-ls-sr-policy-yang: A YANG Data Model for
        BGP-LS Segment Routing Policy.";
   }
 
   typedef protocol-origin {
-    type uint8 {
-      range "1..255";
+    type union {
+      type iana-bgp-ls-srp-t:protocol-origin;
+      type uint8 {
+        range "1..255";
+      }
     }
     description
       "The component responsible for instantiating an SR Policy
-       candidate path.  Values are maintained in the IANA 'SR Policy
-       Protocol-Origin' registry.  RFC 9857 initially defines PCEP
-       (1), BGP SR Policy (2), configuration (3), PCEP via a PCE
-       (10), BGP SR Policy via a PCE (20), and configuration via a
-       PCE (30).";
+       candidate path, from the IANA 'SR Policy Protocol-Origin'
+       registry.  A code point that is not defined in the
+       implemented revision of the IANA-maintained module is
+       reported as a numeric value.";
     reference
       "RFC 9857, Sections 4 and 8.4.";
   }
 
   typedef metric-type {
-    type uint8;
+    type union {
+      type iana-bgp-ls-srp-t:metric-type;
+      type uint8;
+    }
     description
       "An SR Policy metric type from the IANA 'BGP-LS SR Policy
-       Metric Types' registry.";
+       Metric Types' registry.  A code point that is not defined
+       in the implemented revision of the IANA-maintained module,
+       including a User Defined code point, is reported as a
+       numeric value.";
     reference
       "RFC 9857, Sections 5.6.6, 5.7.2, and 8.6.";
+  }
+
+  typedef segment-type {
+    type union {
+      type iana-bgp-ls-srp-t:segment-type;
+      type uint8 {
+        range "1..255";
+      }
+    }
+    description
+      "A Segment Type from the IANA 'BGP-LS SR Segment Descriptor
+       Types' registry.  A code point that is not defined in the
+       implemented revision of the IANA-maintained module is
+       reported as a numeric value.";
+    reference
+      "RFC 9857, Sections 5.7.1 and 8.5.";
   }
 
   typedef descriptor-flags {
@@ -2006,10 +2430,10 @@ module ietf-bgp-ls-sr-policy {
          value of zero indicates that the descriptor was absent.";
     }
     leaf bgp-router-id {
-      type inet:ipv4-address;
+      type yang:dotted-quad;
       description
-        "BGP Router-ID in Node Descriptor TLV 516.  The unspecified
-         address indicates that the descriptor was absent.";
+        "BGP Identifier in Node Descriptor TLV 516.  The value
+         0.0.0.0 indicates that the descriptor was absent.";
     }
     leaf member-as {
       type inet:as-number;
@@ -2082,6 +2506,42 @@ module ietf-bgp-ls-sr-policy {
       mandatory true;
       description
         "Candidate-path discriminator.";
+    }
+  }
+
+  grouping group-identifier {
+    description
+      "Group identifier carried in the SR Disjoint Group and SR
+       Bidirectional Group Constraint sub-TLVs.";
+    reference
+      "RFC 9857, Sections 5.6.4 and 5.6.5.";
+
+    choice group-identifier {
+      mandatory true;
+      description
+        "The identifier is encoded either as a 4-octet value or as
+         an entire PCEP ASSOCIATION Object.";
+      case group-id {
+        leaf group-id {
+          type uint32;
+          description
+            "4-octet group identifier.";
+        }
+      }
+      case pcep-association-object {
+        leaf pcep-association-object {
+          type binary;
+          description
+            "Entire PCEP ASSOCIATION Object, including its optional
+             TLVs, as received.  The object is not parsed by BGP
+             speakers.";
+          reference
+            "RFC 8697: Path Computation Element Communication
+             Protocol (PCEP) Extensions for Establishing
+             Relationships between Sets of Label Switched Paths
+             (LSPs), Section 6.1.";
+        }
+      }
     }
   }
 
@@ -2179,12 +2639,7 @@ module ietf-bgp-ls-sr-policy {
           description
             "Achieved disjointness properties.";
         }
-        leaf group-id {
-          type uint32;
-          mandatory true;
-          description
-            "Disjoint group identifier.";
-        }
+        uses group-identifier;
       }
 
       container bidirectional-group {
@@ -2201,12 +2656,7 @@ module ietf-bgp-ls-sr-policy {
           description
             "Bidirectional group flags.";
         }
-        leaf group-id {
-          type uint32;
-          mandatory true;
-          description
-            "Bidirectional group identifier.";
-        }
+        uses group-identifier;
       }
 
       list metric {
@@ -2250,7 +2700,7 @@ module ietf-bgp-ls-sr-policy {
 
       case type-a {
         container type-a {
-          when "../type = 1";
+          when "../type = 'type-a'";
           description
             "Type A: SR-MPLS label descriptor.";
           leaf algorithm {
@@ -2263,7 +2713,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-b {
         container type-b {
-          when "../type = 2";
+          when "../type = 'type-b'";
           description
             "Type B: SRv6 SID descriptor.";
           leaf algorithm {
@@ -2276,7 +2726,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-c {
         container type-c {
-          when "../type = 3";
+          when "../type = 'type-c'";
           description
             "Type C: IPv4 node address for an SR-MPLS Prefix SID.";
           leaf algorithm {
@@ -2295,7 +2745,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-d {
         container type-d {
-          when "../type = 4";
+          when "../type = 'type-d'";
           description
             "Type D: IPv6 node address for an SR-MPLS Prefix SID.";
           leaf algorithm {
@@ -2314,7 +2764,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-e {
         container type-e {
-          when "../type = 5";
+          when "../type = 'type-e'";
           description
             "Type E: IPv4 node and local interface identifier.";
           leaf node-address {
@@ -2333,7 +2783,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-f {
         container type-f {
-          when "../type = 6";
+          when "../type = 'type-f'";
           description
             "Type F: IPv4 local and remote interface addresses.";
           leaf local-interface-address {
@@ -2353,7 +2803,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-g {
         container type-g {
-          when "../type = 7";
+          when "../type = 'type-g'";
           description
             "Type G: IPv6 node addresses and interface identifiers
              for an SR-MPLS adjacency.";
@@ -2362,7 +2812,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-h {
         container type-h {
-          when "../type = 8";
+          when "../type = 'type-h'";
           description
             "Type H: IPv6 local and remote interface addresses for
              an SR-MPLS adjacency.";
@@ -2371,7 +2821,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-i {
         container type-i {
-          when "../type = 9";
+          when "../type = 'type-i'";
           description
             "Type I: IPv6 node address for an SRv6 End SID.";
           leaf algorithm {
@@ -2390,7 +2840,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-j {
         container type-j {
-          when "../type = 10";
+          when "../type = 'type-j'";
           description
             "Type J: IPv6 node addresses and interface identifiers
              for an SRv6 End.X SID.";
@@ -2399,7 +2849,7 @@ module ietf-bgp-ls-sr-policy {
       }
       case type-k {
         container type-k {
-          when "../type = 11";
+          when "../type = 'type-k'";
           description
             "Type K: IPv6 local and remote interface addresses for
              an SRv6 End.X SID.";
@@ -2525,13 +2975,10 @@ module ietf-bgp-ls-sr-policy {
             "Zero-based position of the segment in the SID list.";
         }
         leaf type {
-          type uint8 {
-            range "1..255";
-          }
+          type segment-type;
           mandatory true;
           description
-            "Segment Descriptor Type from the IANA 'BGP-LS SR
-             Segment Descriptor Types' registry.";
+            "Segment Type of the segment.";
         }
         leaf flags {
           type segment-flags;
@@ -2540,7 +2987,9 @@ module ietf-bgp-ls-sr-policy {
         }
         choice sid {
           description
-            "Resolved or explicitly provisioned SID value.";
+            "Resolved or explicitly provisioned SID value.  A SID
+             value is present only when the 'sid-present' flag is
+             set.";
           case mpls {
             leaf mpls-label {
               type ietf-rt-t:mpls-label-general-use;
@@ -2613,7 +3062,7 @@ module ietf-bgp-ls-sr-policy {
     description
       "Operational SR Policy candidate paths advertised in BGP-LS.";
 
-    container sr-pol-cp {
+    container sr-policy-candidate-paths {
       description
         "BGP-LS topology entries for SR Policy Candidate Path
          NLRIs.";
@@ -2649,31 +3098,34 @@ module ietf-bgp-ls-sr-policy {
              Policy Candidate Path NLRI.";
 
           leaf policy-name {
-            type string {
-              length "0..255";
-            }
+            type string;
             description
-              "Symbolic SR Policy name from TLV 1213.";
+              "Symbolic SR Policy name from TLV 1213.  RFC 9857
+               recommends, but does not require, that the name be
+               limited to 255 octets.";
             reference
               "RFC 9857, Section 5.4.";
           }
           leaf candidate-path-name {
-            type string {
-              length "0..255";
-            }
+            type string;
             description
-              "Symbolic candidate-path name from TLV 1203.";
+              "Symbolic candidate-path name from TLV 1203.  RFC 9857
+               recommends, but does not require, that the name be
+               limited to 255 octets.";
             reference
               "RFC 9857, Section 5.5.";
           }
 
-          container mpls-binding-sid {
+          container sr-binding-sid {
             presence "An SR Binding SID TLV was received.";
             description
-              "SR-MPLS Binding SID state.  The deprecated SRv6
-               encoding of TLV 1201 is intentionally not represented
-               here; SRv6 Binding SIDs are represented by TLV 1212
-               below.";
+              "Binding SID state reported in the SR Binding SID TLV
+               (TLV 1201).  The 'srv6-dataplane' flag (D-flag)
+               selects between the SR-MPLS and SRv6 encodings.  The
+               SRv6 encoding of this TLV is deprecated by RFC 9857
+               and is represented only for backward compatibility;
+               SRv6 Binding SIDs are otherwise represented by the
+               srv6-binding-sid list (TLV 1212).";
             reference
               "RFC 9857, Section 5.1.";
 
@@ -2682,26 +3134,57 @@ module ietf-bgp-ls-sr-policy {
               description
                 "Binding SID status flags.";
             }
-            leaf binding-sid {
-              type ietf-rt-t:mpls-label-general-use;
+            choice dataplane {
               description
-                "Allocated or operational Binding SID.";
-            }
-            leaf specified-binding-sid {
-              type ietf-rt-t:mpls-label-general-use;
-              description
-                "Explicitly specified Binding SID.";
+                "Binding SID values according to the dataplane
+                 indicated by the 'srv6-dataplane' flag.";
+              case mpls {
+                leaf binding-sid {
+                  when "not(bit-is-set(../flags, 'srv6-dataplane'))";
+                  type ietf-rt-t:mpls-label-general-use;
+                  description
+                    "Allocated or operational SR-MPLS Binding SID.";
+                }
+                leaf specified-binding-sid {
+                  when "not(bit-is-set(../flags, 'srv6-dataplane'))";
+                  type ietf-rt-t:mpls-label-general-use;
+                  description
+                    "Explicitly specified SR-MPLS Binding SID.";
+                }
+              }
+              case srv6 {
+                leaf srv6-binding-sid {
+                  when "bit-is-set(../flags, 'srv6-dataplane')";
+                  type inet:ipv6-address;
+                  description
+                    "Allocated or operational SRv6 Binding SID.";
+                }
+                leaf srv6-specified-binding-sid {
+                  when "bit-is-set(../flags, 'srv6-dataplane')";
+                  type inet:ipv6-address;
+                  description
+                    "Explicitly specified SRv6 Binding SID.";
+                }
+              }
             }
           }
 
           list srv6-binding-sid {
-            key "binding-sid";
+            key "index";
+            ordered-by user;
             description
               "An SRv6 Binding SID associated with the candidate
-               path.";
+               path, in the order in which the SRv6 Binding SID TLVs
+               were received.";
             reference
               "RFC 9857, Section 5.2.";
 
+            leaf index {
+              type uint32;
+              description
+                "Zero-based position of the SRv6 Binding SID TLV in
+                 the order received.";
+            }
             leaf binding-sid {
               type inet:ipv6-address;
               description
@@ -2772,35 +3255,253 @@ module ietf-bgp-ls-sr-policy {
     uses sr-policy-candidate-paths;
   }
 }
-</pre><a href="#section-4.1-7" class="pilcrow">¶</a>
+
+&lt;CODE ENDS&gt;
+</pre><a href="#section-5.1-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
+<div id="iana-module">
+<section id="section-5.2">
+        <h3 id="name-iana-maintained-module">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-iana-maintained-module" class="section-name selfRef">IANA-Maintained Module</a>
+        </h3>
+<p id="section-5.2-1">The <code>iana-bgp-ls-sr-policy-types</code> module defines enumerations for the code
+points of the "SR Policy Protocol-Origin", "BGP-LS SR Segment Descriptor
+Types", and "BGP-LS SR Policy Metric Types" registries established by
+<span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>.  The version of the module below reflects the registries at
+the time of writing.  The current version is maintained by IANA, as
+described in <a href="#iana-maintained" class="auto internal xref">Section 7.3</a>.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<div class="breakable lang-yang sourcecode" id="section-5.2-2">
+<pre>
+&lt;CODE BEGINS&gt; file "iana-bgp-ls-sr-policy-types@2026-10-28.yang"
+
+module iana-bgp-ls-sr-policy-types {
+  yang-version 1.1;
+  namespace
+    "urn:ietf:params:xml:ns:yang:iana-bgp-ls-sr-policy-types";
+  prefix iana-bgp-ls-srp-t;
+
+  organization
+    "Internet Assigned Numbers Authority (IANA)";
+  contact
+    "Internet Assigned Numbers Authority
+
+     ICANN
+     12025 Waterfront Drive, Suite 300
+     Los Angeles, CA 90094-2536
+     United States of America
+
+     Tel:    +1 310 301 5800
+     &lt;mailto:iana@iana.org&gt;";
+  description
+    "This module contains type definitions for the code points of
+     the IANA registries used by SR Policy information distributed
+     in BGP - Link State (BGP-LS).
+
+     Copyright (c) 2026 IETF Trust and the persons identified as
+     authors of the code.  All rights reserved.
+
+     Redistribution and use in source and binary forms, with or
+     without modification, is permitted pursuant to, and subject to
+     the license terms contained in, the Revised BSD License set
+     forth in Section 4.c of the IETF Trust's Legal Provisions
+     Relating to IETF Documents
+     (https://trustee.ietf.org/license-info).
+
+     The initial version of this YANG module is part of RFC XXXX;
+     see the RFC itself for full legal notices.
+
+     All revisions of IANA-maintained modules can be found in the
+     'YANG Parameters' registry group
+     (https://www.iana.org/assignments/yang-parameters).";
+
+  revision 2026-10-28 {
+    description
+      "Initial revision.";
+    reference
+      "RFC XXXX: A YANG Data Model for BGP-LS Segment Routing
+       Policy.";
+  }
+
+  typedef protocol-origin {
+    type enumeration {
+      enum pcep {
+        value 1;
+        description
+          "PCEP.";
+      }
+      enum bgp-sr-policy {
+        value 2;
+        description
+          "BGP SR Policy.";
+      }
+      enum configuration {
+        value 3;
+        description
+          "Configuration (CLI, YANG model via NETCONF, etc.).";
+      }
+      enum pcep-via-pce {
+        value 10;
+        description
+          "PCEP (in PCEP or when BGP-LS Producer is PCE).";
+      }
+      enum bgp-sr-policy-via-pce {
+        value 20;
+        description
+          "BGP SR Policy (in PCEP or when BGP-LS Producer is PCE).";
+      }
+      enum configuration-via-pce {
+        value 30;
+        description
+          "Configuration (CLI, YANG model via NETCONF, etc.  In
+           PCEP or when BGP-LS Producer is PCE).";
+      }
+    }
+    description
+      "Code points of the IANA 'SR Policy Protocol-Origin'
+       registry.";
+    reference
+      "RFC 9857: Advertisement of Segment Routing Policies Using
+       BGP - Link State, Section 8.4.";
+  }
+
+  typedef segment-type {
+    type enumeration {
+      enum type-a {
+        value 1;
+        description
+          "Type A Segment: SR-MPLS Label.";
+      }
+      enum type-b {
+        value 2;
+        description
+          "Type B Segment: SRv6 SID.";
+      }
+      enum type-c {
+        value 3;
+        description
+          "Type C Segment: IPv4 Prefix with optional SR
+           Algorithm.";
+      }
+      enum type-d {
+        value 4;
+        description
+          "Type D Segment: IPv6 Global Prefix with optional SR
+           Algorithm for SR-MPLS.";
+      }
+      enum type-e {
+        value 5;
+        description
+          "Type E Segment: IPv4 Prefix with Local Interface ID.";
+      }
+      enum type-f {
+        value 6;
+        description
+          "Type F Segment: IPv4 Addresses for link endpoints as
+           Local, Remote pair.";
+      }
+      enum type-g {
+        value 7;
+        description
+          "Type G Segment: IPv6 Prefix and Interface ID for link
+           endpoints as Local, Remote pair for SR-MPLS.";
+      }
+      enum type-h {
+        value 8;
+        description
+          "Type H Segment: IPv6 Addresses for link endpoints as
+           Local, Remote pair for SR-MPLS.";
+      }
+      enum type-i {
+        value 9;
+        description
+          "Type I Segment: IPv6 Global Prefix with optional SR
+           Algorithm for SRv6.";
+      }
+      enum type-j {
+        value 10;
+        description
+          "Type J Segment: IPv6 Prefix and Interface ID for link
+           endpoints as Local, Remote pair for SRv6.";
+      }
+      enum type-k {
+        value 11;
+        description
+          "Type K Segment: IPv6 Addresses for link endpoints as
+           Local, Remote pair for SRv6.";
+      }
+    }
+    description
+      "Code points of the IANA 'BGP-LS SR Segment Descriptor
+       Types' registry.";
+    reference
+      "RFC 9857: Advertisement of Segment Routing Policies Using
+       BGP - Link State, Section 8.5.";
+  }
+
+  typedef metric-type {
+    type enumeration {
+      enum igp {
+        value 0;
+        description
+          "IGP metric.";
+      }
+      enum min-unidirectional-delay {
+        value 1;
+        description
+          "Min Unidirectional Delay.";
+      }
+      enum te {
+        value 2;
+        description
+          "TE metric.";
+      }
+      enum hop-count {
+        value 3;
+        description
+          "Hop Count.";
+      }
+      enum sid-list-length {
+        value 4;
+        description
+          "SID List Length.";
+      }
+      enum bandwidth {
+        value 5;
+        description
+          "Bandwidth.";
+      }
+      enum avg-unidirectional-delay {
+        value 6;
+        description
+          "Avg Unidirectional Delay.";
+      }
+      enum unidirectional-delay-variation {
+        value 7;
+        description
+          "Unidirectional Delay Variation.";
+      }
+      enum loss {
+        value 8;
+        description
+          "Loss.";
+      }
+    }
+    description
+      "Code points of the IANA 'BGP-LS SR Policy Metric Types'
+       registry.  The User Defined range (128-255) is not
+       enumerated.";
+    reference
+      "RFC 9857: Advertisement of Segment Routing Policies Using
+       BGP - Link State, Section 8.6.";
+  }
+}
+
+&lt;CODE ENDS&gt;
+</pre><a href="#section-5.2-2" class="pilcrow">¶</a>
+</div>
 </section>
-</div>
-<div id="iana-considerations">
-<section id="section-5">
-      <h2 id="name-iana-considerations">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
-      </h2>
-<p id="section-5-1">This document registers the following URI in the "IETF XML Registry"
-<span>[<a href="#RFC3688" class="cite xref">RFC3688</a>]</span>:<a href="#section-5-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5-2">
-<pre>
-URI: urn:ietf:params:xml:ns:yang:ietf-bgp-ls-sr-policy
-Registrant Contact: The IESG.
-XML: N/A; the requested URI is an XML namespace.
-</pre><a href="#section-5-2" class="pilcrow">¶</a>
-</div>
-<p id="section-5-3">This document registers the following YANG module in the "YANG Module Names"
-registry <span>[<a href="#RFC6020" class="cite xref">RFC6020</a>]</span>:<a href="#section-5-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5-4">
-<pre>
-name: ietf-bgp-ls-sr-policy
-namespace: urn:ietf:params:xml:ns:yang:ietf-bgp-ls-sr-policy
-prefix: bgp-ls-sr-policy
-reference: RFC XXXX
-</pre><a href="#section-5-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2813,35 +3514,169 @@ reference: RFC XXXX
 designed to be accessed through network management protocols such as NETCONF
 <span>[<a href="#RFC6241" class="cite xref">RFC6241</a>]</span> or RESTCONF <span>[<a href="#RFC8040" class="cite xref">RFC8040</a>]</span>.  The lowest NETCONF layer is the secure
 transport layer, and the mandatory-to-implement secure transport is Secure
-Shell (SSH) <span>[<a href="#RFC6242" class="cite xref">RFC6242</a>]</span>.  The lowest RESTCONF layer is HTTPS, and TLS
-<span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span> is mandatory to implement.<a href="#section-6-1" class="pilcrow">¶</a></p>
+Shell (SSH) <span>[<a href="#RFC6242" class="cite xref">RFC6242</a>]</span>.  The lowest RESTCONF layer is HTTPS, and the
+mandatory-to-implement secure transport is TLS <span>[<a href="#RFC9846" class="cite xref">RFC9846</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">The Network Configuration Access Control Model (NACM) <span>[<a href="#RFC8341" class="cite xref">RFC8341</a>]</span> provides
-the means to restrict access for particular users to a preconfigured subset
-of all available protocol operations and content.<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3">All data nodes introduced by the <code>ietf-bgp-ls-sr-policy</code> module are read-only.
-The <code>sr-pol-cp</code> subtree contains headend and endpoint addresses, Binding SIDs,
-complete segment lists, path constraints, bandwidth, and disjointness
-relationships.  Unauthorized read access to this information may disclose
-network topology, traffic-engineering intent, and protection strategy.
-Implementations <span class="bcp14">MUST</span> apply appropriate access controls to this subtree and
-<span class="bcp14">SHOULD</span> expose it only to trusted principals.<a href="#section-6-3" class="pilcrow">¶</a></p>
-<p id="section-6-4">The number of candidate paths, segment lists, segments, metrics, and unknown
-TLVs is controlled by received BGP-LS information.  Implementations <span class="bcp14">SHOULD</span>
-apply the resource limits and malformed-TLV handling used for the underlying
-BGP-LS LSDB.  No RPC or action operations are defined by this document.<a href="#section-6-4" class="pilcrow">¶</a></p>
-<p id="section-6-5">The security considerations of <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>, <span>[<a href="#RFC9552" class="cite xref">RFC9552</a>]</span>, <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>,
-<span>[<a href="#I-D.ietf-idr-bgp-model" class="cite xref">I-D.ietf-idr-bgp-model</a>]</span>, and <span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span> also apply.<a href="#section-6-5" class="pilcrow">¶</a></p>
+the means to restrict access for particular NETCONF or RESTCONF users to a
+preconfigured subset of all available NETCONF or RESTCONF protocol
+operations and content.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">There are no data nodes defined in the <code>ietf-bgp-ls-sr-policy</code> module that
+are writable, creatable, or deletable (i.e., <code>config true</code>, which is the
+default).  The module therefore introduces no write-related
+vulnerabilities.  The <code>iana-bgp-ls-sr-policy-types</code> module defines only
+data types and no data nodes, RPCs, actions, or notifications; it
+introduces no security considerations of its own.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">Some of the readable data nodes in this YANG module may be considered
+sensitive or vulnerable in some network environments.  It is thus important
+to control read access (e.g., via get, get-data, or notification) to these
+data nodes.  These are the subtrees and data nodes and their
+sensitivity/vulnerability (the augmented path is abbreviated; the full path
+is shown in <a href="#appendix-tree" class="auto internal xref">Appendix A</a>):<a href="#section-6-4" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6-5">
+        <dt id="section-6-5.1">
+<code>.../bgp-ls:instance/bgp-ls-sr-policy:sr-policy-candidate-paths</code>:</dt>
+        <dd style="margin-left: 1.5em" id="section-6-5.2">
+          <p id="section-6-5.2.1">This subtree contains headend, endpoint, and originator addresses,
+Binding SIDs, complete segment lists, path constraints, requested and
+allocated bandwidth, and disjointness and bidirectional associations.
+Unauthorized read access to this information discloses network topology,
+traffic-engineering intent, and path-protection strategy, which
+<span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span> identifies as potentially commercially sensitive.  Such
+information can also assist an attacker in identifying critical nodes and
+links or in crafting packets that use valid SIDs.<a href="#section-6-5.2.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
+<p id="section-6-6">The content of this subtree is derived from BGP-LS information received
+from other speakers, and the number of candidate paths, segment lists,
+segments, metrics, and unknown TLVs is controlled by those speakers.
+Implementations <span class="bcp14">SHOULD</span> apply to this subtree the same resource limits and
+malformed-TLV handling that apply to the underlying BGP-LS LSDB
+<span>[<a href="#RFC9552" class="cite xref">RFC9552</a>]</span>.<a href="#section-6-6" class="pilcrow">¶</a></p>
+<p id="section-6-7">This document defines no RPC or action operations.<a href="#section-6-7" class="pilcrow">¶</a></p>
+<p id="section-6-8">The security considerations of <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>, <span>[<a href="#RFC9552" class="cite xref">RFC9552</a>]</span>, <span>[<a href="#RFC9857" class="cite xref">RFC9857</a>]</span>,
+<span>[<a href="#I-D.ietf-idr-bgp-model" class="cite xref">I-D.ietf-idr-bgp-model</a>]</span>, and <span>[<a href="#I-D.ietf-lsvr-bgp-ls-yang" class="cite xref">I-D.ietf-lsvr-bgp-ls-yang</a>]</span> also apply.<a href="#section-6-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-7">
+      <h2 id="name-iana-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<div id="the-ietf-xml-registry">
+<section id="section-7.1">
+        <h3 id="name-the-ietf-xml-registry">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-the-ietf-xml-registry" class="section-name selfRef">The "IETF XML" Registry</a>
+        </h3>
+<p id="section-7.1-1">IANA is requested to register the following URIs in the "ns" subregistry
+within the "IETF XML Registry" <span>[<a href="#RFC3688" class="cite xref">RFC3688</a>]</span>:<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.1-2">
+<pre>
+URI: urn:ietf:params:xml:ns:yang:ietf-bgp-ls-sr-policy
+Registrant Contact: The IESG.
+XML: N/A; the requested URI is an XML namespace.
+
+URI: urn:ietf:params:xml:ns:yang:iana-bgp-ls-sr-policy-types
+Registrant Contact: The IESG.
+XML: N/A; the requested URI is an XML namespace.
+</pre><a href="#section-7.1-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="the-yang-module-names-registry">
+<section id="section-7.2">
+        <h3 id="name-the-yang-module-names-regis">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-the-yang-module-names-regis" class="section-name selfRef">The "YANG Module Names" Registry</a>
+        </h3>
+<p id="section-7.2-1">IANA is requested to register the following YANG modules in the "YANG
+Module Names" registry <span>[<a href="#RFC6020" class="cite xref">RFC6020</a>]</span> within the "YANG Parameters" registry
+group:<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.2-2">
+<pre>
+Name: ietf-bgp-ls-sr-policy
+Maintained by IANA?  N
+Namespace: urn:ietf:params:xml:ns:yang:ietf-bgp-ls-sr-policy
+Prefix: bgp-ls-sr-policy
+Reference: RFC XXXX
+
+Name: iana-bgp-ls-sr-policy-types
+Maintained by IANA?  Y
+Namespace: urn:ietf:params:xml:ns:yang:iana-bgp-ls-sr-policy-types
+Prefix: iana-bgp-ls-srp-t
+Reference: RFC XXXX
+</pre><a href="#section-7.2-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="iana-maintained">
+<section id="section-7.3">
+        <h3 id="name-maintenance-of-the-iana-mai">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-maintenance-of-the-iana-mai" class="section-name selfRef">Maintenance of the IANA-Maintained Module</a>
+        </h3>
+<p id="section-7.3-1">IANA is requested to post the initial version of the
+<code>iana-bgp-ls-sr-policy-types</code> YANG module defined in <a href="#iana-module" class="auto internal xref">Section 5.2</a> and to
+maintain it as follows.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">When a new code point is assigned in the "SR Policy Protocol-Origin",
+"BGP-LS SR Segment Descriptor Types", or "BGP-LS SR Policy Metric Types"
+registry, other than in the Reserved, Private Use, or User Defined ranges,
+a new <code>enum</code> statement <span class="bcp14">MUST</span> be added to the corresponding <code>protocol-origin</code>,
+<code>segment-type</code>, or <code>metric-type</code> typedef of the module.  The <code>enum</code>
+statement <span class="bcp14">MUST</span> have the following sub-statements:<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-7.3-3">
+          <dt id="section-7.3-3.1">
+<code>value</code>:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.3-3.2">
+            <p id="section-7.3-3.2.1">The assigned code point.<a href="#section-7.3-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.3-3.3">
+<code>description</code>:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.3-3.4">
+            <p id="section-7.3-3.4.1">The description of the code point in the registry.<a href="#section-7.3-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.3-3.5">
+<code>reference</code>:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.3-3.6">
+            <p id="section-7.3-3.6.1">The reference of the code point in the registry.<a href="#section-7.3-3.6.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-7.3-4">The name of the <code>enum</code> statement is derived from the registry description
+by converting it to lowercase and replacing spaces and punctuation with
+hyphens.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
+<p id="section-7.3-5">When the description or reference of a code point is updated in one of
+these registries, the corresponding <code>enum</code> statement <span class="bcp14">MUST</span> be updated.  When
+a code point is deprecated or made obsolete, a <code>status</code> sub-statement with
+the value <code>deprecated</code> or <code>obsolete</code>, respectively, <span class="bcp14">MUST</span> be added to the
+corresponding <code>enum</code> statement.<a href="#section-7.3-5" class="pilcrow">¶</a></p>
+<p id="section-7.3-6">Each time the module is updated, a new <code>revision</code> statement <span class="bcp14">MUST</span> be added
+before the existing <code>revision</code> statements.  The description of the new
+<code>revision</code> statement <span class="bcp14">MUST</span> identify the changes made.<a href="#section-7.3-6" class="pilcrow">¶</a></p>
+<p id="section-7.3-7">IANA is requested to add the following note to each of the three
+registries listed above:<a href="#section-7.3-7" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-7.3-8.1">
+            <p id="section-7.3-8.1.1">When this registry is modified, the YANG module
+"iana-bgp-ls-sr-policy-types" <span>[<a href="#IANA-YANG-PARAMETERS" class="cite xref">IANA-YANG-PARAMETERS</a>]</span> must be updated as
+defined in RFC XXXX.<a href="#section-7.3-8.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-7.3-9">RFC Editor: Please replace XXXX with the RFC number assigned to this
+document and remove this note.<a href="#section-7.3-9" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-7">
+<section id="section-8">
       <h2 id="name-references">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-7.1">
+<section id="section-8.1">
         <h3 id="name-normative-references">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="I-D.ietf-idr-bgp-model">[I-D.ietf-idr-bgp-model]</dt>
@@ -2864,23 +3699,59 @@ BGP-LS LSDB.  No RPC or action operations are defined by this document.<a href="
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC8294">[RFC8294]</dt>
+        <dd>
+<span class="refAuthor">Liu, X.</span>, <span class="refAuthor">Qu, Y.</span>, <span class="refAuthor">Lindem, A.</span>, <span class="refAuthor">Hopps, C.</span>, and <span class="refAuthor">L. Berger</span>, <span class="refTitle">"Common YANG Data Types for the Routing Area"</span>, <span class="seriesInfo">RFC 8294</span>, <span class="seriesInfo">DOI 10.17487/RFC8294</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8294">https://www.rfc-editor.org/rfc/rfc8294</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8342">[RFC8342]</dt>
+        <dd>
+<span class="refAuthor">Bjorklund, M.</span>, <span class="refAuthor">Schoenwaelder, J.</span>, <span class="refAuthor">Shafer, P.</span>, <span class="refAuthor">Watsen, K.</span>, and <span class="refAuthor">R. Wilton</span>, <span class="refTitle">"Network Management Datastore Architecture (NMDA)"</span>, <span class="seriesInfo">RFC 8342</span>, <span class="seriesInfo">DOI 10.17487/RFC8342</span>, <time datetime="2018-03" class="refDate">March 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8342">https://www.rfc-editor.org/rfc/rfc8342</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8349">[RFC8349]</dt>
         <dd>
 <span class="refAuthor">Lhotka, L.</span>, <span class="refAuthor">Lindem, A.</span>, and <span class="refAuthor">Y. Qu</span>, <span class="refTitle">"A YANG Data Model for Routing Management (NMDA Version)"</span>, <span class="seriesInfo">RFC 8349</span>, <span class="seriesInfo">DOI 10.17487/RFC8349</span>, <time datetime="2018-03" class="refDate">March 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8349">https://www.rfc-editor.org/rfc/rfc8349</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC8697">[RFC8697]</dt>
+        <dd>
+<span class="refAuthor">Minei, I.</span>, <span class="refAuthor">Crabbe, E.</span>, <span class="refAuthor">Sivabalan, S.</span>, <span class="refAuthor">Ananthakrishnan, H.</span>, <span class="refAuthor">Dhody, D.</span>, and <span class="refAuthor">Y. Tanaka</span>, <span class="refTitle">"Path Computation Element Communication Protocol (PCEP) Extensions for Establishing Relationships between Sets of Label Switched Paths (LSPs)"</span>, <span class="seriesInfo">RFC 8697</span>, <span class="seriesInfo">DOI 10.17487/RFC8697</span>, <time datetime="2020-01" class="refDate">January 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8697">https://www.rfc-editor.org/rfc/rfc8697</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9256">[RFC9256]</dt>
+        <dd>
+<span class="refAuthor">Filsfils, C.</span>, <span class="refAuthor">Talaulikar, K., Ed.</span>, <span class="refAuthor">Voyer, D.</span>, <span class="refAuthor">Bogdanov, A.</span>, and <span class="refAuthor">P. Mattes</span>, <span class="refTitle">"Segment Routing Policy Architecture"</span>, <span class="seriesInfo">RFC 9256</span>, <span class="seriesInfo">DOI 10.17487/RFC9256</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9256">https://www.rfc-editor.org/rfc/rfc9256</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9514">[RFC9514]</dt>
+        <dd>
+<span class="refAuthor">Dawra, G.</span>, <span class="refAuthor">Filsfils, C.</span>, <span class="refAuthor">Talaulikar, K., Ed.</span>, <span class="refAuthor">Chen, M.</span>, <span class="refAuthor">Bernier, D.</span>, and <span class="refAuthor">B. Decraene</span>, <span class="refTitle">"Border Gateway Protocol - Link State (BGP-LS) Extensions for Segment Routing over IPv6 (SRv6)"</span>, <span class="seriesInfo">RFC 9514</span>, <span class="seriesInfo">DOI 10.17487/RFC9514</span>, <time datetime="2023-12" class="refDate">December 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9514">https://www.rfc-editor.org/rfc/rfc9514</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9552">[RFC9552]</dt>
+        <dd>
+<span class="refAuthor">Talaulikar, K., Ed.</span>, <span class="refTitle">"Distribution of Link-State and Traffic Engineering Information Using BGP"</span>, <span class="seriesInfo">RFC 9552</span>, <span class="seriesInfo">DOI 10.17487/RFC9552</span>, <time datetime="2023-12" class="refDate">December 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9552">https://www.rfc-editor.org/rfc/rfc9552</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC9857">[RFC9857]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Previdi, S.</span>, <span class="refAuthor">Talaulikar, K., Ed.</span>, <span class="refAuthor">Dong, J.</span>, <span class="refAuthor">Gredler, H.</span>, and <span class="refAuthor">J. Tantsura</span>, <span class="refTitle">"Advertisement of Segment Routing Policies Using BGP - Link State"</span>, <span class="seriesInfo">RFC 9857</span>, <span class="seriesInfo">DOI 10.17487/RFC9857</span>, <time datetime="2025-10" class="refDate">October 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9857">https://www.rfc-editor.org/rfc/rfc9857</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9911">[RFC9911]</dt>
+      <dd>
+<span class="refAuthor">Schönwälder, J., Ed.</span>, <span class="refTitle">"Common YANG Data Types"</span>, <span class="seriesInfo">RFC 9911</span>, <span class="seriesInfo">DOI 10.17487/RFC9911</span>, <time datetime="2025-12" class="refDate">December 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9911">https://www.rfc-editor.org/rfc/rfc9911</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-7.2">
+<section id="section-8.2">
         <h3 id="name-informative-references">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="IANA-YANG-PARAMETERS">[IANA-YANG-PARAMETERS]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"YANG Parameters"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.iana.org/assignments/yang-parameters">https://www.iana.org/assignments/yang-parameters</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IEEE754">[IEEE754]</dt>
+        <dd>
+<span class="refAuthor">IEEE</span>, <span class="refTitle">"IEEE Standard for Floating-Point Arithmetic"</span>, <span class="seriesInfo">IEEE Std 754-2019</span>, <span class="seriesInfo">DOI 10.1109/IEEESTD.2019.8766229</span>, <time datetime="2019" class="refDate">2019</time>, <span>&lt;<a href="https://doi.org/10.1109/IEEESTD.2019.8766229">https://doi.org/10.1109/IEEESTD.2019.8766229</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC3688">[RFC3688]</dt>
         <dd>
 <span class="refAuthor">Mealling, M.</span>, <span class="refTitle">"The IETF XML Registry"</span>, <span class="seriesInfo">BCP 81</span>, <span class="seriesInfo">RFC 3688</span>, <span class="seriesInfo">DOI 10.17487/RFC3688</span>, <time datetime="2004-01" class="refDate">January 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3688">https://www.rfc-editor.org/rfc/rfc3688</a>&gt;</span>. </dd>
@@ -2909,18 +3780,6 @@ BGP-LS LSDB.  No RPC or action operations are defined by this document.<a href="
         <dd>
 <span class="refAuthor">Bierman, A.</span> and <span class="refAuthor">M. Bjorklund</span>, <span class="refTitle">"Network Configuration Access Control Model"</span>, <span class="seriesInfo">STD 91</span>, <span class="seriesInfo">RFC 8341</span>, <span class="seriesInfo">DOI 10.17487/RFC8341</span>, <time datetime="2018-03" class="refDate">March 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8341">https://www.rfc-editor.org/rfc/rfc8341</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC9256">[RFC9256]</dt>
-        <dd>
-<span class="refAuthor">Filsfils, C.</span>, <span class="refAuthor">Talaulikar, K., Ed.</span>, <span class="refAuthor">Voyer, D.</span>, <span class="refAuthor">Bogdanov, A.</span>, and <span class="refAuthor">P. Mattes</span>, <span class="refTitle">"Segment Routing Policy Architecture"</span>, <span class="seriesInfo">RFC 9256</span>, <span class="seriesInfo">DOI 10.17487/RFC9256</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9256">https://www.rfc-editor.org/rfc/rfc9256</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC9514">[RFC9514]</dt>
-        <dd>
-<span class="refAuthor">Dawra, G.</span>, <span class="refAuthor">Filsfils, C.</span>, <span class="refAuthor">Talaulikar, K., Ed.</span>, <span class="refAuthor">Chen, M.</span>, <span class="refAuthor">Bernier, D.</span>, and <span class="refAuthor">B. Decraene</span>, <span class="refTitle">"Border Gateway Protocol - Link State (BGP-LS) Extensions for Segment Routing over IPv6 (SRv6)"</span>, <span class="seriesInfo">RFC 9514</span>, <span class="seriesInfo">DOI 10.17487/RFC9514</span>, <time datetime="2023-12" class="refDate">December 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9514">https://www.rfc-editor.org/rfc/rfc9514</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC9552">[RFC9552]</dt>
-        <dd>
-<span class="refAuthor">Talaulikar, K., Ed.</span>, <span class="refTitle">"Distribution of Link-State and Traffic Engineering Information Using BGP"</span>, <span class="seriesInfo">RFC 9552</span>, <span class="seriesInfo">DOI 10.17487/RFC9552</span>, <time datetime="2023-12" class="refDate">December 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9552">https://www.rfc-editor.org/rfc/rfc9552</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC9846">[RFC9846]</dt>
       <dd>
 <span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 9846</span>, <span class="seriesInfo">DOI 10.17487/RFC9846</span>, <time datetime="2026-07" class="refDate">July 2026</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9846">https://www.rfc-editor.org/rfc/rfc9846</a>&gt;</span>. </dd>
@@ -2945,14 +3804,14 @@ module: ietf-bgp-ls-sr-policy
             /rt:control-plane-protocol/bgp:bgp/bgp:global
             /bgp:afi-safis/bgp:afi-safi/bgp-ls:link-state
             /bgp-ls:bgp-ls-topology/bgp-ls:instances/bgp-ls:instance:
-    +--ro sr-pol-cp
+    +--ro sr-policy-candidate-paths
        +--ro candidate-path*
                [as bgp-router-id member-as ipv4-router-id
                 ipv6-router-id protocol-origin descriptor-flags
                 endpoint color originator-as originator-address
                 discriminator]
           +--ro as                    inet:as-number
-          +--ro bgp-router-id         inet:ipv4-address
+          +--ro bgp-router-id         yang:dotted-quad
           +--ro member-as             inet:as-number
           +--ro ipv4-router-id        inet:ipv4-address
           +--ro ipv6-router-id        inet:ipv6-address
@@ -2966,12 +3825,23 @@ module: ietf-bgp-ls-sr-policy
           +--ro attributes
              +--ro policy-name?           string
              +--ro candidate-path-name?   string
-             +--ro mpls-binding-sid!
-             |  +--ro flags?                   binding-sid-flags
-             |  +--ro binding-sid?             mpls-label
-             |  +--ro specified-binding-sid?   mpls-label
-             +--ro srv6-binding-sid* [binding-sid]
-             |  +--ro binding-sid              inet:ipv6-address
+             +--ro sr-binding-sid!
+             |  +--ro flags?
+             |  |       binding-sid-flags
+             |  +--ro (dataplane)?
+             |     +--:(mpls)
+             |     |  +--ro binding-sid?
+             |     |  |       ietf-rt-t:mpls-label-general-use
+             |     |  +--ro specified-binding-sid?
+             |     |          ietf-rt-t:mpls-label-general-use
+             |     +--:(srv6)
+             |        +--ro srv6-binding-sid?
+             |        |       inet:ipv6-address
+             |        +--ro srv6-specified-binding-sid?
+             |                inet:ipv6-address
+             +--ro srv6-binding-sid* [index]
+             |  +--ro index                    uint32
+             |  +--ro binding-sid?             inet:ipv6-address
              |  +--ro flags?                   srv6-binding-sid-flags
              |  +--ro specified-binding-sid?   inet:ipv6-address
              |  +--ro srv6-sid-attributes
@@ -3007,14 +3877,26 @@ module: ietf-bgp-ls-sr-policy
              |  |  +--ro include-any*   uint32
              |  |  +--ro include-all*   uint32
              |  +--ro excluded-srlg*         uint32
-             |  +--ro bandwidth?             decimal64
+             |  +--ro bandwidth?
+             |  |       ietf-rt-t:bandwidth-ieee-float32
              |  +--ro disjoint-group!
-             |  |  +--ro request-flags?   disjoint-request-flags
-             |  |  +--ro status-flags?    disjoint-status-flags
-             |  |  +--ro group-id         uint32
+             |  |  +--ro request-flags?
+             |  |  |       disjoint-request-flags
+             |  |  +--ro status-flags?
+             |  |  |       disjoint-status-flags
+             |  |  +--ro (group-identifier)
+             |  |     +--:(group-id)
+             |  |     |  +--ro group-id?                  uint32
+             |  |     +--:(pcep-association-object)
+             |  |        +--ro pcep-association-object?   binary
              |  +--ro bidirectional-group!
-             |  |  +--ro flags?      bidirectional-flags
-             |  |  +--ro group-id    uint32
+             |  |  +--ro flags?
+             |  |  |       bidirectional-flags
+             |  |  +--ro (group-identifier)
+             |  |     +--:(group-id)
+             |  |     |  +--ro group-id?                  uint32
+             |  |     +--:(pcep-association-object)
+             |  |        +--ro pcep-association-object?   binary
              |  +--ro metric* [type]
              |     +--ro type      metric-type
              |     +--ro flags?    metric-constraint-flags
@@ -3029,11 +3911,12 @@ module: ietf-bgp-ls-sr-policy
              |  +--ro identifier?          uint32
              |  +--ro segment* [index]
              |  |  +--ro index                  uint32
-             |  |  +--ro type                   uint8
+             |  |  +--ro type                   segment-type
              |  |  +--ro flags?                 segment-flags
              |  |  +--ro (sid)?
              |  |  |  +--:(mpls)
-             |  |  |  |  +--ro mpls-label?      mpls-label
+             |  |  |  |  +--ro mpls-label?
+             |  |  |  |          ietf-rt-t:mpls-label-general-use
              |  |  |  +--:(srv6)
              |  |  |     +--ro srv6-sid?        inet:ipv6-address
              |  |  +--ro (descriptor)?
@@ -3119,7 +4002,8 @@ module: ietf-bgp-ls-sr-policy
              |  |  +--ro margin?   uint32
              |  |  +--ro bound?    uint32
              |  |  +--ro value?    uint32
-             |  +--ro bandwidth?           decimal64
+             |  +--ro bandwidth?
+             |  |       ietf-rt-t:bandwidth-ieee-float32
              |  +--ro unknown* [type]
              |     +--ro type     uint16
              |     +--ro value?   yang:hex-string
@@ -3135,20 +4019,20 @@ module: ietf-bgp-ls-sr-policy
       <h2 id="name-examples">
 <a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
       </h2>
-<p id="appendix-B-1">The following examples illustrate the BGP-LS LSDB populated with an SR-MPLS
-candidate path and an SRv6 candidate path.  The data is shown under the
-<code>bgp-ls-topology</code> container augmented into the <code>link-state</code> container at
-<code>/rt:routing/rt:control-plane-protocols/rt:control-plane-protocol/
-bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp-ls:link-state</code>.
-XML encoding follows <span>[<a href="#RFC7950" class="cite xref">RFC7950</a>]</span>.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-1">This appendix provides non-normative examples of the BGP-LS LSDB populated
+with an SR-MPLS candidate path and an SRv6 candidate path.  The data is
+shown under the <code>bgp-ls-topology</code> container of the <code>link-state</code> container
+of the BGP-LS AFI/SAFI.  The examples use the XML encoding defined in
+<span>[<a href="#RFC7950" class="cite xref">RFC7950</a>]</span> and the IPv4 and IPv6 documentation address prefixes.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <div id="sr-mpls-candidate-path">
 <section id="appendix-B.1">
         <h3 id="name-sr-mpls-candidate-path">
 <a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-sr-mpls-candidate-path" class="section-name selfRef">SR-MPLS Candidate Path</a>
         </h3>
-<p id="appendix-B.1-1">The following example contains one SR-MPLS candidate path originated by
-local configuration.  The candidate path has an allocated Binding SID and
-one segment list containing an IPv4 Prefix SID.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-1">The following example contains one SR-MPLS explicit candidate path
+instantiated by local configuration (Protocol-Origin 3).  The candidate path
+has an allocated Binding SID and one segment list containing a Type C
+segment (IPv4 Prefix SID).<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
 <div class="breakable lang-xml sourcecode" id="appendix-B.1-2">
 <pre>
 &lt;routing xmlns="urn:ietf:params:xml:ns:yang:ietf-routing"
@@ -3171,14 +4055,14 @@ one segment list containing an IPv4 Prefix SID.<a href="#appendix-B.1-1" class="
            &lt;bgp-ls:vrf-name&gt;default&lt;/bgp-ls:vrf-name&gt;
            &lt;bgp-ls:protocol&gt;sr&lt;/bgp-ls:protocol&gt;
            &lt;bgp-ls:identifier&gt;0&lt;/bgp-ls:identifier&gt;
-           &lt;s:sr-pol-cp&gt;
+           &lt;s:sr-policy-candidate-paths&gt;
             &lt;s:candidate-path&gt;
              &lt;s:as&gt;65000&lt;/s:as&gt;
              &lt;s:bgp-router-id&gt;192.0.2.1&lt;/s:bgp-router-id&gt;
              &lt;s:member-as&gt;0&lt;/s:member-as&gt;
              &lt;s:ipv4-router-id&gt;192.0.2.1&lt;/s:ipv4-router-id&gt;
              &lt;s:ipv6-router-id&gt;::&lt;/s:ipv6-router-id&gt;
-             &lt;s:protocol-origin&gt;3&lt;/s:protocol-origin&gt;
+             &lt;s:protocol-origin&gt;configuration&lt;/s:protocol-origin&gt;
              &lt;s:descriptor-flags/&gt;
              &lt;s:endpoint&gt;192.0.2.200&lt;/s:endpoint&gt;
              &lt;s:color&gt;100&lt;/s:color&gt;
@@ -3188,10 +4072,10 @@ one segment list containing an IPv4 Prefix SID.<a href="#appendix-B.1-1" class="
              &lt;s:attributes&gt;
               &lt;s:policy-name&gt;blue-policy&lt;/s:policy-name&gt;
               &lt;s:candidate-path-name&gt;primary&lt;/s:candidate-path-name&gt;
-              &lt;s:mpls-binding-sid&gt;
+              &lt;s:sr-binding-sid&gt;
                &lt;s:flags&gt;allocated&lt;/s:flags&gt;
                &lt;s:binding-sid&gt;16000&lt;/s:binding-sid&gt;
-              &lt;/s:mpls-binding-sid&gt;
+              &lt;/s:sr-binding-sid&gt;
               &lt;s:state&gt;
                &lt;s:priority&gt;100&lt;/s:priority&gt;
                &lt;s:flags&gt;active evaluated valid&lt;/s:flags&gt;
@@ -3199,11 +4083,13 @@ one segment list containing an IPv4 Prefix SID.<a href="#appendix-B.1-1" class="
               &lt;/s:state&gt;
               &lt;s:segment-list&gt;
                &lt;s:index&gt;0&lt;/s:index&gt;
+               &lt;s:flags&gt;explicit computed verified resolved&lt;/s:flags&gt;
                &lt;s:weight&gt;1&lt;/s:weight&gt;
                &lt;s:identifier&gt;10&lt;/s:identifier&gt;
                &lt;s:segment&gt;
                 &lt;s:index&gt;0&lt;/s:index&gt;
-                &lt;s:type&gt;3&lt;/s:type&gt;
+                &lt;s:type&gt;type-c&lt;/s:type&gt;
+                &lt;s:flags&gt;sid-present verified resolved&lt;/s:flags&gt;
                 &lt;s:mpls-label&gt;16001&lt;/s:mpls-label&gt;
                 &lt;s:type-c&gt;
                  &lt;s:algorithm&gt;0&lt;/s:algorithm&gt;
@@ -3213,7 +4099,7 @@ one segment list containing an IPv4 Prefix SID.<a href="#appendix-B.1-1" class="
               &lt;/s:segment-list&gt;
              &lt;/s:attributes&gt;
             &lt;/s:candidate-path&gt;
-           &lt;/s:sr-pol-cp&gt;
+           &lt;/s:sr-policy-candidate-paths&gt;
           &lt;/bgp-ls:instance&gt;
          &lt;/bgp-ls:instances&gt;
         &lt;/bgp-ls:bgp-ls-topology&gt;
@@ -3234,8 +4120,11 @@ one segment list containing an IPv4 Prefix SID.<a href="#appendix-B.1-1" class="
         <h3 id="name-srv6-candidate-path">
 <a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-srv6-candidate-path" class="section-name selfRef">SRv6 Candidate Path</a>
         </h3>
-<p id="appendix-B.2-1">The following example contains one SRv6 candidate path with an allocated
-SRv6 Binding SID and one segment list containing an SRv6 End SID.<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.2-1">The following example contains one SRv6 dynamic candidate path with an
+allocated SRv6 Binding SID and one computed segment list containing a Type I
+segment (SRv6 End SID).  The headend is identified only by its IPv6
+Router-ID; the IPv4 Router-ID key leaf therefore contains the unspecified
+address.<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
 <div class="breakable lang-xml sourcecode" id="appendix-B.2-2">
 <pre>
 &lt;routing xmlns="urn:ietf:params:xml:ns:yang:ietf-routing"
@@ -3258,14 +4147,14 @@ SRv6 Binding SID and one segment list containing an SRv6 End SID.<a href="#appen
            &lt;bgp-ls:vrf-name&gt;default&lt;/bgp-ls:vrf-name&gt;
            &lt;bgp-ls:protocol&gt;sr&lt;/bgp-ls:protocol&gt;
            &lt;bgp-ls:identifier&gt;0&lt;/bgp-ls:identifier&gt;
-           &lt;s:sr-pol-cp&gt;
+           &lt;s:sr-policy-candidate-paths&gt;
             &lt;s:candidate-path&gt;
              &lt;s:as&gt;65000&lt;/s:as&gt;
              &lt;s:bgp-router-id&gt;192.0.2.1&lt;/s:bgp-router-id&gt;
              &lt;s:member-as&gt;0&lt;/s:member-as&gt;
              &lt;s:ipv4-router-id&gt;0.0.0.0&lt;/s:ipv4-router-id&gt;
              &lt;s:ipv6-router-id&gt;2001:db8::1&lt;/s:ipv6-router-id&gt;
-             &lt;s:protocol-origin&gt;3&lt;/s:protocol-origin&gt;
+             &lt;s:protocol-origin&gt;configuration&lt;/s:protocol-origin&gt;
              &lt;s:descriptor-flags&gt;endpoint-ipv6&lt;/s:descriptor-flags&gt;
              &lt;s:endpoint&gt;2001:db8::200&lt;/s:endpoint&gt;
              &lt;s:color&gt;200&lt;/s:color&gt;
@@ -3275,6 +4164,7 @@ SRv6 Binding SID and one segment list containing an SRv6 End SID.<a href="#appen
              &lt;s:attributes&gt;
               &lt;s:policy-name&gt;green-policy&lt;/s:policy-name&gt;
               &lt;s:srv6-binding-sid&gt;
+               &lt;s:index&gt;0&lt;/s:index&gt;
                &lt;s:binding-sid&gt;2001:db8:100::1&lt;/s:binding-sid&gt;
                &lt;s:flags&gt;allocated&lt;/s:flags&gt;
               &lt;/s:srv6-binding-sid&gt;
@@ -3285,11 +4175,12 @@ SRv6 Binding SID and one segment list containing an SRv6 End SID.<a href="#appen
               &lt;/s:state&gt;
               &lt;s:segment-list&gt;
                &lt;s:index&gt;0&lt;/s:index&gt;
-               &lt;s:flags&gt;srv6-dataplane computed&lt;/s:flags&gt;
+               &lt;s:flags&gt;srv6-dataplane computed verified&lt;/s:flags&gt;
                &lt;s:weight&gt;1&lt;/s:weight&gt;
                &lt;s:segment&gt;
                 &lt;s:index&gt;0&lt;/s:index&gt;
-                &lt;s:type&gt;9&lt;/s:type&gt;
+                &lt;s:type&gt;type-i&lt;/s:type&gt;
+                &lt;s:flags&gt;sid-present verified resolved&lt;/s:flags&gt;
                 &lt;s:srv6-sid&gt;2001:db8:200::1&lt;/s:srv6-sid&gt;
                 &lt;s:type-i&gt;
                  &lt;s:algorithm&gt;0&lt;/s:algorithm&gt;
@@ -3299,7 +4190,7 @@ SRv6 Binding SID and one segment list containing an SRv6 End SID.<a href="#appen
               &lt;/s:segment-list&gt;
              &lt;/s:attributes&gt;
             &lt;/s:candidate-path&gt;
-           &lt;/s:sr-pol-cp&gt;
+           &lt;/s:sr-policy-candidate-paths&gt;
           &lt;/bgp-ls:instance&gt;
          &lt;/bgp-ls:instances&gt;
         &lt;/bgp-ls:bgp-ls-topology&gt;
