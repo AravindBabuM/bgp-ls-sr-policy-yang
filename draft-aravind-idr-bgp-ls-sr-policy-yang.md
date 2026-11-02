@@ -48,6 +48,11 @@ normative:
   RFC9911:
   I-D.ietf-idr-bgp-model:
   I-D.ietf-lsvr-bgp-ls-yang:
+  IANA-YANG-PARAMETERS:
+    title: "YANG Parameters"
+    author:
+      org: IANA
+    target: https://www.iana.org/assignments/yang-parameters
 
 informative:
   RFC3688:
@@ -58,11 +63,6 @@ informative:
   RFC8340:
   RFC8341:
   RFC9846:
-  IANA-YANG-PARAMETERS:
-    title: "YANG Parameters"
-    author:
-      org: IANA
-    target: https://www.iana.org/assignments/yang-parameters
   IEEE754:
     title: "IEEE Standard for Floating-Point Arithmetic"
     author:
@@ -1869,12 +1869,22 @@ module ietf-bgp-ls-sr-policy {
 
 ## IANA-Maintained Module {#iana-module}
 
-The `iana-bgp-ls-sr-policy-types` module defines enumerations for the code
-points of the "SR Policy Protocol-Origin", "BGP-LS SR Segment Descriptor
-Types", and "BGP-LS SR Policy Metric Types" registries established by
-{{RFC9857}}.  The version of the module below reflects the registries at
-the time of writing.  The current version is maintained by IANA, as
-described in {{iana-maintained}}.
+This document defines the initial version of the
+`iana-bgp-ls-sr-policy-types` YANG module.  The module defines enumerations
+for code points in the "SR Policy Protocol-Origin", "BGP-LS SR Segment
+Descriptor Types", and "BGP-LS SR Policy Metric Types" registries
+established by {{RFC9857}}.  The version below reflects those registries at
+the time of writing.  This document requests IANA to publish and maintain
+the module as described in {{iana-maintained}}.
+
+A single module covers these three registries because they contain closely
+related, one-octet code points used by the same BGP-LS SR Policy data model
+and are expected to remain small.  Enumerations are used instead of
+identities because the numeric value of each enumeration corresponds
+directly to the code point carried in the protocol encoding.  The typedefs
+used by the BGP-LS SR Policy module combine each enumeration with `uint8`,
+allowing a server to report a code point that is not defined by the revision
+of the IANA-maintained module that it implements.
 
 <!-- IANA-YANG-MODEL:BEGIN -->
 ~~~ yang
@@ -1934,32 +1944,50 @@ module iana-bgp-ls-sr-policy-types {
         value 1;
         description
           "PCEP.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum bgp-sr-policy {
         value 2;
         description
           "BGP SR Policy.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum configuration {
         value 3;
         description
           "Configuration (CLI, YANG model via NETCONF, etc.).";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum pcep-via-pce {
         value 10;
         description
           "PCEP (in PCEP or when BGP-LS Producer is PCE).";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum bgp-sr-policy-via-pce {
         value 20;
         description
           "BGP SR Policy (in PCEP or when BGP-LS Producer is PCE).";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum configuration-via-pce {
         value 30;
         description
           "Configuration (CLI, YANG model via NETCONF, etc.  In
            PCEP or when BGP-LS Producer is PCE).";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
     }
     description
@@ -1975,65 +2003,90 @@ module iana-bgp-ls-sr-policy-types {
       enum type-a {
         value 1;
         description
-          "Type A Segment: SR-MPLS Label.";
+          "Type A Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-b {
         value 2;
         description
-          "Type B Segment: SRv6 SID.";
+          "Type B Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-c {
         value 3;
         description
-          "Type C Segment: IPv4 Prefix with optional SR
-           Algorithm.";
+          "Type C Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-d {
         value 4;
         description
-          "Type D Segment: IPv6 Global Prefix with optional SR
-           Algorithm for SR-MPLS.";
+          "Type D Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-e {
         value 5;
         description
-          "Type E Segment: IPv4 Prefix with Local Interface ID.";
+          "Type E Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-f {
         value 6;
         description
-          "Type F Segment: IPv4 Addresses for link endpoints as
-           Local, Remote pair.";
+          "Type F Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-g {
         value 7;
         description
-          "Type G Segment: IPv6 Prefix and Interface ID for link
-           endpoints as Local, Remote pair for SR-MPLS.";
+          "Type G Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-h {
         value 8;
         description
-          "Type H Segment: IPv6 Addresses for link endpoints as
-           Local, Remote pair for SR-MPLS.";
+          "Type H Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-i {
         value 9;
         description
-          "Type I Segment: IPv6 Global Prefix with optional SR
-           Algorithm for SRv6.";
+          "Type I Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-j {
         value 10;
         description
-          "Type J Segment: IPv6 Prefix and Interface ID for link
-           endpoints as Local, Remote pair for SRv6.";
+          "Type J Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum type-k {
         value 11;
         description
-          "Type K Segment: IPv6 Addresses for link endpoints as
-           Local, Remote pair for SRv6.";
+          "Type K Segment.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
     }
     description
@@ -2049,47 +2102,74 @@ module iana-bgp-ls-sr-policy-types {
       enum igp {
         value 0;
         description
-          "IGP metric.";
+          "IGP.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum min-unidirectional-delay {
         value 1;
         description
           "Min Unidirectional Delay.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum te {
         value 2;
         description
-          "TE metric.";
+          "TE.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum hop-count {
         value 3;
         description
           "Hop Count.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum sid-list-length {
         value 4;
         description
           "SID List Length.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum bandwidth {
         value 5;
         description
           "Bandwidth.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum avg-unidirectional-delay {
         value 6;
         description
           "Avg Unidirectional Delay.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum unidirectional-delay-variation {
         value 7;
         description
           "Unidirectional Delay Variation.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
       enum loss {
         value 8;
         description
           "Loss.";
+        reference
+          "RFC 9857: Advertisement of Segment Routing Policies
+           Using BGP - Link State.";
       }
     }
     description
@@ -2199,12 +2279,32 @@ IANA is requested to post the initial version of the
 `iana-bgp-ls-sr-policy-types` YANG module defined in {{iana-module}} and to
 maintain it as follows.
 
+IANA is requested to add a "YANG Enum Name" column to each of the "SR
+Policy Protocol-Origin", "BGP-LS SR Segment Descriptor Types", and "BGP-LS
+SR Policy Metric Types" registries.  For every assigned code point that is
+represented in the initial module, IANA is requested to populate that
+column with the name of the `enum` statement having the same numeric value
+in the corresponding typedef.  The column is left empty for Reserved,
+Unassigned, Private Use, and User Defined entries.  A future assignment
+that is to be represented in the module MUST include a unique YANG enum
+name that conforms to the identifier syntax in {{RFC7950}}.
+
+IANA is requested to add the following note to the page that displays the
+`iana-bgp-ls-sr-policy-types` module:
+
+> New values must not be added directly to the
+> "iana-bgp-ls-sr-policy-types" YANG module.  They must instead be added to
+> the corresponding authoritative IANA registry.
+
 When a new code point is assigned in the "SR Policy Protocol-Origin",
 "BGP-LS SR Segment Descriptor Types", or "BGP-LS SR Policy Metric Types"
 registry, other than in the Reserved, Private Use, or User Defined ranges,
 a new `enum` statement MUST be added to the corresponding `protocol-origin`,
 `segment-type`, or `metric-type` typedef of the module.  The `enum`
 statement MUST have the following sub-statements:
+
+`enum`:
+: The YANG enum name recorded in the registry.
 
 `value`:
 : The assigned code point.
@@ -2213,11 +2313,8 @@ statement MUST have the following sub-statements:
 : The description of the code point in the registry.
 
 `reference`:
-: The reference of the code point in the registry.
-
-The name of the `enum` statement is derived from the registry description
-by converting it to lowercase and replacing spaces and punctuation with
-hyphens.
+: The reference of the code point in the registry, including the title of
+  the referenced document.
 
 When the description or reference of a code point is updated in one of
 these registries, the corresponding `enum` statement MUST be updated.  When
