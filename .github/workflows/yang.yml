@@ -1,0 +1,47 @@
+name: "Validate YANG Model"
+
+on:
+  push:
+    paths:
+      - "src/yang/**"
+      - "scripts/**"
+      - "requirements.txt"
+      - "Makefile"
+      - "draft-aravind-idr-bgp-ls-sr-policy-yang.md"
+      - ".github/workflows/yang.yml"
+  pull_request:
+    paths:
+      - "src/yang/**"
+      - "scripts/**"
+      - "requirements.txt"
+      - "Makefile"
+      - "draft-aravind-idr-bgp-ls-sr-policy-yang.md"
+      - ".github/workflows/yang.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v6
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: "Install yanglint"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libyang2-tools
+
+      - name: "Validate model and embedded draft copy"
+        run: make validate-yang
+
+      - name: "Archive generated tree"
+        uses: actions/upload-artifact@v6
+        with:
+          name: ietf-bgp-ls-sr-policy-tree
+          path: build/ietf-bgp-ls-sr-policy-tree.txt

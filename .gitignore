@@ -1,0 +1,24 @@
+# Internet-Draft build support and generated documents
+lib/
+.refcache/
+.gems/
+.targets.mk
+.requirements.txt
+node_modules/
+versioned/
+archive.json
+draft-*.html
+draft-*.txt
+draft-*.xml
+
+# YANG validation artifacts
+.cache/
+.venv/
+.yang-venv/
+build/
+
+# Editors and operating systems
+*~
+*#
+.#*
+.DS_Store

@@ -1,0 +1,221 @@
+module iana-bgp-ls-sr-policy-types {
+  yang-version 1.1;
+  namespace
+    "urn:ietf:params:xml:ns:yang:iana-bgp-ls-sr-policy-types";
+  prefix iana-bgp-ls-srp-t;
+
+  organization
+    "Internet Assigned Numbers Authority (IANA)";
+  contact
+    "Internet Assigned Numbers Authority
+
+     ICANN
+     12025 Waterfront Drive, Suite 300
+     Los Angeles, CA 90094-2536
+     United States of America
+
+     Tel:    +1 310 301 5800
+     <mailto:iana@iana.org>";
+  description
+    "This module contains type definitions for the code points of
+     the IANA registries used by SR Policy information distributed
+     in BGP - Link State (BGP-LS).
+
+     Copyright (c) 2026 IETF Trust and the persons identified as
+     authors of the code.  All rights reserved.
+
+     Redistribution and use in source and binary forms, with or
+     without modification, is permitted pursuant to, and subject to
+     the license terms contained in, the Revised BSD License set
+     forth in Section 4.c of the IETF Trust's Legal Provisions
+     Relating to IETF Documents
+     (https://trustee.ietf.org/license-info).
+
+     The initial version of this YANG module is part of RFC XXXX;
+     see the RFC itself for full legal notices.
+
+     All revisions of IANA-maintained modules can be found in the
+     'YANG Parameters' registry group
+     (https://www.iana.org/assignments/yang-parameters).";
+
+  revision 2026-10-28 {
+    description
+      "Initial revision.";
+    reference
+      "RFC XXXX: A YANG Data Model for BGP-LS Segment Routing
+       Policy.";
+  }
+
+  typedef protocol-origin {
+    type enumeration {
+      enum pcep {
+        value 1;
+        description
+          "PCEP.";
+      }
+      enum bgp-sr-policy {
+        value 2;
+        description
+          "BGP SR Policy.";
+      }
+      enum configuration {
+        value 3;
+        description
+          "Configuration (CLI, YANG model via NETCONF, etc.).";
+      }
+      enum pcep-via-pce {
+        value 10;
+        description
+          "PCEP (in PCEP or when BGP-LS Producer is PCE).";
+      }
+      enum bgp-sr-policy-via-pce {
+        value 20;
+        description
+          "BGP SR Policy (in PCEP or when BGP-LS Producer is PCE).";
+      }
+      enum configuration-via-pce {
+        value 30;
+        description
+          "Configuration (CLI, YANG model via NETCONF, etc.  In
+           PCEP or when BGP-LS Producer is PCE).";
+      }
+    }
+    description
+      "Code points of the IANA 'SR Policy Protocol-Origin'
+       registry.";
+    reference
+      "RFC 9857: Advertisement of Segment Routing Policies Using
+       BGP - Link State, Section 8.4.";
+  }
+
+  typedef segment-type {
+    type enumeration {
+      enum type-a {
+        value 1;
+        description
+          "Type A Segment: SR-MPLS Label.";
+      }
+      enum type-b {
+        value 2;
+        description
+          "Type B Segment: SRv6 SID.";
+      }
+      enum type-c {
+        value 3;
+        description
+          "Type C Segment: IPv4 Prefix with optional SR
+           Algorithm.";
+      }
+      enum type-d {
+        value 4;
+        description
+          "Type D Segment: IPv6 Global Prefix with optional SR
+           Algorithm for SR-MPLS.";
+      }
+      enum type-e {
+        value 5;
+        description
+          "Type E Segment: IPv4 Prefix with Local Interface ID.";
+      }
+      enum type-f {
+        value 6;
+        description
+          "Type F Segment: IPv4 Addresses for link endpoints as
+           Local, Remote pair.";
+      }
+      enum type-g {
+        value 7;
+        description
+          "Type G Segment: IPv6 Prefix and Interface ID for link
+           endpoints as Local, Remote pair for SR-MPLS.";
+      }
+      enum type-h {
+        value 8;
+        description
+          "Type H Segment: IPv6 Addresses for link endpoints as
+           Local, Remote pair for SR-MPLS.";
+      }
+      enum type-i {
+        value 9;
+        description
+          "Type I Segment: IPv6 Global Prefix with optional SR
+           Algorithm for SRv6.";
+      }
+      enum type-j {
+        value 10;
+        description
+          "Type J Segment: IPv6 Prefix and Interface ID for link
+           endpoints as Local, Remote pair for SRv6.";
+      }
+      enum type-k {
+        value 11;
+        description
+          "Type K Segment: IPv6 Addresses for link endpoints as
+           Local, Remote pair for SRv6.";
+      }
+    }
+    description
+      "Code points of the IANA 'BGP-LS SR Segment Descriptor
+       Types' registry.";
+    reference
+      "RFC 9857: Advertisement of Segment Routing Policies Using
+       BGP - Link State, Section 8.5.";
+  }
+
+  typedef metric-type {
+    type enumeration {
+      enum igp {
+        value 0;
+        description
+          "IGP metric.";
+      }
+      enum min-unidirectional-delay {
+        value 1;
+        description
+          "Min Unidirectional Delay.";
+      }
+      enum te {
+        value 2;
+        description
+          "TE metric.";
+      }
+      enum hop-count {
+        value 3;
+        description
+          "Hop Count.";
+      }
+      enum sid-list-length {
+        value 4;
+        description
+          "SID List Length.";
+      }
+      enum bandwidth {
+        value 5;
+        description
+          "Bandwidth.";
+      }
+      enum avg-unidirectional-delay {
+        value 6;
+        description
+          "Avg Unidirectional Delay.";
+      }
+      enum unidirectional-delay-variation {
+        value 7;
+        description
+          "Unidirectional Delay Variation.";
+      }
+      enum loss {
+        value 8;
+        description
+          "Loss.";
+      }
+    }
+    description
+      "Code points of the IANA 'BGP-LS SR Policy Metric Types'
+       registry.  The User Defined range (128-255) is not
+       enumerated.";
+    reference
+      "RFC 9857: Advertisement of Segment Routing Policies Using
+       BGP - Link State, Section 8.6.";
+  }
+}
