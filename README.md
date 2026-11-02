@@ -9,14 +9,14 @@ module and its companion Internet-Draft:
   with a representation of the SR Policy Candidate Path NLRI and its
   associated BGP-LS attributes, as defined in
   [RFC 9857](https://www.rfc-editor.org/rfc/rfc9857.html).
-* [`draft-aravind-lsvr-bgp-ls-sr-policy-yang.md`](draft-aravind-lsvr-bgp-ls-sr-policy-yang.md)
+* [`draft-aravind-idr-bgp-ls-sr-policy-yang.md`](draft-aravind-idr-bgp-ls-sr-policy-yang.md)
   is the kramdown-rfc source for the Internet-Draft.
 
 ## Repository layout
 
 ~~~
 .
-|-- draft-aravind-lsvr-bgp-ls-sr-policy-yang.md
+|-- draft-aravind-idr-bgp-ls-sr-policy-yang.md
 |-- src/yang/ietf-bgp-ls-sr-policy.yang
 |-- scripts/fetch-yang-dependencies.sh
 |-- scripts/sync-draft-yang.py

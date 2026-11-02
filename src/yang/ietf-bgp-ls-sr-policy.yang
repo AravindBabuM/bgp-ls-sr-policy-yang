@@ -50,10 +50,10 @@ module ietf-bgp-ls-sr-policy {
        Policy.";
   }
   organization
-    "IETF LSVR Working Group";
+    "IETF IDR Working Group";
   contact
-    "WG Web:   <https://datatracker.ietf.org/wg/lsvr>
-     WG List:  <mailto:lsvr@ietf.org>
+    "WG Web:   <https://datatracker.ietf.org/wg/idr>
+     WG List:  <mailto:idr@ietf.org>
 
      Authors:  Aravind Babu MahendraBabu
                <mailto:aramahen@cisco.com>
@@ -84,7 +84,7 @@ module ietf-bgp-ls-sr-policy {
     reference
       "RFC 9857: Advertisement of Segment Routing Policies Using
        BGP - Link State.
-       I-D.aravind-lsvr-bgp-ls-sr-policy-yang: A YANG Data Model for
+       I-D.aravind-idr-bgp-ls-sr-policy-yang: A YANG Data Model for
        BGP-LS Segment Routing Policy.";
   }
 

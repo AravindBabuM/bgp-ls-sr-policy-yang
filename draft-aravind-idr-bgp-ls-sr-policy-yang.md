@@ -3,26 +3,26 @@ title: "A YANG Data Model for BGP-LS Segment Routing Policy"
 abbrev: "BGP-LS SR Policy YANG"
 category: std
 
-docname: draft-aravind-lsvr-bgp-ls-sr-policy-yang-latest
+docname: draft-aravind-idr-bgp-ls-sr-policy-yang-latest
 submissiontype: IETF
 number:
 date:
 consensus: true
 v: 3
 area: "Routing"
-workgroup: "Link State Vector Routing"
+workgroup: "Inter-Domain Routing"
 keyword:
   - BGP-LS
   - Segment Routing
   - SR Policy
   - YANG
 venue:
-  group: "Link State Vector Routing"
+  group: "Inter-Domain Routing"
   type: "Working Group"
-  mail: "lsvr@ietf.org"
-  arch: "https://mailarchive.ietf.org/arch/browse/lsvr/"
+  mail: "idr@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/idr/"
   github: "AravindBabuM/bgp-ls-sr-policy-yang"
-  latest: "https://AravindBabuM.github.io/bgp-ls-sr-policy-yang/draft-aravind-lsvr-bgp-ls-sr-policy-yang.html"
+  latest: "https://AravindBabuM.github.io/bgp-ls-sr-policy-yang/draft-aravind-idr-bgp-ls-sr-policy-yang.html"
 
 author:
   -
@@ -505,10 +505,10 @@ module ietf-bgp-ls-sr-policy {
        Policy.";
   }
   organization
-    "IETF LSVR Working Group";
+    "IETF IDR Working Group";
   contact
-    "WG Web:   <https://datatracker.ietf.org/wg/lsvr>
-     WG List:  <mailto:lsvr@ietf.org>
+    "WG Web:   <https://datatracker.ietf.org/wg/idr>
+     WG List:  <mailto:idr@ietf.org>
 
      Authors:  Aravind Babu MahendraBabu
                <mailto:aramahen@cisco.com>
@@ -539,7 +539,7 @@ module ietf-bgp-ls-sr-policy {
     reference
       "RFC 9857: Advertisement of Segment Routing Policies Using
        BGP - Link State.
-       I-D.aravind-lsvr-bgp-ls-sr-policy-yang: A YANG Data Model for
+       I-D.aravind-idr-bgp-ls-sr-policy-yang: A YANG Data Model for
        BGP-LS Segment Routing Policy.";
   }
 

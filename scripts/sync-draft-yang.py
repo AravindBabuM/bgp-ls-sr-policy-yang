@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DRAFT = ROOT / "draft-aravind-lsvr-bgp-ls-sr-policy-yang.md"
+DRAFT = ROOT / "draft-aravind-idr-bgp-ls-sr-policy-yang.md"
 YANG_DIR = ROOT / "src" / "yang"
 TREE = ROOT / "build" / "ietf-bgp-ls-sr-policy-tree.txt"
 TREE_WIDTH = 69

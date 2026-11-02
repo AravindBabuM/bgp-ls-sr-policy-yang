@@ -7,7 +7,7 @@ on:
       - "scripts/**"
       - "requirements.txt"
       - "Makefile"
-      - "draft-aravind-lsvr-bgp-ls-sr-policy-yang.md"
+      - "draft-aravind-idr-bgp-ls-sr-policy-yang.md"
       - ".github/workflows/yang.yml"
   pull_request:
     paths:
@@ -15,7 +15,7 @@ on:
       - "scripts/**"
       - "requirements.txt"
       - "Makefile"
-      - "draft-aravind-lsvr-bgp-ls-sr-policy-yang.md"
+      - "draft-aravind-idr-bgp-ls-sr-policy-yang.md"
       - ".github/workflows/yang.yml"
   workflow_dispatch:
 
