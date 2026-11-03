@@ -1,0 +1,133 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2026-11-03T05:48:15.171098+00:00",
+  "repo": "AravindBabuM/bgp-ls-sr-policy-yang",
+  "labels": [
+    {
+      "name": "accessibility",
+      "description": "Barrier affecting people with disabilities",
+      "color": "f143ab"
+    },
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOVaRRF88AAAABLha0Og",
+      "title": "Add BGP-LS SR Policy YANG model and draft",
+      "url": "https://github.com/AravindBabuM/bgp-ls-sr-policy-yang/pull/1",
+      "state": "MERGED",
+      "author": "AravindBabuM",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "AravindBabuM"
+      ],
+      "labels": [],
+      "body": "## Summary\n\n- add the `ietf-bgp-ls-sr-policy` YANG module for RFC 9857 SR Policy Candidate Path NLRIs\n- augment the BGP-LS Link-State Database with the `sr-pol-cp` operational subtree\n- add the companion `draft-aravind-lsvr-bgp-ls-sr-policy-yang` Internet-Draft\n- reuse BGP-LS LSDB groupings for SRv6 SID and unknown attributes\n- add validation, draft synchronization, and GitHub workflow support\n\n## Validation\n\n- `make validate-yang`\n- strict IETF `pyang` lint and schema validation\n- synchronized embedded YANG module\n- rendered the Internet-Draft with `kramdown-rfc` and `xml2rfc`",
+      "createdAt": "2026-10-29T12:43:09Z",
+      "updatedAt": "2026-11-02T10:20:40Z",
+      "baseRepository": "AravindBabuM/bgp-ls-sr-policy-yang",
+      "baseRefName": "main",
+      "baseRefOid": "d8f34ee8fb9c3131a26f45184c7f48bc2257465d",
+      "headRepository": "AravindBabuM/bgp-ls-sr-policy-yang",
+      "headRefName": "feature/bgp-ls-sr-policy-yang",
+      "headRefOid": "6fa607cefb00f01ae6092eb0e770a7b3fcb12af6",
+      "closedAt": "2026-11-02T10:20:39Z",
+      "mergedAt": "2026-11-02T10:20:39Z",
+      "mergedBy": "AravindBabuM",
+      "mergeCommit": {
+        "oid": "498c94feaf2045ca2270b4d384f3918bbaa31688"
+      },
+      "comments": [
+        {
+          "author": "thanmano",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Just to track:\r\n\r\n  grouping sr-policy-node-descriptors  - other IGP descriptors??\r\n  container bidirectional-group {         leaf group-id  - PCEP association object\r\n  leaf endpoint-behavior { - uint8 to uint16 - existing bgp-lsdb draft",
+          "createdAt": "2026-10-30T16:20:05Z",
+          "updatedAt": "2026-10-30T16:20:05Z"
+        },
+        {
+          "author": "AravindBabuM",
+          "authorAssociation": "OWNER",
+          "body": "> Just to track:\r\n> \r\n> grouping sr-policy-node-descriptors - other IGP descriptors?? container bidirectional-group { leaf group-id - PCEP association object leaf endpoint-behavior { - uint8 to uint16 - existing bgp-lsdb draft\r\n\r\n1 can be addressed later. \r\n2 addressed.\r\n3 to be addressed in the parent model.",
+          "createdAt": "2026-11-02T10:18:58Z",
+          "updatedAt": "2026-11-02T10:18:58Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOVaRRF88AAAABMSQEbg",
+      "title": "Align IANA module guidance with RFC 9907",
+      "url": "https://github.com/AravindBabuM/bgp-ls-sr-policy-yang/pull/2",
+      "state": "MERGED",
+      "author": "AravindBabuM",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "## Summary\n\n- clarify that the document defines the initial IANA-maintained module and requests IANA publication and maintenance\n- document the rationale for one module and enumeration-based types\n- add deterministic YANG enum-name registry guidance and the RFC 9907 module-maintenance note\n- align initial enum descriptions with IANA registry labels and add per-enum RFC 9857 references\n- make the IANA YANG Parameters reference normative\n\n## Validation\n\n- `make validate-yang`\n- `scripts/sync-draft-yang.py --check`\n- kramdown-rfc Markdown-to-XML conversion\n- xml2rfc text rendering\n- `git diff --check`",
+      "createdAt": "2026-11-02T11:16:54Z",
+      "updatedAt": "2026-11-02T11:32:06Z",
+      "baseRepository": "AravindBabuM/bgp-ls-sr-policy-yang",
+      "baseRefName": "main",
+      "baseRefOid": "498c94feaf2045ca2270b4d384f3918bbaa31688",
+      "headRepository": "AravindBabuM/bgp-ls-sr-policy-yang",
+      "headRefName": "feature/bgp-ls-sr-policy-yang",
+      "headRefOid": "16ec66a0c456c241b1d27dac634d2332fa4fdd22",
+      "closedAt": "2026-11-02T11:32:05Z",
+      "mergedAt": "2026-11-02T11:32:05Z",
+      "mergedBy": "AravindBabuM",
+      "mergeCommit": {
+        "oid": "54eca91b7579689566b668684195991c46ca03b7"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
