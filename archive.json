@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-11-03T05:48:15.171098+00:00",
+  "timestamp": "2026-11-05T05:42:51.444718+00:00",
   "repo": "AravindBabuM/bgp-ls-sr-policy-yang",
   "labels": [
     {
@@ -54,7 +54,24 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 3,
+      "id": "I_kwDOVaRRF88AAAABcHbzNA",
+      "title": "Complete SR Policy Local Node Descriptors modeling",
+      "url": "https://github.com/AravindBabuM/bgp-ls-sr-policy-yang/issues/3",
+      "state": "OPEN",
+      "author": "thanmano",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "## Problem\n\nThe `sr-policy-node-descriptors` grouping introduced in PR #1 does not completely represent the Local Node Descriptors TLV defined by RFC 9857 Section 3.\n\nIt currently models TLVs 512, 516, 517, 1028, and 1029. RFC 9857 Sections 3.1 and 3.2 also permit other Node Descriptor TLVs from RFC 9552 and explicitly call out the IGP Router-ID (TLV 515). The model should account for:\n\n- BGP-LS Identifier (TLV 513), deprecated but permitted by RFC 9552 for compatibility\n- OSPF Area-ID (TLV 514)\n- IGP Router-ID (TLV 515)\n- Future or otherwise unknown Node Descriptor TLVs\n\nThe current draft acknowledges that these descriptors are not represented.\n\n## Impact\n\nLocal Node Descriptors are part of the NLRI identity. Two NLRIs that differ only in one of the omitted descriptors cannot be represented as distinct `candidate-path` entries with the current list key.\n\n## Proposed scope for the next release\n\n- Represent the complete Local Node Descriptors TLV, including TLVs 513, 514, and 515.\n- Preserve unrecognized descriptors for extensibility.\n- Include a canonical representation of the Local Node Descriptors in the `candidate-path` key so distinct wire NLRIs cannot collapse into one list entry.\n- Preserve RFC 9857 conditional presence rules:\n  - TLVs 512 and 516 are required when the headend is the BGP-LS Producer and optional when a PCE is the producer.\n  - TLV 517 is optional.\n  - At least one of TLV 1028 and TLV 1029 is required.\n- Update the YANG tree, NLRI-to-YANG mapping, population rules, and embedded module in the draft.\n- Add validation examples covering headend-produced and PCE-produced NLRIs, including an IGP Router-ID and an unknown descriptor.\n\n## References\n\n- RFC 9857, Sections 3, 3.1, and 3.2\n- RFC 9552, Sections 5.2.1.2 and 5.2.1.4\n- PR #1",
+      "createdAt": "2026-11-03T11:39:21Z",
+      "updatedAt": "2026-11-03T11:39:21Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": [
     {
       "number": 1,
